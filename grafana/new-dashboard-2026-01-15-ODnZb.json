@@ -65,7 +65,7 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 9,
+          "h": 21,
           "w": 24,
           "x": 0,
           "y": 0
@@ -113,6 +113,7 @@
       }
     ],
     "preload": false,
+    "refresh": "5s",
     "schemaVersion": 42,
     "tags": [],
     "templating": {
