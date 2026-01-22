@@ -337,6 +337,44 @@
                 {
                   "id": "custom.width",
                   "value": 168
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "color"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 1
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 3
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -349,6 +387,45 @@
                 {
                   "id": "custom.width",
                   "value": 136
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "basic",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 1
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 3
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color"
                 }
               ]
             },
@@ -375,6 +452,30 @@
                   "value": 166
                 }
               ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 246
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dimensions %"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 222
+                }
+              ]
             }
           ]
         },
@@ -391,8 +492,8 @@
           "showHeader": true,
           "sortBy": [
             {
-              "desc": true,
-              "displayName": "more_than_one_item%"
+              "desc": false,
+              "displayName": "No Weight %"
             }
           ]
         },
