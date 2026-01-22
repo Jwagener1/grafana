@@ -169,71 +169,96 @@
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMax": 104.9999,
+              "axisSoftMin": 0,
+              "fillOpacity": 0.5,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
               },
-              "footer": {
-                "reducers": []
+              "lineWidth": 1,
+              "scaleDistribution": {
+                "type": "linear"
               },
-              "inspect": false
-            },
-            "mappings": [
-              {
-                "options": {
-                  "offline": {
-                    "index": 1,
-                    "text": "🔴 Offline"
-                  },
-                  "online": {
-                    "index": 0,
-                    "text": "🟢 Online"
-                  }
-                },
-                "type": "value"
+              "thresholdsStyle": {
+                "mode": "dashed"
               }
-            ],
+            },
+            "fieldMinMax": false,
+            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
+                  "color": "dark-red",
                   "value": 0
                 },
                 {
-                  "color": "red",
+                  "color": "dark-orange",
                   "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
                 }
               ]
-            }
+            },
+            "unit": "percent"
           },
           "overrides": []
         },
         "gridPos": {
-          "h": 12,
-          "w": 7,
-          "x": 17,
+          "h": 11,
+          "w": 24,
+          "x": 0,
           "y": 4
         },
-        "id": 3,
+        "id": 2,
+        "maxPerRow": 2,
         "options": {
-          "cellHeight": "sm",
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "device_name"
-            }
-          ]
+          "barRadius": 0.4,
+          "barWidth": 0.41,
+          "colorByField": "good_read_pct",
+          "fullHighlight": false,
+          "groupWidth": 0.7,
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "orientation": "horizontal",
+          "showValue": "always",
+          "stacking": "normal",
+          "text": {
+            "valueSize": 16
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          },
+          "xField": "device_name",
+          "xTickLabelRotation": 0,
+          "xTickLabelSpacing": 100
         },
         "pluginVersion": "12.3.1",
+        "repeat": "pepkor_devices",
+        "repeatDirection": "h",
         "targets": [
           {
             "dataset": "S1_Remote_Monitoring",
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "WITH latest_status AS (\r\n    SELECT\r\n        ds.device_id,\r\n        ds.status,\r\n        ds.offline_since,\r\n        ds.ts_datetime,\r\n        ROW_NUMBER() OVER (\r\n            PARTITION BY ds.device_id\r\n            ORDER BY ds.ts_datetime DESC\r\n        ) AS rn\r\n    FROM dbo.device_status ds\r\n)\r\nSELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    ls.status,\r\n    CASE\r\n        WHEN ls.status = 'OFFLINE' AND ls.offline_since IS NOT NULL THEN\r\n            CONCAT(\r\n                CASE\r\n                    WHEN DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440 \u003e 0\r\n                        THEN CONCAT(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440, 'd ')\r\n                    ELSE ''\r\n                END,\r\n                RIGHT('0' + CAST((DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 1440) / 60 AS varchar(2)), 2),\r\n                'h ',\r\n                RIGHT('0' + CAST(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 60 AS varchar(2)), 2),\r\n                'm'\r\n            )\r\n        ELSE NULL\r\n    END AS offline_for\r\nFROM dbo.devices d\r\nLEFT JOIN latest_status ls\r\n    ON ls.device_id = d.id\r\n   AND ls.rn = 1\r\nWHERE d.customer = '${Customer}'\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
+            "rawSql": "SELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    CAST(\r\n        100.0 * SUM(ds.good_read) / NULLIF(SUM(ds.total_items), 0)\r\n        AS decimal(6,2)\r\n    ) AS good_read_pct\r\nFROM dbo.devices d\r\nLEFT JOIN dbo.device_statistics ds\r\n    ON ds.device_id = d.id\r\n   AND $__timeFilter(ds.ts_datetime)\r\nWHERE d.customer = '${Customer}'\r\nGROUP BY\r\n    d.location,\r\n    d.machine_name\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
             "refId": "A",
             "sql": {
               "columns": [
@@ -255,31 +280,8 @@
           }
         ],
         "title": "New panel",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "device_name",
-              "renamePattern": "Machine Name"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "status",
-              "renamePattern": "Status"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "offline_for",
-              "renamePattern": "Time since last online"
-            }
-          }
-        ],
         "transparent": true,
-        "type": "table"
+        "type": "barchart"
       },
       {
         "datasource": {
@@ -332,10 +334,10 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 7,
-          "w": 24,
+          "h": 11,
+          "w": 17,
           "x": 0,
-          "y": 16
+          "y": 15
         },
         "id": 4,
         "options": {
@@ -436,96 +438,71 @@
               "mode": "thresholds"
             },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "axisSoftMax": 104.9999,
-              "axisSoftMin": 0,
-              "fillOpacity": 0.5,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
               },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
+              "footer": {
+                "reducers": []
               },
-              "thresholdsStyle": {
-                "mode": "dashed"
-              }
+              "inspect": false
             },
-            "fieldMinMax": false,
-            "mappings": [],
+            "mappings": [
+              {
+                "options": {
+                  "offline": {
+                    "index": 1,
+                    "text": "🔴 Offline"
+                  },
+                  "online": {
+                    "index": 0,
+                    "text": "🟢 Online"
+                  }
+                },
+                "type": "value"
+              }
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "dark-red",
+                  "color": "green",
                   "value": 0
                 },
                 {
-                  "color": "dark-orange",
+                  "color": "red",
                   "value": 80
-                },
-                {
-                  "color": "dark-green",
-                  "value": 97
                 }
               ]
-            },
-            "unit": "percent"
+            }
           },
           "overrides": []
         },
         "gridPos": {
-          "h": 11,
-          "w": 12,
-          "x": 0,
-          "y": 23
+          "h": 12,
+          "w": 7,
+          "x": 17,
+          "y": 15
         },
-        "id": 2,
-        "maxPerRow": 2,
+        "id": 3,
         "options": {
-          "barRadius": 0.4,
-          "barWidth": 0.41,
-          "colorByField": "good_read_pct",
-          "fullHighlight": false,
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "orientation": "horizontal",
-          "showValue": "always",
-          "stacking": "normal",
-          "text": {
-            "valueSize": 16
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          },
-          "xField": "device_name",
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 100
+          "cellHeight": "sm",
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "device_name"
+            }
+          ]
         },
         "pluginVersion": "12.3.1",
-        "repeat": "pepkor_devices",
-        "repeatDirection": "h",
         "targets": [
           {
             "dataset": "S1_Remote_Monitoring",
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    CAST(\r\n        100.0 * SUM(ds.good_read) / NULLIF(SUM(ds.total_items), 0)\r\n        AS decimal(6,2)\r\n    ) AS good_read_pct\r\nFROM dbo.devices d\r\nLEFT JOIN dbo.device_statistics ds\r\n    ON ds.device_id = d.id\r\n   AND $__timeFilter(ds.ts_datetime)\r\nWHERE d.customer = '${Customer}'\r\nGROUP BY\r\n    d.location,\r\n    d.machine_name\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
+            "rawSql": "WITH latest_status AS (\r\n    SELECT\r\n        ds.device_id,\r\n        ds.status,\r\n        ds.offline_since,\r\n        ds.ts_datetime,\r\n        ROW_NUMBER() OVER (\r\n            PARTITION BY ds.device_id\r\n            ORDER BY ds.ts_datetime DESC\r\n        ) AS rn\r\n    FROM dbo.device_status ds\r\n)\r\nSELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    ls.status,\r\n    CASE\r\n        WHEN ls.status = 'OFFLINE' AND ls.offline_since IS NOT NULL THEN\r\n            CONCAT(\r\n                CASE\r\n                    WHEN DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440 \u003e 0\r\n                        THEN CONCAT(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440, 'd ')\r\n                    ELSE ''\r\n                END,\r\n                RIGHT('0' + CAST((DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 1440) / 60 AS varchar(2)), 2),\r\n                'h ',\r\n                RIGHT('0' + CAST(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 60 AS varchar(2)), 2),\r\n                'm'\r\n            )\r\n        ELSE NULL\r\n    END AS offline_for\r\nFROM dbo.devices d\r\nLEFT JOIN latest_status ls\r\n    ON ls.device_id = d.id\r\n   AND ls.rn = 1\r\nWHERE d.customer = '${Customer}'\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
             "refId": "A",
             "sql": {
               "columns": [
@@ -547,8 +524,31 @@
           }
         ],
         "title": "New panel",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "device_name",
+              "renamePattern": "Machine Name"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "status",
+              "renamePattern": "Status"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "offline_for",
+              "renamePattern": "Time since last online"
+            }
+          }
+        ],
         "transparent": true,
-        "type": "barchart"
+        "type": "table"
       }
     ],
     "preload": false,
