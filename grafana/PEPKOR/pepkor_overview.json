@@ -275,6 +275,7 @@
     "templating": {
       "list": [
         {
+          "allValue": "All",
           "allowCustomValue": false,
           "current": {
             "text": [
