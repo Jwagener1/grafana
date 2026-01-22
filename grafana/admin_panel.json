@@ -476,6 +476,18 @@
                   "value": 222
                 }
               ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Item out of specifications %"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 156
+                }
+              ]
             }
           ]
         },
