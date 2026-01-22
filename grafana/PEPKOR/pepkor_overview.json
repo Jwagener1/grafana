@@ -42,17 +42,67 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
+                  "color": "dark-red",
                   "value": 0
                 },
                 {
-                  "color": "red",
+                  "color": "dark-orange",
                   "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
                 }
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "Year Total Parcels"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "text",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Month Total Parcels"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "text",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today Total Parcels"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "text",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 4,
@@ -63,8 +113,8 @@
         "id": 1,
         "options": {
           "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto",
+          "graphMode": "none",
+          "justifyMode": "center",
           "orientation": "auto",
           "percentChangeColorMode": "standard",
           "reduceOptions": {
@@ -523,7 +573,7 @@
             }
           }
         ],
-        "title": "Machine Status - Beta",
+        "title": "New panel",
         "transformations": [
           {
             "id": "renameByRegex",
