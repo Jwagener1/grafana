@@ -156,7 +156,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 137
+                  "value": 211
                 }
               ]
             },
@@ -336,7 +336,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 129
+                  "value": 168
                 }
               ]
             },
@@ -348,7 +348,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 96
+                  "value": 136
                 }
               ]
             },
@@ -360,7 +360,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 109
+                  "value": 130
                 }
               ]
             },
@@ -391,8 +391,8 @@
           "showHeader": true,
           "sortBy": [
             {
-              "desc": false,
-              "displayName": "Name"
+              "desc": true,
+              "displayName": "more_than_one_item%"
             }
           ]
         },
@@ -425,6 +425,43 @@
           }
         ],
         "title": "New panel",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "device_os_version",
+              "renamePattern": "OS Version"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "no_dimensions%",
+              "renamePattern": "No Dimensions %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "no_weight%",
+              "renamePattern": "No Weight %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "out_of_spec%",
+              "renamePattern": "Item out of specifications %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "more_than_one_item%",
+              "renamePattern": "More than one item %"
+            }
+          }
+        ],
         "type": "table"
       }
     ],
