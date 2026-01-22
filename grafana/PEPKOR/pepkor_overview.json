@@ -113,7 +113,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    CAST(\r\n        100.0 * SUM(ds.good_read) / NULLIF(SUM(ds.total_items), 0)\r\n        AS decimal(6,2)\r\n    ) AS good_read_pct\r\nFROM dbo.device_statistics ds\r\nJOIN dbo.devices d\r\n    ON d.id = ds.device_id\r\nWHERE ds.device_id IN (${pepkor_devices:csv})\r\n  AND $__timeFilter(ds.ts_datetime)\r\nGROUP BY\r\n    d.location,\r\n    d.machine_name\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
+            "rawSql": "SELECT COUNT(*) AS selected_device_count\r\nFROM dbo.devices\r\nWHERE id IN (${pepkor_devices:csv});",
             "refId": "A",
             "sql": {
               "columns": [
