@@ -111,6 +111,50 @@
           }
         ],
         "title": "New panel",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "year_total_parcels",
+              "renamePattern": "Year Total Parcels"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "year_good_read_pct",
+              "renamePattern": "Year Good Read %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "month_total_parcels",
+              "renamePattern": "Month Total Parcels"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "month_good_read_pct",
+              "renamePattern": "Month Good Read %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "day_total_parcels",
+              "renamePattern": "Today Total Parcels"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "day_good_read_pct",
+              "renamePattern": "Today Good Read %"
+            }
+          }
+        ],
         "type": "stat"
       }
     ],
