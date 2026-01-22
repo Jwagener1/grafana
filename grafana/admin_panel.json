@@ -134,10 +134,10 @@
           "allowCustomValue": false,
           "current": {
             "text": [
-              "PEP"
+              "All"
             ],
             "value": [
-              "PEP"
+              "$__all"
             ]
           },
           "definition": "SELECT DISTINCT customer\nFROM dbo.devices\nORDER BY customer;",
