@@ -214,8 +214,8 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 9,
-          "w": 24,
+          "h": 12,
+          "w": 18,
           "x": 0,
           "y": 4
         },
@@ -302,7 +302,21 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+              {
+                "options": {
+                  "offline": {
+                    "index": 1,
+                    "text": "🔴 Offline"
+                  },
+                  "online": {
+                    "index": 0,
+                    "text": "🟢 Online"
+                  }
+                },
+                "type": "value"
+              }
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -320,15 +334,21 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
-          "w": 13,
-          "x": 11,
-          "y": 13
+          "h": 12,
+          "w": 6,
+          "x": 18,
+          "y": 4
         },
         "id": 3,
         "options": {
           "cellHeight": "sm",
-          "showHeader": true
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "device_name"
+            }
+          ]
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -359,6 +379,29 @@
           }
         ],
         "title": "New panel",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "device_name",
+              "renamePattern": "Machine Name"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "status",
+              "renamePattern": "Status"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "offline_for",
+              "renamePattern": "Time since last online"
+            }
+          }
+        ],
         "type": "table"
       }
     ],
