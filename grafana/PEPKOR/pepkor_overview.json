@@ -35,7 +35,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "palette-classic"
+              "mode": "thresholds"
             },
             "custom": {
               "axisBorderShow": false,
@@ -55,7 +55,7 @@
                 "type": "linear"
               },
               "thresholdsStyle": {
-                "mode": "off"
+                "mode": "dashed"
               }
             },
             "mappings": [],
@@ -63,15 +63,20 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
+                  "color": "dark-red",
                   "value": 0
                 },
                 {
-                  "color": "red",
+                  "color": "dark-orange",
                   "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
                 }
               ]
-            }
+            },
+            "unit": "percent"
           },
           "overrides": []
         },
@@ -83,8 +88,9 @@
         },
         "id": 2,
         "options": {
-          "barRadius": 0,
-          "barWidth": 0.97,
+          "barRadius": 0.5,
+          "barWidth": 0.42,
+          "colorByField": "good_read_pct",
           "fullHighlight": false,
           "groupWidth": 0.7,
           "legend": {
@@ -93,7 +99,7 @@
             "placement": "bottom",
             "showLegend": true
           },
-          "orientation": "auto",
+          "orientation": "horizontal",
           "showValue": "auto",
           "stacking": "none",
           "tooltip": {
@@ -101,11 +107,11 @@
             "mode": "single",
             "sort": "none"
           },
+          "xField": "device_name",
           "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
+          "xTickLabelSpacing": 100
         },
         "pluginVersion": "12.3.1",
-        "repeat": "pepkor_devices",
         "repeatDirection": "h",
         "targets": [
           {
@@ -135,6 +141,7 @@
           }
         ],
         "title": "New panel",
+        "transparent": true,
         "type": "barchart"
       },
       {
