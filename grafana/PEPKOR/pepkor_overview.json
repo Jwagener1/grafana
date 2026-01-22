@@ -5,604 +5,606 @@
     "name": "dffawxvokw94owa"
   },
   "spec": {
-    "annotations": {
-      "list": [
-        {
-          "builtIn": 1,
-          "datasource": {
-            "type": "grafana",
-            "uid": "-- Grafana --"
-          },
-          "enable": true,
-          "hide": true,
-          "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations \u0026 Alerts",
-          "type": "dashboard"
-        }
-      ]
-    },
-    "editable": true,
-    "fiscalYearStartMonth": 0,
-    "graphTooltip": 0,
-    "links": [],
-    "liveNow": true,
-    "panels": [
+  "annotations": {
+    "list": [
       {
+        "builtIn": 1,
         "datasource": {
-          "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "type": "grafana",
+          "uid": "-- Grafana --"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 24,
-          "x": 0,
-          "y": 0
-        },
-        "id": 1,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "auto",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.3.1",
-        "targets": [
-          {
-            "dataset": "S1_Remote_Monitoring",
-            "datasource": {
-              "type": "mssql",
-              "uid": "ffapo5htl28e8e"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "WITH base AS (\r\n    SELECT\r\n        ds.ts_datetime,\r\n        ds.total_items,\r\n        ds.good_read\r\n    FROM dbo.device_statistics ds\r\n    WHERE ds.device_id IN (${pepkor_devices:csv})\r\n),\r\nbounds AS (\r\n    SELECT\r\n        CAST(GETDATE() AS datetime2(7)) AS now_dt,\r\n        CAST(GETDATE() AS date) AS day_start,\r\n        DATEADD(DAY, 1, CAST(GETDATE() AS date)) AS day_end,\r\n        DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AS month_start,\r\n        DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS month_end,\r\n        DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AS year_start,\r\n        DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(GETDATE()), 1, 1)) AS year_end\r\n)\r\nSELECT\r\n    -- Year\r\n    SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.total_items ELSE 0 END) AS year_total_parcels,\r\n    CAST(\r\n        100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.good_read ELSE 0 END)\r\n        / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.total_items ELSE 0 END), 0)\r\n        AS decimal(6,2)\r\n    ) AS year_good_read_pct,\r\n\r\n    -- Month\r\n    SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.total_items ELSE 0 END) AS month_total_parcels,\r\n    CAST(\r\n        100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.good_read ELSE 0 END)\r\n        / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.total_items ELSE 0 END), 0)\r\n        AS decimal(6,2)\r\n    ) AS month_good_read_pct,\r\n\r\n    -- Day\r\n    SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.total_items ELSE 0 END) AS day_total_parcels,\r\n    CAST(\r\n        100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.good_read ELSE 0 END)\r\n        / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.total_items ELSE 0 END), 0)\r\n        AS decimal(6,2)\r\n    ) AS day_good_read_pct\r\nFROM base b\r\nCROSS JOIN bounds bo;\r\n",
-            "refId": "A",
-            "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
-              "groupBy": [
-                {
-                  "property": {
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "limit": 50
-            }
-          }
-        ],
-        "title": "New panel",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "year_total_parcels",
-              "renamePattern": "Year Total Parcels"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "year_good_read_pct",
-              "renamePattern": "Year Good Read %"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "month_total_parcels",
-              "renamePattern": "Month Total Parcels"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "month_good_read_pct",
-              "renamePattern": "Month Good Read %"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "day_total_parcels",
-              "renamePattern": "Today Total Parcels"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "day_good_read_pct",
-              "renamePattern": "Today Good Read %"
-            }
-          }
-        ],
-        "transparent": true,
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "mssql",
-          "uid": "ffapo5htl28e8e"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "axisSoftMax": 104.9999,
-              "axisSoftMin": 0,
-              "fillOpacity": 0.5,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "thresholdsStyle": {
-                "mode": "dashed"
-              }
-            },
-            "fieldMinMax": false,
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-red",
-                  "value": 0
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 80
-                },
-                {
-                  "color": "dark-green",
-                  "value": 97
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 12,
-          "w": 17,
-          "x": 0,
-          "y": 4
-        },
-        "id": 2,
-        "maxPerRow": 2,
-        "options": {
-          "barRadius": 0.4,
-          "barWidth": 0.41,
-          "colorByField": "good_read_pct",
-          "fullHighlight": false,
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "orientation": "horizontal",
-          "showValue": "always",
-          "stacking": "normal",
-          "text": {
-            "valueSize": 16
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          },
-          "xField": "device_name",
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 100
-        },
-        "pluginVersion": "12.3.1",
-        "repeat": "pepkor_devices",
-        "repeatDirection": "h",
-        "targets": [
-          {
-            "dataset": "S1_Remote_Monitoring",
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    CAST(\r\n        100.0 * SUM(ds.good_read) / NULLIF(SUM(ds.total_items), 0)\r\n        AS decimal(6,2)\r\n    ) AS good_read_pct\r\nFROM dbo.devices d\r\nLEFT JOIN dbo.device_statistics ds\r\n    ON ds.device_id = d.id\r\n   AND $__timeFilter(ds.ts_datetime)\r\nWHERE d.customer = '${Customer}'\r\nGROUP BY\r\n    d.location,\r\n    d.machine_name\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
-            "refId": "A",
-            "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
-              "groupBy": [
-                {
-                  "property": {
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "limit": 50
-            }
-          }
-        ],
-        "title": "New panel",
-        "transparent": true,
-        "type": "barchart"
-      },
-      {
-        "datasource": {
-          "type": "mssql",
-          "uid": "ffapo5htl28e8e"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "auto",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "footer": {
-                "reducers": []
-              },
-              "inspect": false
-            },
-            "mappings": [
-              {
-                "options": {
-                  "offline": {
-                    "index": 1,
-                    "text": "🔴 Offline"
-                  },
-                  "online": {
-                    "index": 0,
-                    "text": "🟢 Online"
-                  }
-                },
-                "type": "value"
-              }
-            ],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 11,
-          "w": 7,
-          "x": 17,
-          "y": 4
-        },
-        "id": 3,
-        "options": {
-          "cellHeight": "sm",
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "device_name"
-            }
-          ]
-        },
-        "pluginVersion": "12.3.1",
-        "targets": [
-          {
-            "dataset": "S1_Remote_Monitoring",
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "WITH latest_status AS (\r\n    SELECT\r\n        ds.device_id,\r\n        ds.status,\r\n        ds.offline_since,\r\n        ds.ts_datetime,\r\n        ROW_NUMBER() OVER (\r\n            PARTITION BY ds.device_id\r\n            ORDER BY ds.ts_datetime DESC\r\n        ) AS rn\r\n    FROM dbo.device_status ds\r\n)\r\nSELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    ls.status,\r\n    CASE\r\n        WHEN ls.status = 'OFFLINE' AND ls.offline_since IS NOT NULL THEN\r\n            CONCAT(\r\n                CASE\r\n                    WHEN DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440 \u003e 0\r\n                        THEN CONCAT(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440, 'd ')\r\n                    ELSE ''\r\n                END,\r\n                RIGHT('0' + CAST((DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 1440) / 60 AS varchar(2)), 2),\r\n                'h ',\r\n                RIGHT('0' + CAST(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 60 AS varchar(2)), 2),\r\n                'm'\r\n            )\r\n        ELSE NULL\r\n    END AS offline_for\r\nFROM dbo.devices d\r\nLEFT JOIN latest_status ls\r\n    ON ls.device_id = d.id\r\n   AND ls.rn = 1\r\nWHERE d.customer = '${Customer}'\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
-            "refId": "A",
-            "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
-              "groupBy": [
-                {
-                  "property": {
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "limit": 50
-            }
-          }
-        ],
-        "title": "New panel",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "device_name",
-              "renamePattern": "Machine Name"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "status",
-              "renamePattern": "Status"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "offline_for",
-              "renamePattern": "Time since last online"
-            }
-          }
-        ],
-        "transparent": true,
-        "type": "table"
-      },
-      {
-        "datasource": {
-          "type": "mssql",
-          "uid": "ffapo5htl28e8e"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisGridShow": true,
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "fillOpacity": 80,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 24,
-          "x": 0,
-          "y": 16
-        },
-        "id": 4,
-        "options": {
-          "barRadius": 0,
-          "barWidth": 0.99,
-          "fullHighlight": false,
-          "groupWidth": 0.38,
-          "legend": {
-            "calcs": [],
-            "displayMode": "table",
-            "placement": "right",
-            "showLegend": true
-          },
-          "orientation": "auto",
-          "showValue": "never",
-          "stacking": "none",
-          "text": {
-            "valueSize": 8
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          },
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
-        },
-        "pluginVersion": "12.3.1",
-        "targets": [
-          {
-            "dataset": "S1_Remote_Monitoring",
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n\r\n    CAST(\r\n        100.0 * SUM(COALESCE(ds.no_read, 0)) / NULLIF(SUM(COALESCE(ds.total_items, 0)), 0)\r\n        AS decimal(6,2)\r\n    ) AS no_read_pct,\r\n\r\n    CAST(\r\n        100.0 * SUM(COALESCE(ds.no_dimension, 0)) / NULLIF(SUM(COALESCE(ds.total_items, 0)), 0)\r\n        AS decimal(6,2)\r\n    ) AS no_dimension_pct,\r\n\r\n    CAST(\r\n        100.0 * SUM(COALESCE(ds.item_out_of_spec, 0)) / NULLIF(SUM(COALESCE(ds.total_items, 0)), 0)\r\n        AS decimal(6,2)\r\n    ) AS item_out_of_spec_pct,\r\n\r\n    CAST(\r\n        100.0 * SUM(COALESCE(ds.more_than_1_item, 0)) / NULLIF(SUM(COALESCE(ds.total_items, 0)), 0)\r\n        AS decimal(6,2)\r\n    ) AS more_than_1_item_pct\r\n\r\nFROM dbo.devices d\r\nLEFT JOIN dbo.device_statistics ds\r\n    ON ds.device_id = d.id\r\n   AND $__timeFilter(ds.ts_datetime)\r\nWHERE d.customer = '${Customer}'\r\nGROUP BY\r\n    d.location,\r\n    d.machine_name\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
-            "refId": "A",
-            "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
-              "groupBy": [
-                {
-                  "property": {
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "limit": 50
-            }
-          }
-        ],
-        "title": "Device Errors",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "no_read_pct",
-              "renamePattern": "No Read %"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "no_dimension_pct",
-              "renamePattern": "No Dimension % "
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "item_out_of_spec_pct",
-              "renamePattern": "Item out of spec %"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "more_than_1_item_pct",
-              "renamePattern": "More than one item %"
-            }
-          }
-        ],
-        "transparent": true,
-        "type": "barchart"
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
       }
-    ],
-    "preload": false,
-    "refresh": "5s",
-    "schemaVersion": 42,
-    "tags": [],
-    "templating": {
-      "list": [
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 0,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "mssql",
+        "uid": "ffapo5htl28e8e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.1",
+      "targets": [
         {
-          "allowCustomValue": false,
-          "current": {
-            "text": [
-              "1"
+          "dataset": "S1_Remote_Monitoring",
+          "datasource": {
+            "type": "mssql",
+            "uid": "ffapo5htl28e8e"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH base AS (\r\n    SELECT\r\n        ds.ts_datetime,\r\n        ds.total_items,\r\n        ds.good_read\r\n    FROM dbo.device_statistics ds\r\n    WHERE ds.device_id IN (${pepkor_devices:csv})\r\n),\r\nbounds AS (\r\n    SELECT\r\n        CAST(GETDATE() AS datetime2(7)) AS now_dt,\r\n        CAST(GETDATE() AS date) AS day_start,\r\n        DATEADD(DAY, 1, CAST(GETDATE() AS date)) AS day_end,\r\n        DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AS month_start,\r\n        DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS month_end,\r\n        DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AS year_start,\r\n        DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(GETDATE()), 1, 1)) AS year_end\r\n)\r\nSELECT\r\n    -- Year\r\n    SUM(CASE WHEN b.ts_datetime >= bo.year_start AND b.ts_datetime < bo.year_end THEN b.total_items ELSE 0 END) AS year_total_parcels,\r\n    CAST(\r\n        100.0 * SUM(CASE WHEN b.ts_datetime >= bo.year_start AND b.ts_datetime < bo.year_end THEN b.good_read ELSE 0 END)\r\n        / NULLIF(SUM(CASE WHEN b.ts_datetime >= bo.year_start AND b.ts_datetime < bo.year_end THEN b.total_items ELSE 0 END), 0)\r\n        AS decimal(6,2)\r\n    ) AS year_good_read_pct,\r\n\r\n    -- Month\r\n    SUM(CASE WHEN b.ts_datetime >= bo.month_start AND b.ts_datetime < bo.month_end THEN b.total_items ELSE 0 END) AS month_total_parcels,\r\n    CAST(\r\n        100.0 * SUM(CASE WHEN b.ts_datetime >= bo.month_start AND b.ts_datetime < bo.month_end THEN b.good_read ELSE 0 END)\r\n        / NULLIF(SUM(CASE WHEN b.ts_datetime >= bo.month_start AND b.ts_datetime < bo.month_end THEN b.total_items ELSE 0 END), 0)\r\n        AS decimal(6,2)\r\n    ) AS month_good_read_pct,\r\n\r\n    -- Day\r\n    SUM(CASE WHEN b.ts_datetime >= bo.day_start AND b.ts_datetime < bo.day_end THEN b.total_items ELSE 0 END) AS day_total_parcels,\r\n    CAST(\r\n        100.0 * SUM(CASE WHEN b.ts_datetime >= bo.day_start AND b.ts_datetime < bo.day_end THEN b.good_read ELSE 0 END)\r\n        / NULLIF(SUM(CASE WHEN b.ts_datetime >= bo.day_start AND b.ts_datetime < bo.day_end THEN b.total_items ELSE 0 END), 0)\r\n        AS decimal(6,2)\r\n    ) AS day_good_read_pct\r\nFROM base b\r\nCROSS JOIN bounds bo;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
             ],
-            "value": [
-              "1"
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "New panel",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "year_total_parcels",
+            "renamePattern": "Year Total Parcels"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "year_good_read_pct",
+            "renamePattern": "Year Good Read %"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "month_total_parcels",
+            "renamePattern": "Month Total Parcels"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "month_good_read_pct",
+            "renamePattern": "Month Good Read %"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "day_total_parcels",
+            "renamePattern": "Today Total Parcels"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "day_good_read_pct",
+            "renamePattern": "Today Good Read %"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mssql",
+        "uid": "ffapo5htl28e8e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 104.9999,
+            "axisSoftMin": 0,
+            "fillOpacity": 0.5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": 0
+              },
+              {
+                "color": "dark-orange",
+                "value": 80
+              },
+              {
+                "color": "dark-green",
+                "value": 97
+              }
             ]
           },
-          "definition": "SELECT\n    id\nFROM dbo.devices\nWHERE customer = 'PEPKOR';",
-          "hide": 2,
-          "includeAll": true,
-          "label": "Devices",
-          "multi": true,
-          "name": "pepkor_devices",
-          "options": [],
-          "query": "SELECT\n    id\nFROM dbo.devices\nWHERE customer = 'PEPKOR';",
-          "refresh": 1,
-          "regex": "",
-          "type": "query"
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 17,
+        "x": 0,
+        "y": 4
+      },
+      "id": 2,
+      "maxPerRow": 2,
+      "options": {
+        "barRadius": 0.4,
+        "barWidth": 0.41,
+        "colorByField": "good_read_pct",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "normal",
+        "text": {
+          "valueSize": 16
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "device_name",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "12.3.1",
+      "repeat": "pepkor_devices",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "dataset": "S1_Remote_Monitoring",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    CAST(\r\n        100.0 * SUM(ds.good_read) / NULLIF(SUM(ds.total_items), 0)\r\n        AS decimal(6,2)\r\n    ) AS good_read_pct\r\nFROM dbo.devices d\r\nLEFT JOIN dbo.device_statistics ds\r\n    ON ds.device_id = d.id\r\n   AND $__timeFilter(ds.ts_datetime)\r\nWHERE d.customer = '${Customer}'\r\nGROUP BY\r\n    d.location,\r\n    d.machine_name\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "New panel",
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "mssql",
+        "uid": "ffapo5htl28e8e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "offline": {
+                  "index": 1,
+                  "text": "🔴 Offline"
+                },
+                "online": {
+                  "index": 0,
+                  "text": "🟢 Online"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 7,
+        "x": 17,
+        "y": 4
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "device_name"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.1",
+      "targets": [
+        {
+          "dataset": "S1_Remote_Monitoring",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH latest_status AS (\r\n    SELECT\r\n        ds.device_id,\r\n        ds.status,\r\n        ds.offline_since,\r\n        ds.ts_datetime,\r\n        ROW_NUMBER() OVER (\r\n            PARTITION BY ds.device_id\r\n            ORDER BY ds.ts_datetime DESC\r\n        ) AS rn\r\n    FROM dbo.device_status ds\r\n)\r\nSELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    ls.status,\r\n    CASE\r\n        WHEN ls.status = 'OFFLINE' AND ls.offline_since IS NOT NULL THEN\r\n            CONCAT(\r\n                CASE\r\n                    WHEN DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440 > 0\r\n                        THEN CONCAT(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440, 'd ')\r\n                    ELSE ''\r\n                END,\r\n                RIGHT('0' + CAST((DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 1440) / 60 AS varchar(2)), 2),\r\n                'h ',\r\n                RIGHT('0' + CAST(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 60 AS varchar(2)), 2),\r\n                'm'\r\n            )\r\n        ELSE NULL\r\n    END AS offline_for\r\nFROM dbo.devices d\r\nLEFT JOIN latest_status ls\r\n    ON ls.device_id = d.id\r\n   AND ls.rn = 1\r\nWHERE d.customer = '${Customer}'\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "New panel",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "device_name",
+            "renamePattern": "Machine Name"
+          }
         },
         {
-          "current": {
-            "text": "PEPKOR",
-            "value": "PEPKOR"
-          },
-          "description": "",
-          "hide": 2,
-          "name": "Customer",
-          "query": "PEPKOR",
-          "skipUrlSync": true,
-          "type": "constant"
+          "id": "renameByRegex",
+          "options": {
+            "regex": "status",
+            "renamePattern": "Status"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "offline_for",
+            "renamePattern": "Time since last online"
+          }
         }
-      ]
+      ],
+      "transparent": true,
+      "type": "table"
     },
-    "time": {
-      "from": "now/d",
-      "to": "now"
-    },
-    "timepicker": {
-      "refresh_intervals": [
-        "5s"
-      ]
-    },
-    "timezone": "browser",
-    "title": "pepkor_overview"
-  }
+    {
+      "datasource": {
+        "type": "mssql",
+        "uid": "ffapo5htl28e8e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 4,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.99,
+        "fullHighlight": false,
+        "groupWidth": 0.38,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "text": {
+          "valueSize": 8
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.3.1",
+      "targets": [
+        {
+          "dataset": "S1_Remote_Monitoring",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n\r\n    CAST(\r\n        100.0 * SUM(COALESCE(ds.no_read, 0)) / NULLIF(SUM(COALESCE(ds.total_items, 0)), 0)\r\n        AS decimal(6,2)\r\n    ) AS no_read_pct,\r\n\r\n    CAST(\r\n        100.0 * SUM(COALESCE(ds.no_dimension, 0)) / NULLIF(SUM(COALESCE(ds.total_items, 0)), 0)\r\n        AS decimal(6,2)\r\n    ) AS no_dimension_pct,\r\n\r\n    CAST(\r\n        100.0 * SUM(COALESCE(ds.item_out_of_spec, 0)) / NULLIF(SUM(COALESCE(ds.total_items, 0)), 0)\r\n        AS decimal(6,2)\r\n    ) AS item_out_of_spec_pct,\r\n\r\n    CAST(\r\n        100.0 * SUM(COALESCE(ds.more_than_1_item, 0)) / NULLIF(SUM(COALESCE(ds.total_items, 0)), 0)\r\n        AS decimal(6,2)\r\n    ) AS more_than_1_item_pct\r\n\r\nFROM dbo.devices d\r\nLEFT JOIN dbo.device_statistics ds\r\n    ON ds.device_id = d.id\r\n   AND $__timeFilter(ds.ts_datetime)\r\nWHERE d.customer = '${Customer}'\r\nGROUP BY\r\n    d.location,\r\n    d.machine_name\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Device Errors",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "no_read_pct",
+            "renamePattern": "No Read %"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "no_dimension_pct",
+            "renamePattern": "No Dimension % "
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "item_out_of_spec_pct",
+            "renamePattern": "Item out of spec %"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "more_than_1_item_pct",
+            "renamePattern": "More than one item %"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "barchart"
+    }
+  ],
+  "preload": false,
+  "refresh": "5s",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": [
+            "1"
+          ],
+          "value": [
+            "1"
+          ]
+        },
+        "definition": "SELECT\n    id\nFROM dbo.devices\nWHERE customer = 'PEPKOR';",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Devices",
+        "multi": true,
+        "name": "pepkor_devices",
+        "options": [],
+        "query": "SELECT\n    id\nFROM dbo.devices\nWHERE customer = 'PEPKOR';",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "PEPKOR",
+          "value": "PEPKOR"
+        },
+        "description": "",
+        "hide": 2,
+        "name": "Customer",
+        "query": "PEPKOR",
+        "skipUrlSync": true,
+        "type": "constant"
+      }
+    ]
+  },
+  "time": {
+    "from": "now/d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s"
+    ]
+  },
+  "timezone": "browser",
+  "title": "pepkor_overview",
+  "uid": "dffawxvokw94owa",
+  "version": 68
 }
