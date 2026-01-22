@@ -105,6 +105,7 @@
           "xTickLabelSpacing": 0
         },
         "pluginVersion": "12.3.1",
+        "repeat": "pepkor_devices",
         "repeatDirection": "h",
         "targets": [
           {
