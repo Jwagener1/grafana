@@ -454,6 +454,7 @@
                 {
                   "id": "custom.cellOptions",
                   "value": {
+                    "mode": "basic",
                     "type": "gauge"
                   }
                 },
@@ -483,11 +484,11 @@
                       },
                       {
                         "color": "dark-orange",
-                        "value": 1
+                        "value": 3
                       },
                       {
                         "color": "dark-red",
-                        "value": 3
+                        "value": 10
                       }
                     ]
                   }
