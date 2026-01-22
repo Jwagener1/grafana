@@ -35,6 +35,118 @@
         "fieldConfig": {
           "defaults": {
             "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "dataset": "S1_Remote_Monitoring",
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "WITH latest_status AS (\r\n    SELECT\r\n        ds.device_id,\r\n        ds.status,\r\n        ds.offline_since,\r\n        ds.ts_datetime,\r\n        ROW_NUMBER() OVER (\r\n            PARTITION BY ds.device_id\r\n            ORDER BY ds.ts_datetime DESC\r\n        ) AS rn\r\n    FROM dbo.device_status ds\r\n)\r\nSELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    ls.status,\r\n    CASE\r\n        WHEN ls.status = 'OFFLINE' AND ls.offline_since IS NOT NULL THEN\r\n            CONCAT(\r\n                CASE\r\n                    WHEN DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440 \u003e 0\r\n                        THEN CONCAT(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) / 1440, 'd ')\r\n                    ELSE ''\r\n                END,\r\n                RIGHT('0' + CAST((DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 1440) / 60 AS varchar(2)), 2),\r\n                'h ',\r\n                RIGHT('0' + CAST(DATEDIFF(MINUTE, ls.offline_since, SYSDATETIME()) % 60 AS varchar(2)), 2),\r\n                'm'\r\n            )\r\n        ELSE NULL\r\n    END AS offline_for\r\nFROM dbo.devices d\r\nLEFT JOIN latest_status ls\r\n    ON ls.device_id = d.id\r\n   AND ls.rn = 1\r\nWHERE d.customer = '${Customer}'\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "New panel",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "ffapo5htl28e8e"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
               "mode": "thresholds"
             },
             "mappings": [],
@@ -214,8 +326,8 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
-          "w": 24,
+          "h": 9,
+          "w": 20,
           "x": 0,
           "y": 4
         },
