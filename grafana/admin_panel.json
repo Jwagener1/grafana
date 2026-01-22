@@ -169,6 +169,24 @@
                 {
                   "id": "custom.width",
                   "value": 104
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "offline": {
+                          "index": 1,
+                          "text": "🔴 Offline"
+                        },
+                        "online": {
+                          "index": 0,
+                          "text": "🟢 Online"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
                 }
               ]
             },
