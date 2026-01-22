@@ -123,7 +123,7 @@
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
+              "align": "center",
               "cellOptions": {
                 "type": "auto"
               },
@@ -156,7 +156,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 266
+                  "value": 137
                 }
               ]
             },
@@ -246,7 +246,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 88
+                  "value": 95
                 }
               ]
             },
@@ -320,8 +320,15 @@
         },
         "id": 2,
         "options": {
-          "cellHeight": "sm",
-          "showHeader": true
+          "cellHeight": "md",
+          "enablePagination": false,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "Name"
+            }
+          ]
         },
         "pluginVersion": "12.3.1",
         "targets": [
