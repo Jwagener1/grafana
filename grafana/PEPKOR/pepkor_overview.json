@@ -523,7 +523,7 @@
             }
           }
         ],
-        "title": "New panel",
+        "title": "Machine Status - Beta",
         "transformations": [
           {
             "id": "renameByRegex",
