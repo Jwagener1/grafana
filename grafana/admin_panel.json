@@ -136,15 +136,16 @@
             "text": "All",
             "value": "__ALL__"
           },
-          "definition": "SELECT *\nFROM (\n    SELECT 'All' AS __text, '__ALL__' AS __value\n    UNION ALL\n    SELECT DISTINCT\n        customer AS __text,\n        customer AS __value\n    FROM dbo.devices\n) v\nORDER BY\n    CASE WHEN v.__value = '__ALL__' THEN 0 ELSE 1 END,\n    v.__value;",
+          "definition": "SELECT *\nFROM (\n    SELECT 'All' AS __text, '__ALL__' AS __value\n    UNION ALL\n    SELECT DISTINCT\n        d.customer AS __text,\n        d.customer AS __value\n    FROM dbo.devices d\n) v\nORDER BY\n    CASE WHEN v.__value = '__ALL__' THEN 0 ELSE 1 END,\n    v.__value;\n",
           "description": "Select the customer you wish to view.",
           "includeAll": false,
           "label": "Customer",
-          "name": "customer_query",
+          "name": "tenant",
           "options": [],
-          "query": "SELECT *\nFROM (\n    SELECT 'All' AS __text, '__ALL__' AS __value\n    UNION ALL\n    SELECT DISTINCT\n        customer AS __text,\n        customer AS __value\n    FROM dbo.devices\n) v\nORDER BY\n    CASE WHEN v.__value = '__ALL__' THEN 0 ELSE 1 END,\n    v.__value;",
+          "query": "SELECT *\nFROM (\n    SELECT 'All' AS __text, '__ALL__' AS __value\n    UNION ALL\n    SELECT DISTINCT\n        d.customer AS __text,\n        d.customer AS __value\n    FROM dbo.devices d\n) v\nORDER BY\n    CASE WHEN v.__value = '__ALL__' THEN 0 ELSE 1 END,\n    v.__value;\n",
           "refresh": 1,
           "regex": "",
+          "sort": 1,
           "type": "query"
         }
       ]
