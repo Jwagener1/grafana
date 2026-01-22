@@ -155,7 +155,6 @@
             }
           }
         ],
-        "transparent": true,
         "type": "stat"
       },
       {
@@ -403,6 +402,7 @@
             }
           }
         ],
+        "transparent": true,
         "type": "table"
       },
       {
