@@ -117,7 +117,30 @@
     "schemaVersion": 42,
     "tags": [],
     "templating": {
-      "list": []
+      "list": [
+        {
+          "allowCustomValue": false,
+          "current": {
+            "text": [
+              "1"
+            ],
+            "value": [
+              "1"
+            ]
+          },
+          "definition": "SELECT\n    id\nFROM dbo.devices\nWHERE customer = 'PEPKOR';",
+          "hide": 2,
+          "includeAll": false,
+          "label": "Devices",
+          "multi": true,
+          "name": "pepkor_devices",
+          "options": [],
+          "query": "SELECT\n    id\nFROM dbo.devices\nWHERE customer = 'PEPKOR';",
+          "refresh": 2,
+          "regex": "",
+          "type": "query"
+        }
+      ]
     },
     "time": {
       "from": "now-6h",
