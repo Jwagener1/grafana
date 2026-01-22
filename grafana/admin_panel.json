@@ -168,25 +168,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 118
-                },
-                {
-                  "id": "mappings",
-                  "value": [
-                    {
-                      "options": {
-                        "offline": {
-                          "index": 1,
-                          "text": "🔴 Offline"
-                        },
-                        "online": {
-                          "index": 0,
-                          "text": "🟢 Online"
-                        }
-                      },
-                      "type": "value"
-                    }
-                  ]
+                  "value": 104
                 }
               ]
             },
@@ -198,7 +180,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 89
+                  "value": 70
                 }
               ]
             },
@@ -210,7 +192,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 87
+                  "value": 71
                 }
               ]
             },
@@ -222,7 +204,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 108
+                  "value": 79
                 }
               ]
             },
@@ -321,8 +303,7 @@
         "id": 2,
         "options": {
           "cellHeight": "sm",
-          "showHeader": true,
-          "sortBy": []
+          "showHeader": true
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -331,7 +312,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "WITH device_scope AS (\r\n  SELECT d.id, d.customer, d.location, d.machine_name\r\n  FROM dbo.devices d\r\n  WHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\r\n),\r\nlatest_status AS (\r\n  SELECT x.device_id, x.status\r\n  FROM (\r\n    SELECT ds.device_id, ds.status,\r\n           ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\r\n    FROM dbo.device_status ds\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nlatest_os AS (\r\n  SELECT x.device_id, x.os_version\r\n  FROM (\r\n    SELECT os.device_id, os.os_version,\r\n           ROW_NUMBER() OVER (PARTITION BY os.device_id ORDER BY os.ts_datetime DESC) AS rn\r\n    FROM dbo.device_os_status os\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nlatest_c_drive AS (\r\n  SELECT x.device_id, x.usage_percent\r\n  FROM (\r\n    SELECT ss.device_id, ss.usage_percent,\r\n           ROW_NUMBER() OVER (PARTITION BY ss.device_id ORDER BY ss.ts_datetime DESC) AS rn\r\n    FROM dbo.device_storage_status ss\r\n    WHERE ss.drive = 'C'\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nstats AS (\r\n  SELECT\r\n    ds.device_id,\r\n    SUM(ds.total_items)        AS total_items,\r\n    SUM(ds.good_read)          AS good_read,\r\n    SUM(ds.no_dimension)       AS no_dimension,\r\n    SUM(ds.no_weight)          AS no_weight,\r\n    SUM(ds.item_out_of_spec)   AS item_out_of_spec,\r\n    SUM(ds.more_than_1_item)   AS more_than_1_item\r\n  FROM dbo.device_statistics ds\r\n  WHERE $__timeFilter(ds.ts_datetime)\r\n  GROUP BY ds.device_id\r\n)\r\nSELECT\r\n  sc.customer                                AS Customer,\r\n  sc.location                                AS Location,\r\n  sc.machine_name                            AS Name,\r\n\r\n  COALESCE(ls.status, 'unknown')             AS [Online Status],\r\n\r\n  COALESCE(\r\n    CASE\r\n      -- Windows 11\r\n      WHEN lo.os_version LIKE '%10.0.26100%' THEN 'Windows 11 24H2'\r\n      WHEN lo.os_version LIKE '%10.0.22631%' THEN 'Windows 11 23H2'\r\n      WHEN lo.os_version LIKE '%10.0.22621%' THEN 'Windows 11 22H2'\r\n      WHEN lo.os_version LIKE '%10.0.22000%' THEN 'Windows 11 21H2'\r\n\r\n      -- Windows 10\r\n      WHEN lo.os_version LIKE '%10.0.19045%' THEN 'Windows 10 22H2'\r\n      WHEN lo.os_version LIKE '%10.0.19044%' THEN 'Windows 10 21H2'\r\n\r\n      -- Null/empty\r\n      WHEN lo.os_version IS NULL OR LTRIM(RTRIM(lo.os_version)) = '' THEN NULL\r\n\r\n      -- Unknown: show only first token for debugging (usually the numeric build)\r\n      ELSE\r\n        'Unknown (' +\r\n        LEFT(\r\n          LTRIM(RTRIM(lo.os_version)),\r\n          CHARINDEX(' ', LTRIM(RTRIM(lo.os_version)) + ' ') - 1\r\n        )\r\n        + ')'\r\n    END,\r\n    'Unknown'\r\n  )                                          AS device_os_version,\r\n\r\n  CAST(COALESCE(lc.usage_percent, 0) AS decimal(5,2))  AS [C drive used in %],\r\n\r\n  COALESCE(st.total_items, 0)                           AS [Total Items],\r\n\r\n  CAST(COALESCE(100.0 * st.good_read        / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [Good Read%],\r\n  CAST(COALESCE(100.0 * st.no_dimension     / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [no_dimensions%],\r\n  CAST(COALESCE(100.0 * st.no_weight        / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [no_weight%],\r\n  CAST(COALESCE(100.0 * st.item_out_of_spec / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [out_of_spec%],\r\n  CAST(COALESCE(100.0 * st.more_than_1_item / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [more_than_one_item%]\r\n\r\nFROM device_scope sc\r\nLEFT JOIN latest_status   ls ON ls.device_id = sc.id\r\nLEFT JOIN latest_os       lo ON lo.device_id = sc.id\r\nLEFT JOIN latest_c_drive  lc ON lc.device_id = sc.id\r\nLEFT JOIN stats           st ON st.device_id = sc.id\r\nORDER BY sc.customer, sc.location, sc.machine_name;\r\n",
+            "rawSql": "WITH device_scope AS (\r\n  SELECT d.id, d.customer, d.location, d.machine_name\r\n  FROM dbo.devices d\r\n  WHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\r\n),\r\nlatest_status AS (\r\n  SELECT x.device_id, x.status\r\n  FROM (\r\n    SELECT ds.device_id, ds.status,\r\n           ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\r\n    FROM dbo.device_status ds\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nlatest_os AS (\r\n  SELECT x.device_id, x.os_version\r\n  FROM (\r\n    SELECT os.device_id, os.os_version,\r\n           ROW_NUMBER() OVER (PARTITION BY os.device_id ORDER BY os.ts_datetime DESC) AS rn\r\n    FROM dbo.device_os_status os\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nlatest_c_drive AS (\r\n  SELECT x.device_id, x.usage_percent\r\n  FROM (\r\n    SELECT ss.device_id, ss.usage_percent,\r\n           ROW_NUMBER() OVER (PARTITION BY ss.device_id ORDER BY ss.ts_datetime DESC) AS rn\r\n    FROM dbo.device_storage_status ss\r\n    WHERE ss.drive = 'C'\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nstats AS (\r\n  SELECT\r\n    ds.device_id,\r\n    SUM(ds.total_items)        AS total_items,\r\n    SUM(ds.good_read)          AS good_read,\r\n    SUM(ds.no_dimension)       AS no_dimension,\r\n    SUM(ds.no_weight)          AS no_weight,\r\n    SUM(ds.item_out_of_spec)   AS item_out_of_spec,\r\n    SUM(ds.more_than_1_item)   AS more_than_1_item\r\n  FROM dbo.device_statistics ds\r\n  WHERE $__timeFilter(ds.ts_datetime)\r\n  GROUP BY ds.device_id\r\n)\r\nSELECT\r\n  sc.customer                                AS Customer,\r\n  sc.location                                AS Location,\r\n  sc.machine_name                            AS Name,\r\n\r\n  COALESCE(ls.status, 'unknown')             AS [Online Status],\r\n\r\n  COALESCE(\r\n  CASE\r\n    -- Windows 11 (builds may appear anywhere in the string)\r\n    WHEN lo.os_version LIKE '%10.0.26200%' THEN 'Windows 11 25H2'\r\n    WHEN lo.os_version LIKE '%10.0.26100%' THEN 'Windows 11 24H2'\r\n    WHEN lo.os_version LIKE '%10.0.22631%' THEN 'Windows 11 23H2'\r\n    WHEN lo.os_version LIKE '%10.0.22621%' THEN 'Windows 11 22H2'\r\n    WHEN lo.os_version LIKE '%10.0.22000%' THEN 'Windows 11 21H2'\r\n\r\n    -- Windows 10\r\n    WHEN lo.os_version LIKE '%10.0.19045%' THEN 'Windows 10 22H2'\r\n    WHEN lo.os_version LIKE '%10.0.19044%' THEN 'Windows 10 21H2'\r\n\r\n    -- Null/empty\r\n    WHEN lo.os_version IS NULL OR LTRIM(RTRIM(lo.os_version)) = '' THEN NULL\r\n\r\n    -- Unknown: if we can find a Windows-style build, show it\r\n    WHEN CHARINDEX('10.0.', lo.os_version) \u003e 0 THEN\r\n      'Unknown (' +\r\n      SUBSTRING(\r\n        lo.os_version,\r\n        CHARINDEX('10.0.', lo.os_version),\r\n        CHARINDEX(' ', lo.os_version + ' ', CHARINDEX('10.0.', lo.os_version)) - CHARINDEX('10.0.', lo.os_version)\r\n      )\r\n      + ')'\r\n\r\n    -- Fallback: show first 40 chars so you can see what it is\r\n    ELSE 'Unknown (' + LEFT(LTRIM(RTRIM(lo.os_version)), 40) + ')'\r\n  END,\r\n  'Unknown'\r\n) AS device_os_version,\r\n\r\n  CAST(COALESCE(lc.usage_percent, 0) AS decimal(5,2))  AS [C drive used in %],\r\n\r\n  COALESCE(st.total_items, 0)                           AS [Total Items],\r\n\r\n  CAST(COALESCE(100.0 * st.good_read        / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [Good Read%],\r\n  CAST(COALESCE(100.0 * st.no_dimension     / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [no_dimensions%],\r\n  CAST(COALESCE(100.0 * st.no_weight        / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [no_weight%],\r\n  CAST(COALESCE(100.0 * st.item_out_of_spec / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [out_of_spec%],\r\n  CAST(COALESCE(100.0 * st.more_than_1_item / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [more_than_one_item%]\r\n\r\nFROM device_scope sc\r\nLEFT JOIN latest_status   ls ON ls.device_id = sc.id\r\nLEFT JOIN latest_os       lo ON lo.device_id = sc.id\r\nLEFT JOIN latest_c_drive  lc ON lc.device_id = sc.id\r\nLEFT JOIN stats           st ON st.device_id = sc.id\r\nORDER BY sc.customer, sc.location, sc.machine_name;\r\n",
             "refId": "A",
             "sql": {
               "columns": [
@@ -352,17 +333,7 @@
             }
           }
         ],
-        "title": "Device Summary",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "device_os_version",
-              "renamePattern": "OS Version"
-            }
-          }
-        ],
-        "transparent": true,
+        "title": "New panel",
         "type": "table"
       }
     ],
