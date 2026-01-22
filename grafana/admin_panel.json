@@ -450,6 +450,47 @@
                 {
                   "id": "custom.width",
                   "value": 166
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "color"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 1
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 3
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -474,47 +515,6 @@
                 {
                   "id": "custom.width",
                   "value": 222
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "type": "gauge"
-                  }
-                },
-                {
-                  "id": "min",
-                  "value": 0
-                },
-                {
-                  "id": "max",
-                  "value": 100
-                },
-                {
-                  "id": "color"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "dark-green",
-                        "value": 0
-                      },
-                      {
-                        "color": "dark-orange",
-                        "value": 1
-                      },
-                      {
-                        "color": "dark-red",
-                        "value": 3
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "unit",
-                  "value": "percent"
                 }
               ]
             },
@@ -551,23 +551,19 @@
                     "mode": "absolute",
                     "steps": [
                       {
-                        "color": "dark-green",
+                        "color": "green",
                         "value": 0
                       },
                       {
-                        "color": "dark-orange",
-                        "value": 1
+                        "color": "red",
+                        "value": 80
                       },
                       {
-                        "color": "dark-red",
-                        "value": 3
+                        "color": "#EAB839",
+                        "value": 90
                       }
                     ]
                   }
-                },
-                {
-                  "id": "unit",
-                  "value": "percent"
                 }
               ]
             }
