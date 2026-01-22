@@ -275,7 +275,6 @@
     "templating": {
       "list": [
         {
-          "allValue": "",
           "allowCustomValue": false,
           "current": {
             "text": [
@@ -293,7 +292,7 @@
           "name": "pepkor_devices",
           "options": [],
           "query": "SELECT\n    id\nFROM dbo.devices\nWHERE customer = 'PEPKOR';",
-          "refresh": 2,
+          "refresh": 1,
           "regex": "",
           "type": "query"
         }
