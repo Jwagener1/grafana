@@ -215,7 +215,7 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 11,
+          "h": 12,
           "w": 17,
           "x": 0,
           "y": 4
@@ -454,38 +454,13 @@
             },
             "unit": "percent"
           },
-          "overrides": [
-            {
-              "__systemRef": "hideSeriesFrom",
-              "matcher": {
-                "id": "byNames",
-                "options": {
-                  "mode": "exclude",
-                  "names": [
-                    "item_out_of_spec_pct"
-                  ],
-                  "prefix": "All except:",
-                  "readOnly": true
-                }
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom",
-                  "value": {
-                    "legend": false,
-                    "tooltip": true,
-                    "viz": true
-                  }
-                }
-              ]
-            }
-          ]
+          "overrides": []
         },
         "gridPos": {
           "h": 7,
           "w": 24,
           "x": 0,
-          "y": 15
+          "y": 16
         },
         "id": 4,
         "options": {
