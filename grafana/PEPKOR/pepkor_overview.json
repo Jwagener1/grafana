@@ -402,6 +402,7 @@
             }
           }
         ],
+        "transparent": true,
         "type": "table"
       },
       {
