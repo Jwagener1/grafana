@@ -155,6 +155,7 @@
             }
           }
         ],
+        "transparent": true,
         "type": "stat"
       },
       {
