@@ -402,7 +402,6 @@
             }
           }
         ],
-        "transparent": true,
         "type": "table"
       },
       {
@@ -512,6 +511,7 @@
           }
         ],
         "title": "New panel",
+        "transparent": true,
         "type": "barchart"
       }
     ],
