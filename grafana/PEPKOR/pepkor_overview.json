@@ -230,7 +230,7 @@
             "showLegend": true
           },
           "orientation": "horizontal",
-          "showValue": "auto",
+          "showValue": "always",
           "stacking": "none",
           "tooltip": {
             "hideZeros": false,
