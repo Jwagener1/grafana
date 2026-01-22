@@ -34,41 +34,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
+              "mode": "thresholds"
             },
             "mappings": [],
             "thresholds": {
@@ -95,17 +61,21 @@
         },
         "id": 1,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
           },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -115,14 +85,32 @@
               "type": "mssql",
               "uid": "PAAAEB8D7872B0C49"
             },
-            "editorMode": "builder",
+            "editorMode": "code",
             "format": "table",
-            "rawSql": "",
-            "refId": "A"
+            "rawQuery": true,
+            "rawSql": "WITH base AS (\r\n    SELECT\r\n        ds.ts_datetime,\r\n        ds.total_items,\r\n        ds.good_read\r\n    FROM dbo.device_statistics ds\r\n    JOIN dbo.devices d\r\n        ON d.id = ds.device_id\r\n    WHERE (\r\n        ${tenant:sqlstring} = '__ALL__'\r\n        OR d.customer = ${tenant:sqlstring}\r\n    )\r\n),\r\nbounds AS (\r\n    SELECT\r\n        CAST(GETDATE() AS date) AS day_start,\r\n        DATEADD(DAY, 1, CAST(GETDATE() AS date)) AS day_end,\r\n\r\n        DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AS month_start,\r\n        DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS month_end,\r\n\r\n        DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AS year_start,\r\n        DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(GETDATE()), 1, 1)) AS year_end\r\n)\r\nSELECT\r\n    -- Year\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.total_items ELSE 0 END), 0)\r\n        AS year_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS year_good_read_pct,\r\n\r\n    -- Month\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.total_items ELSE 0 END), 0)\r\n        AS month_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS month_good_read_pct,\r\n\r\n    -- Day\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.total_items ELSE 0 END), 0)\r\n        AS day_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS day_good_read_pct\r\nFROM base b\r\nCROSS JOIN bounds bo;\r\n",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
           }
         ],
         "title": "New panel",
-        "type": "timeseries"
+        "type": "stat"
       }
     ],
     "preload": false,
