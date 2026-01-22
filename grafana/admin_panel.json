@@ -391,7 +391,11 @@
       "from": "now-6h",
       "to": "now"
     },
-    "timepicker": {},
+    "timepicker": {
+      "refresh_intervals": [
+        "5s"
+      ]
+    },
     "timezone": "browser",
     "title": "admin_panel"
   }
