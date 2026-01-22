@@ -36,6 +36,230 @@
             "color": {
               "mode": "thresholds"
             },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "device_os_version"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 266
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Online Status"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 104
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Name"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 70
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Location"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 71
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Customer"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 79
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "C drive used in %"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 133
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Items"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 88
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read%"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 102
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "no_dimensions%"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 129
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "no_weight%"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 96
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "out_of_spec%"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 109
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "more_than_one_item%"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 166
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "dataset": "S1_Remote_Monitoring",
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "WITH device_scope AS (\r\n    SELECT\r\n        d.id,\r\n        d.customer,\r\n        d.location,\r\n        d.machine_name\r\n    FROM dbo.devices d\r\n    WHERE\r\n        (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\r\n),\r\nlatest_status AS (\r\n    SELECT x.device_id, x.status\r\n    FROM (\r\n        SELECT\r\n            ds.device_id,\r\n            ds.status,\r\n            ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\r\n        FROM dbo.device_status ds\r\n    ) x\r\n    WHERE x.rn = 1\r\n),\r\nlatest_os AS (\r\n    SELECT x.device_id, x.os_version\r\n    FROM (\r\n        SELECT\r\n            os.device_id,\r\n            os.os_version,\r\n            ROW_NUMBER() OVER (PARTITION BY os.device_id ORDER BY os.ts_datetime DESC) AS rn\r\n        FROM dbo.device_os_status os\r\n    ) x\r\n    WHERE x.rn = 1\r\n),\r\nlatest_c_drive AS (\r\n    SELECT x.device_id, x.usage_percent\r\n    FROM (\r\n        SELECT\r\n            ss.device_id,\r\n            ss.usage_percent,\r\n            ROW_NUMBER() OVER (PARTITION BY ss.device_id ORDER BY ss.ts_datetime DESC) AS rn\r\n        FROM dbo.device_storage_status ss\r\n        WHERE ss.drive = 'C'\r\n    ) x\r\n    WHERE x.rn = 1\r\n),\r\nstats AS (\r\n    SELECT\r\n        ds.device_id,\r\n        SUM(ds.total_items)           AS total_items,\r\n        SUM(ds.good_read)             AS good_read,\r\n        SUM(ds.no_dimension)          AS no_dimension,\r\n        SUM(ds.no_weight)             AS no_weight,\r\n        SUM(ds.item_out_of_spec)      AS item_out_of_spec,\r\n        SUM(ds.more_than_1_item)      AS more_than_1_item\r\n    FROM dbo.device_statistics ds\r\n    WHERE $__timeFilter(ds.ts_datetime)\r\n    GROUP BY ds.device_id\r\n)\r\nSELECT\r\n    sc.customer                                           AS Customer,\r\n    sc.location                                           AS Location,\r\n    sc.machine_name                                       AS Name,\r\n\r\n    COALESCE(ls.status, 'unknown')                        AS [Online Status],\r\n    COALESCE(lo.os_version, 'unknown')                    AS device_os_version,\r\n\r\n    CAST(COALESCE(lc.usage_percent, 0) AS decimal(5,2))   AS [C drive used in %],\r\n\r\n    COALESCE(st.total_items, 0)                           AS [Total Items],\r\n\r\n    CAST(\r\n        COALESCE(100.0 * st.good_read / NULLIF(st.total_items, 0), 0)\r\n        AS decimal(6,2)\r\n    )                                                     AS [Good Read%],\r\n\r\n    CAST(\r\n        COALESCE(100.0 * st.no_dimension / NULLIF(st.total_items, 0), 0)\r\n        AS decimal(6,2)\r\n    )                                                     AS [no_dimensions%],\r\n\r\n    CAST(\r\n        COALESCE(100.0 * st.no_weight / NULLIF(st.total_items, 0), 0)\r\n        AS decimal(6,2)\r\n    )                                                     AS [no_weight%],\r\n\r\n    CAST(\r\n        COALESCE(100.0 * st.item_out_of_spec / NULLIF(st.total_items, 0), 0)\r\n        AS decimal(6,2)\r\n    )                                                     AS [out_of_spec%],\r\n\r\n    CAST(\r\n        COALESCE(100.0 * st.more_than_1_item / NULLIF(st.total_items, 0), 0)\r\n        AS decimal(6,2)\r\n    )                                                     AS [more_than_one_item%]\r\n\r\nFROM device_scope sc\r\nLEFT JOIN latest_status  ls ON ls.device_id = sc.id\r\nLEFT JOIN latest_os      lo ON lo.device_id = sc.id\r\nLEFT JOIN latest_c_drive lc ON lc.device_id = sc.id\r\nLEFT JOIN stats          st ON st.device_id = sc.id\r\n\r\nORDER BY\r\n    sc.customer,\r\n    sc.location,\r\n    sc.machine_name;\r\n",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "New panel",
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
