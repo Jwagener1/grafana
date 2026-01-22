@@ -159,6 +159,7 @@
       }
     ],
     "preload": false,
+    "refresh": "5s",
     "schemaVersion": 42,
     "tags": [],
     "templating": {
@@ -188,7 +189,7 @@
       ]
     },
     "time": {
-      "from": "now-6h",
+      "from": "now/d",
       "to": "now"
     },
     "timepicker": {
