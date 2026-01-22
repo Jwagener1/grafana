@@ -110,7 +110,7 @@
             }
           }
         ],
-        "title": "New panel",
+        "title": "",
         "transformations": [
           {
             "id": "renameByRegex",
