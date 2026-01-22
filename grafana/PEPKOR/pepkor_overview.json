@@ -111,7 +111,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    CAST(\r\n        100.0 * SUM(ds.good_read) / NULLIF(SUM(ds.total_items), 0)\r\n        AS decimal(6,2)\r\n    ) AS good_read_pct\r\nFROM dbo.device_statistics ds\r\nJOIN dbo.devices d\r\n    ON d.id = ds.device_id\r\nWHERE $__timeFilter(ds.ts_datetime)\r\n  AND ds.device_id IN (${pepkor_devices:sqlstring})\r\nGROUP BY\r\n    d.location,\r\n    d.machine_name\r\nORDER BY\r\n    good_read_pct DESC;\r\n",
+            "rawSql": "SELECT\r\n  CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n  CAST(\r\n    100.0 * SUM(ds.good_read) / NULLIF(SUM(ds.total_items), 0) AS decimal(6, 2)\r\n  ) AS good_read_pct\r\nFROM\r\n  dbo.device_statistics ds\r\n  JOIN dbo.devices d ON d.id = ds.device_id\r\nWHERE\r\n  ds.device_id IN (${pepkor_devices:csv})\r\n  AND $__timeFilter(ds.ts_datetime)\r\nGROUP BY\r\n  d.location,\r\n  d.machine_name\r\nORDER BY\r\n  d.location,\r\n  d.machine_name;",
             "refId": "A",
             "sql": {
               "columns": [
@@ -297,7 +297,7 @@
       ]
     },
     "time": {
-      "from": "now-7d",
+      "from": "now-6M",
       "to": "now"
     },
     "timepicker": {
