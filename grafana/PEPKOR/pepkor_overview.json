@@ -166,7 +166,7 @@
           "h": 4,
           "w": 24,
           "x": 0,
-          "y": 0
+          "y": 8
         },
         "id": 1,
         "options": {
@@ -284,7 +284,7 @@
           },
           "definition": "SELECT\n    id\nFROM dbo.devices\nWHERE customer = 'PEPKOR';",
           "hide": 2,
-          "includeAll": false,
+          "includeAll": true,
           "label": "Devices",
           "multi": true,
           "name": "pepkor_devices",
