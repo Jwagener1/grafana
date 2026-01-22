@@ -215,7 +215,7 @@
         },
         "gridPos": {
           "h": 9,
-          "w": 11,
+          "w": 24,
           "x": 0,
           "y": 4
         },
@@ -290,41 +290,17 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "palette-classic"
+              "mode": "thresholds"
             },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
               },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
+              "footer": {
+                "reducers": []
               },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
+              "inspect": false
             },
             "mappings": [],
             "thresholds": {
@@ -347,21 +323,12 @@
           "h": 8,
           "w": 13,
           "x": 11,
-          "y": 4
+          "y": 13
         },
         "id": 3,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
+          "cellHeight": "sm",
+          "showHeader": true
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -392,7 +359,7 @@
           }
         ],
         "title": "New panel",
-        "type": "timeseries"
+        "type": "table"
       }
     ],
     "preload": false,
