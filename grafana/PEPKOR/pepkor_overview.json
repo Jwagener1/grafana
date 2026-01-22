@@ -420,6 +420,7 @@
               "axisBorderShow": false,
               "axisCenteredZero": false,
               "axisColorMode": "text",
+              "axisGridShow": true,
               "axisLabel": "",
               "axisPlacement": "auto",
               "fillOpacity": 80,
@@ -453,7 +454,32 @@
             },
             "unit": "percent"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "item_out_of_spec_pct"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": true,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 7,
@@ -464,18 +490,21 @@
         "id": 4,
         "options": {
           "barRadius": 0,
-          "barWidth": 0.97,
+          "barWidth": 0.99,
           "fullHighlight": false,
-          "groupWidth": 0.7,
+          "groupWidth": 0.38,
           "legend": {
             "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
+            "displayMode": "table",
+            "placement": "right",
             "showLegend": true
           },
           "orientation": "auto",
-          "showValue": "always",
+          "showValue": "never",
           "stacking": "none",
+          "text": {
+            "valueSize": 8
+          },
           "tooltip": {
             "hideZeros": false,
             "mode": "single",
@@ -512,7 +541,37 @@
             }
           }
         ],
-        "title": "New panel",
+        "title": "Device Errors",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "no_read_pct",
+              "renamePattern": "No Read %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "no_dimension_pct",
+              "renamePattern": "No Dimension % "
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "item_out_of_spec_pct",
+              "renamePattern": "Item out of spec %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "more_than_1_item_pct",
+              "renamePattern": "More than one item %"
+            }
+          }
+        ],
         "transparent": true,
         "type": "barchart"
       }
