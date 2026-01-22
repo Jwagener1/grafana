@@ -34,41 +34,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
+              "mode": "thresholds"
             },
             "mappings": [],
             "thresholds": {
@@ -95,17 +61,21 @@
         },
         "id": 1,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
           },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -115,14 +85,32 @@
               "type": "mssql",
               "uid": "PAAAEB8D7872B0C49"
             },
-            "editorMode": "builder",
+            "editorMode": "code",
             "format": "table",
-            "rawSql": "",
-            "refId": "A"
+            "rawQuery": true,
+            "rawSql": "WITH base AS (\r\n    SELECT\r\n        ds.ts_datetime,\r\n        ds.total_items,\r\n        ds.good_read\r\n    FROM dbo.device_statistics ds\r\n    JOIN dbo.devices d\r\n      ON d.id = ds.device_id\r\n    WHERE ('${customer}' = 'ALL' OR d.customer = '${customer}')\r\n)\r\nSELECT\r\n    period,\r\n    total_parcels,\r\n    good_read_pct\r\nFROM (\r\n    SELECT\r\n        1 AS sort_order,\r\n        'Year' AS period,\r\n        COALESCE(SUM(total_items), 0) AS total_parcels,\r\n        CAST(\r\n            COALESCE(100.0 * SUM(good_read) / NULLIF(SUM(total_items), 0), 0)\r\n            AS decimal(6,2)\r\n        ) AS good_read_pct\r\n    FROM base\r\n    WHERE ts_datetime \u003e= DATEFROMPARTS(YEAR(GETDATE()), 1, 1)\r\n      AND ts_datetime \u003c  DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(GETDATE()), 1, 1))\r\n\r\n    UNION ALL\r\n\r\n    SELECT\r\n        2 AS sort_order,\r\n        'Month' AS period,\r\n        COALESCE(SUM(total_items), 0) AS total_parcels,\r\n        CAST(\r\n            COALESCE(100.0 * SUM(good_read) / NULLIF(SUM(total_items), 0), 0)\r\n            AS decimal(6,2)\r\n        ) AS good_read_pct\r\n    FROM base\r\n    WHERE ts_datetime \u003e= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)\r\n      AND ts_datetime \u003c  DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))\r\n\r\n    UNION ALL\r\n\r\n    SELECT\r\n        3 AS sort_order,\r\n        'Day' AS period,\r\n        COALESCE(SUM(total_items), 0) AS total_parcels,\r\n        CAST(\r\n            COALESCE(100.0 * SUM(good_read) / NULLIF(SUM(total_items), 0), 0)\r\n            AS decimal(6,2)\r\n        ) AS good_read_pct\r\n    FROM base\r\n    WHERE ts_datetime \u003e= CAST(GETDATE() AS date)\r\n      AND ts_datetime \u003c  DATEADD(DAY, 1, CAST(GETDATE() AS date))\r\n) x\r\nORDER BY x.sort_order;\r\n",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
           }
         ],
         "title": "New panel",
-        "type": "timeseries"
+        "type": "stat"
       }
     ],
     "preload": false,
