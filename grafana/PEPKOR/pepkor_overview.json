@@ -173,7 +173,9 @@
               "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
-              "fillOpacity": 80,
+              "axisSoftMax": 104.9999,
+              "axisSoftMin": 0,
+              "fillOpacity": 0.5,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -188,6 +190,7 @@
                 "mode": "dashed"
               }
             },
+            "fieldMinMax": false,
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
@@ -211,15 +214,16 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 11,
-          "w": 17,
+          "h": 8,
+          "w": 24,
           "x": 0,
           "y": 4
         },
         "id": 2,
+        "maxPerRow": 2,
         "options": {
-          "barRadius": 0.5,
-          "barWidth": 0.42,
+          "barRadius": 0.4,
+          "barWidth": 0.41,
           "colorByField": "good_read_pct",
           "fullHighlight": false,
           "groupWidth": 0.7,
@@ -231,7 +235,10 @@
           },
           "orientation": "horizontal",
           "showValue": "always",
-          "stacking": "none",
+          "stacking": "normal",
+          "text": {
+            "valueSize": 16
+          },
           "tooltip": {
             "hideZeros": false,
             "mode": "single",
@@ -242,6 +249,8 @@
           "xTickLabelSpacing": 100
         },
         "pluginVersion": "12.3.1",
+        "repeat": "pepkor_devices",
+        "repeatDirection": "h",
         "targets": [
           {
             "dataset": "S1_Remote_Monitoring",
