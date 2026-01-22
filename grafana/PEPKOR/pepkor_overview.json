@@ -226,7 +226,7 @@
               "axisPlacement": "auto",
               "axisSoftMax": 104.9999,
               "axisSoftMin": 0,
-              "fillOpacity": 0.5,
+              "fillOpacity": 100,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
