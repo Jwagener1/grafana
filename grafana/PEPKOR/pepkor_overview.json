@@ -37,6 +37,130 @@
             "color": {
               "mode": "thresholds"
             },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 5,
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "dataset": "S1_Remote_Monitoring",
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT\r\n  CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n\r\n  SUM(COALESCE(ds.total_items, 0))          AS total_items,\r\n  SUM(COALESCE(ds.no_read, 0))              AS no_read,\r\n  SUM(COALESCE(ds.no_dimension, 0))         AS no_dimension,\r\n  SUM(COALESCE(ds.item_out_of_spec, 0))     AS item_out_of_spec,\r\n  SUM(COALESCE(ds.more_than_1_item, 0))     AS more_than_1_item\r\n  \r\n\r\nFROM dbo.devices d\r\nLEFT JOIN dbo.device_statistics ds\r\n  ON ds.device_id = d.id\r\n  AND $__timeFilter(ds.ts_datetime)\r\n\r\nWHERE\r\n  d.customer = '${Customer}'\r\n\r\nGROUP BY\r\n  d.location,\r\n  d.machine_name\r\n\r\nORDER BY\r\n  d.location,\r\n  d.machine_name;\r\n",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "Raw Metrics",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "device_name",
+              "renamePattern": "Machine"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "total_items",
+              "renamePattern": "Total Items"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "no_read",
+              "renamePattern": "No Read"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "no_dimension",
+              "renamePattern": "No Dimension"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "item_out_of_spec",
+              "renamePattern": "Item Out Of Spec"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "more_than_1_item",
+              "renamePattern": "More Than One Item"
+            }
+          }
+        ],
+        "transparent": true,
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "ffapo5htl28e8e"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
