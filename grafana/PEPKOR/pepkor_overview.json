@@ -573,7 +573,7 @@
             }
           }
         ],
-        "title": "New panel",
+        "title": "Device Status",
         "transformations": [
           {
             "id": "renameByRegex",
