@@ -624,7 +624,12 @@
         "options": {
           "cellHeight": "sm",
           "showHeader": true,
-          "sortBy": []
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Time Since Last Packet"
+            }
+          ]
         },
         "pluginVersion": "12.3.1",
         "targets": [
