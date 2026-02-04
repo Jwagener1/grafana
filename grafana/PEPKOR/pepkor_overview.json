@@ -453,9 +453,9 @@
         "id": 4,
         "options": {
           "barRadius": 0,
-          "barWidth": 0.99,
+          "barWidth": 1,
           "fullHighlight": false,
-          "groupWidth": 0.38,
+          "groupWidth": 0.5,
           "legend": {
             "calcs": [],
             "displayMode": "table",
@@ -466,7 +466,7 @@
           "showValue": "never",
           "stacking": "none",
           "text": {
-            "valueSize": 8
+            "valueSize": 90
           },
           "tooltip": {
             "hideZeros": false,
