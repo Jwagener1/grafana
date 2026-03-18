@@ -965,6 +965,8 @@
               "axisColorMode": "text",
               "axisLabel": "Good Read %",
               "axisPlacement": "auto",
+              "axisSoftMax": 105,
+              "axisSoftMin": 0,
               "fillOpacity": 80,
               "gradientMode": "none",
               "hideFrom": {
@@ -1003,7 +1005,20 @@
             },
             "unit": "percent"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byType",
+                "options": "number"
+              },
+              "properties": [
+                {
+                  "id": "max",
+                  "value": 104
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 14,
@@ -1013,7 +1028,7 @@
         },
         "id": 61,
         "options": {
-          "barRadius": 0,
+          "barRadius": 0.35,
           "barWidth": 0.6,
           "fillOpacity": 80,
           "fullHighlight": false,
