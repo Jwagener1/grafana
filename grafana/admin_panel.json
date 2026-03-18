@@ -467,6 +467,108 @@
           }
         ]
       }
+      ,
+      {
+        "id": 60,
+        "type": "barchart",
+        "title": "Items Processed — Per Hour Today",
+        "gridPos": { "x": 0, "y": 28, "w": 16, "h": 9 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "options": {
+          "barWidth": 0.7,
+          "groupWidth": 0.7,
+          "orientation": "auto",
+          "xTickLabelRotation": 0,
+          "xTickLabelSpacing": 0,
+          "fillOpacity": 80,
+          "gradientMode": "none",
+          "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+          "tooltip": { "mode": "single", "sort": "none" },
+          "xField": "Hour"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "fixed", "fixedColor": "blue" },
+            "custom": {
+              "axisPlacement": "auto",
+              "axisLabel": "Items",
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+              "lineWidth": 1
+            },
+            "mappings": [],
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": 0 }] }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT\n  RIGHT('0'+CAST(DATEPART(HOUR, ts_datetime) AS varchar),2)+':00' AS [Hour],\n  SUM(total_items) AS [Items]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= CAST(GETDATE() AS date)\nAND ds.ts_datetime < DATEADD(DAY,1,CAST(GETDATE() AS date))\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEPART(HOUR, ts_datetime)\nORDER BY DATEPART(HOUR, ts_datetime)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 61,
+        "type": "barchart",
+        "title": "Good Read % by Machine (Today)",
+        "gridPos": { "x": 16, "y": 28, "w": 8, "h": 9 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "options": {
+          "barWidth": 0.6,
+          "groupWidth": 0.7,
+          "orientation": "horizontal",
+          "xTickLabelRotation": 0,
+          "xTickLabelSpacing": 0,
+          "fillOpacity": 80,
+          "gradientMode": "none",
+          "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+          "tooltip": { "mode": "single", "sort": "none" },
+          "xField": "Machine"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "min": 0,
+            "max": 100,
+            "color": { "mode": "thresholds" },
+            "custom": {
+              "axisPlacement": "auto",
+              "axisLabel": "Good Read %",
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+              "lineWidth": 1
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "dark-red", "value": 0 },
+                { "color": "dark-orange", "value": 80 },
+                { "color": "dark-green", "value": 97 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT\n  d.machine_name AS [Machine],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= CAST(GETDATE() AS date)\nAND ds.ts_datetime < DATEADD(DAY,1,CAST(GETDATE() AS date))\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY d.machine_name\nORDER BY [Good Read %] ASC",
+            "refId": "A"
+          }
+        ]
+      }
     ]
   }
 }
