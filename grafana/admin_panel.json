@@ -405,52 +405,48 @@
             {
               "matcher": { "id": "byName", "options": "C: Drive %" },
               "properties": [
-                { "id": "custom.width", "value": 140 },
+                { "id": "custom.width", "value": 90 },
                 { "id": "unit", "value": "percent" },
-                { "id": "min", "value": 0 },
-                { "id": "max", "value": 100 },
-                { "id": "custom.cellOptions", "value": { "type": "gauge", "mode": "basic", "valueDisplayMode": "color" } },
-                { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }, { "color": "orange", "value": 75 }, { "color": "red", "value": 90 }] } }
+                { "id": "decimals", "value": 1 },
+                { "id": "color", "value": { "mode": "thresholds" } },
+                { "id": "custom.cellOptions", "value": { "type": "colored-text" } },
+                { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "dark-green", "value": 0 }, { "color": "dark-orange", "value": 75 }, { "color": "dark-red", "value": 90 }] } }
               ]
             },
             {
               "matcher": { "id": "byName", "options": "Items Today" },
-              "properties": [{ "id": "custom.width", "value": 100 }]
+              "properties": [{ "id": "custom.width", "value": 90 }]
             },
             {
               "matcher": { "id": "byName", "options": "Good Read %" },
               "properties": [
-                { "id": "custom.width", "value": 160 },
+                { "id": "custom.width", "value": 95 },
                 { "id": "unit", "value": "percent" },
                 { "id": "decimals", "value": 1 },
-                { "id": "min", "value": 0 },
-                { "id": "max", "value": 100 },
-                { "id": "custom.cellOptions", "value": { "type": "gauge", "mode": "basic", "valueDisplayMode": "text" } },
                 { "id": "color", "value": { "mode": "thresholds" } },
+                { "id": "custom.cellOptions", "value": { "type": "colored-text" } },
                 { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "dark-red", "value": 0 }, { "color": "dark-orange", "value": 80 }, { "color": "dark-green", "value": 97 }] } }
               ]
             },
             {
               "matcher": { "id": "byName", "options": "No Dims %" },
               "properties": [
-                { "id": "custom.width", "value": 110 },
+                { "id": "custom.width", "value": 90 },
                 { "id": "unit", "value": "percent" },
                 { "id": "decimals", "value": 1 },
-                { "id": "min", "value": 0 },
-                { "id": "max", "value": 100 },
                 { "id": "color", "value": { "mode": "thresholds" } },
+                { "id": "custom.cellOptions", "value": { "type": "colored-text" } },
                 { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "dark-green", "value": 0 }, { "color": "dark-orange", "value": 1 }, { "color": "dark-red", "value": 3 }] } }
               ]
             },
             {
               "matcher": { "id": "byName", "options": "No Weight %" },
               "properties": [
-                { "id": "custom.width", "value": 120 },
+                { "id": "custom.width", "value": 95 },
                 { "id": "unit", "value": "percent" },
                 { "id": "decimals", "value": 1 },
-                { "id": "min", "value": 0 },
-                { "id": "max", "value": 100 },
                 { "id": "color", "value": { "mode": "thresholds" } },
+                { "id": "custom.cellOptions", "value": { "type": "colored-text" } },
                 { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "dark-green", "value": 0 }, { "color": "dark-orange", "value": 1 }, { "color": "dark-red", "value": 3 }] } }
               ]
             }
