@@ -5,714 +5,300 @@
     "name": "dbfax7xzsblmgwa"
   },
   "spec": {
-    "annotations": {
+    "title": "admin_panel",
+    "uid": "dbfax7xzsblmgwa",
+    "schemaVersion": 42,
+    "refresh": "30s",
+    "timezone": "browser",
+    "time": { "from": "now/d", "to": "now" },
+    "timepicker": { "refresh_intervals": ["5s","30s","1m","5m"] },
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "preload": false,
+    "editable": true,
+    "tags": ["overview"],
+    "links": [],
+    "annotations": { "list": [] },
+    "templating": {
       "list": [
         {
-          "builtIn": 1,
-          "datasource": {
-            "type": "grafana",
-            "uid": "-- Grafana --"
-          },
-          "enable": true,
-          "hide": true,
-          "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations \u0026 Alerts",
-          "type": "dashboard"
+          "name": "tenant",
+          "label": "Customer",
+          "description": "Filter by customer",
+          "type": "query",
+          "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+          "definition": "SELECT * FROM (\n  SELECT 'All' AS __text, '__ALL__' AS __value\n  UNION ALL\n  SELECT DISTINCT customer AS __text, customer AS __value FROM dbo.devices\n) v ORDER BY CASE WHEN __value='__ALL__' THEN 0 ELSE 1 END, __value",
+          "query": "SELECT * FROM (\n  SELECT 'All' AS __text, '__ALL__' AS __value\n  UNION ALL\n  SELECT DISTINCT customer AS __text, customer AS __value FROM dbo.devices\n) v ORDER BY CASE WHEN __value='__ALL__' THEN 0 ELSE 1 END, __value",
+          "refresh": 1,
+          "regex": "",
+          "sort": 0,
+          "includeAll": false,
+          "allowCustomValue": false,
+          "current": { "text": "All", "value": "__ALL__" },
+          "options": []
         }
       ]
     },
-    "editable": true,
-    "fiscalYearStartMonth": 0,
-    "graphTooltip": 0,
-    "links": [],
     "panels": [
       {
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
+        "id": 10,
+        "type": "stat",
+        "title": "Total Devices",
+        "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "orientation": "auto",
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto"
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
+            "color": { "mode": "fixed", "fixedColor": "blue" },
+            "mappings": [],
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": 0 }] }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT COUNT(*) AS [Total Devices] FROM dbo.devices WHERE (${tenant:sqlstring} = '__ALL__' OR customer = ${tenant:sqlstring})",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "type": "stat",
+        "title": "Online Now",
+        "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "orientation": "auto",
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "thresholds" },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
+                { "color": "red", "value": 0 },
+                { "color": "green", "value": 1 }
               ]
             }
           },
           "overrides": []
         },
-        "gridPos": {
-          "h": 4,
-          "w": 24,
-          "x": 0,
-          "y": 0
-        },
-        "id": 1,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "text": {
-            "titleSize": 15,
-            "valueSize": 25
-          },
-          "textMode": "auto",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.3.1",
         "targets": [
           {
-            "dataset": "S1_Remote_Monitoring",
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "WITH base AS (\r\n    SELECT\r\n        ds.ts_datetime,\r\n        ds.total_items,\r\n        ds.good_read\r\n    FROM dbo.device_statistics ds\r\n    JOIN dbo.devices d\r\n        ON d.id = ds.device_id\r\n    WHERE (\r\n        ${tenant:sqlstring} = '__ALL__'\r\n        OR d.customer = ${tenant:sqlstring}\r\n    )\r\n),\r\nbounds AS (\r\n    SELECT\r\n        CAST(GETDATE() AS date) AS day_start,\r\n        DATEADD(DAY, 1, CAST(GETDATE() AS date)) AS day_end,\r\n\r\n        DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AS month_start,\r\n        DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS month_end,\r\n\r\n        DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AS year_start,\r\n        DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(GETDATE()), 1, 1)) AS year_end\r\n)\r\nSELECT\r\n    -- Year\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.total_items ELSE 0 END), 0)\r\n        AS year_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS year_good_read_pct,\r\n\r\n    -- Month\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.total_items ELSE 0 END), 0)\r\n        AS month_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS month_good_read_pct,\r\n\r\n    -- Day\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.total_items ELSE 0 END), 0)\r\n        AS day_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS day_good_read_pct\r\nFROM base b\r\nCROSS JOIN bounds bo;\r\n",
-            "refId": "A",
-            "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
-              "groupBy": [
-                {
-                  "property": {
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "limit": 50
-            }
+            "rawSql": "SELECT COUNT(*) AS [Online Now]\nFROM dbo.device_status ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.status = 'online'\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "refId": "A"
           }
-        ],
-        "title": "New panel",
-        "type": "stat"
+        ]
       },
       {
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
+        "id": 12,
+        "type": "stat",
+        "title": "Total Items Today",
+        "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "orientation": "auto",
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto"
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "center",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "footer": {
-                "reducers": []
-              },
-              "inspect": false
-            },
+            "color": { "mode": "fixed", "fixedColor": "purple" },
+            "mappings": [],
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": 0 }] }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Items Today]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= CAST(GETDATE() AS date)\nAND ds.ts_datetime < DATEADD(DAY,1,CAST(GETDATE() AS date))\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "type": "stat",
+        "title": "Avg Good Read % Today",
+        "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "orientation": "auto",
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "thresholds" },
+            "unit": "percent",
+            "decimals": 1,
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
+                { "color": "dark-red", "value": 0 },
+                { "color": "dark-orange", "value": 80 },
+                { "color": "dark-green", "value": 97 }
               ]
             }
           },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "device_os_version"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 211
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Online Status"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 104
-                },
-                {
-                  "id": "mappings",
-                  "value": [
-                    {
-                      "options": {
-                        "offline": {
-                          "index": 1,
-                          "text": "🔴 Offline"
-                        },
-                        "online": {
-                          "index": 0,
-                          "text": "🟢 Online"
-                        }
-                      },
-                      "type": "value"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Name"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 70
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Location"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 71
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Customer"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 79
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "C drive used in %"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 213
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "mode": "basic",
-                    "type": "gauge",
-                    "valueDisplayMode": "color"
-                  }
-                },
-                {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "min",
-                  "value": 0
-                },
-                {
-                  "id": "max",
-                  "value": 100
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Total Items"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 95
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Good Read%"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 192
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "mode": "basic",
-                    "type": "gauge",
-                    "valueDisplayMode": "text"
-                  }
-                },
-                {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "min",
-                  "value": 0
-                },
-                {
-                  "id": "max",
-                  "value": 100
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "dark-red",
-                        "value": 0
-                      },
-                      {
-                        "color": "dark-orange",
-                        "value": 80
-                      },
-                      {
-                        "color": "dark-green",
-                        "value": 97
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "no_dimensions%"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 168
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "type": "gauge",
-                    "valueDisplayMode": "color"
-                  }
-                },
-                {
-                  "id": "min",
-                  "value": 0
-                },
-                {
-                  "id": "max",
-                  "value": 100
-                },
-                {
-                  "id": "color"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "dark-green",
-                        "value": 0
-                      },
-                      {
-                        "color": "dark-orange",
-                        "value": 1
-                      },
-                      {
-                        "color": "dark-red",
-                        "value": 3
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "decimals",
-                  "value": 2
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "no_weight%"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 136
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "mode": "basic",
-                    "type": "gauge",
-                    "valueDisplayMode": "color"
-                  }
-                },
-                {
-                  "id": "min",
-                  "value": 0
-                },
-                {
-                  "id": "max",
-                  "value": 100
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "dark-orange",
-                        "value": 1
-                      },
-                      {
-                        "color": "dark-red",
-                        "value": 3
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color"
-                },
-                {
-                  "id": "decimals",
-                  "value": 1
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "out_of_spec%"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 130
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "more_than_one_item%"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 166
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "mode": "basic",
-                    "type": "gauge"
-                  }
-                },
-                {
-                  "id": "min",
-                  "value": 0
-                },
-                {
-                  "id": "max",
-                  "value": 100
-                },
-                {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "color"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "dark-green",
-                        "value": 0
-                      },
-                      {
-                        "color": "dark-orange",
-                        "value": 3
-                      },
-                      {
-                        "color": "dark-red",
-                        "value": 10
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "decimals",
-                  "value": 2
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "No Weight %"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 246
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "No Dimensions %"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 222
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Item out of specifications %"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 156
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "type": "gauge"
-                  }
-                },
-                {
-                  "id": "max",
-                  "value": 100
-                },
-                {
-                  "id": "min",
-                  "value": 0
-                },
-                {
-                  "id": "color"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      },
-                      {
-                        "color": "#EAB839",
-                        "value": 90
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "decimals",
-                  "value": 2
-                }
-              ]
-            }
-          ]
+          "overrides": []
         },
-        "gridPos": {
-          "h": 20,
-          "w": 24,
-          "x": 0,
-          "y": 4
-        },
-        "id": 2,
-        "options": {
-          "cellHeight": "md",
-          "enablePagination": false,
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": false,
-              "displayName": "No Weight %"
-            }
-          ]
-        },
-        "pluginVersion": "12.3.1",
         "targets": [
           {
-            "dataset": "S1_Remote_Monitoring",
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "WITH device_scope AS (\r\n  SELECT d.id, d.customer, d.location, d.machine_name\r\n  FROM dbo.devices d\r\n  WHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\r\n),\r\nlatest_status AS (\r\n  SELECT x.device_id, x.status\r\n  FROM (\r\n    SELECT ds.device_id, ds.status,\r\n           ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\r\n    FROM dbo.device_status ds\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nlatest_os AS (\r\n  SELECT x.device_id, x.os_version\r\n  FROM (\r\n    SELECT os.device_id, os.os_version,\r\n           ROW_NUMBER() OVER (PARTITION BY os.device_id ORDER BY os.ts_datetime DESC) AS rn\r\n    FROM dbo.device_os_status os\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nlatest_c_drive AS (\r\n  SELECT x.device_id, x.usage_percent\r\n  FROM (\r\n    SELECT ss.device_id, ss.usage_percent,\r\n           ROW_NUMBER() OVER (PARTITION BY ss.device_id ORDER BY ss.ts_datetime DESC) AS rn\r\n    FROM dbo.device_storage_status ss\r\n    WHERE ss.drive = 'C'\r\n  ) x\r\n  WHERE x.rn = 1\r\n),\r\nstats AS (\r\n  SELECT\r\n    ds.device_id,\r\n    SUM(ds.total_items)        AS total_items,\r\n    SUM(ds.good_read)          AS good_read,\r\n    SUM(ds.no_dimension)       AS no_dimension,\r\n    SUM(ds.no_weight)          AS no_weight,\r\n    SUM(ds.item_out_of_spec)   AS item_out_of_spec,\r\n    SUM(ds.more_than_1_item)   AS more_than_1_item\r\n  FROM dbo.device_statistics ds\r\n  WHERE $__timeFilter(ds.ts_datetime)\r\n  GROUP BY ds.device_id\r\n)\r\nSELECT\r\n  sc.customer                                AS Customer,\r\n  sc.location                                AS Location,\r\n  sc.machine_name                            AS Name,\r\n\r\n  COALESCE(ls.status, 'unknown')             AS [Online Status],\r\n\r\n  COALESCE(\r\n  CASE\r\n    -- Windows 11 (builds may appear anywhere in the string)\r\n    WHEN lo.os_version LIKE '%10.0.26200%' THEN 'Windows 11 25H2'\r\n    WHEN lo.os_version LIKE '%10.0.26100%' THEN 'Windows 11 24H2'\r\n    WHEN lo.os_version LIKE '%10.0.22631%' THEN 'Windows 11 23H2'\r\n    WHEN lo.os_version LIKE '%10.0.22621%' THEN 'Windows 11 22H2'\r\n    WHEN lo.os_version LIKE '%10.0.22000%' THEN 'Windows 11 21H2'\r\n\r\n    -- Windows 10\r\n    WHEN lo.os_version LIKE '%10.0.19045%' THEN 'Windows 10 22H2'\r\n    WHEN lo.os_version LIKE '%10.0.19044%' THEN 'Windows 10 21H2'\r\n\r\n    -- Null/empty\r\n    WHEN lo.os_version IS NULL OR LTRIM(RTRIM(lo.os_version)) = '' THEN NULL\r\n\r\n    -- Unknown: if we can find a Windows-style build, show it\r\n    WHEN CHARINDEX('10.0.', lo.os_version) \u003e 0 THEN\r\n      'Unknown (' +\r\n      SUBSTRING(\r\n        lo.os_version,\r\n        CHARINDEX('10.0.', lo.os_version),\r\n        CHARINDEX(' ', lo.os_version + ' ', CHARINDEX('10.0.', lo.os_version)) - CHARINDEX('10.0.', lo.os_version)\r\n      )\r\n      + ')'\r\n\r\n    -- Fallback: show first 40 chars so you can see what it is\r\n    ELSE 'Unknown (' + LEFT(LTRIM(RTRIM(lo.os_version)), 40) + ')'\r\n  END,\r\n  'Unknown'\r\n) AS device_os_version,\r\n\r\n  CAST(COALESCE(lc.usage_percent, 0) AS decimal(5,2))  AS [C drive used in %],\r\n\r\n  COALESCE(st.total_items, 0)                           AS [Total Items],\r\n\r\n  CAST(COALESCE(100.0 * st.good_read        / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [Good Read%],\r\n  CAST(COALESCE(100.0 * st.no_dimension     / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [no_dimensions%],\r\n  CAST(COALESCE(100.0 * st.no_weight        / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [no_weight%],\r\n  CAST(COALESCE(100.0 * st.item_out_of_spec / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [out_of_spec%],\r\n  CAST(COALESCE(100.0 * st.more_than_1_item / NULLIF(st.total_items, 0), 0) AS decimal(6,2)) AS [more_than_one_item%]\r\n\r\nFROM device_scope sc\r\nLEFT JOIN latest_status   ls ON ls.device_id = sc.id\r\nLEFT JOIN latest_os       lo ON lo.device_id = sc.id\r\nLEFT JOIN latest_c_drive  lc ON lc.device_id = sc.id\r\nLEFT JOIN stats           st ON st.device_id = sc.id\r\nORDER BY sc.customer, sc.location, sc.machine_name;\r\n",
-            "refId": "A",
-            "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
-              "groupBy": [
-                {
-                  "property": {
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "limit": 50
-            }
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(6,2)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= CAST(GETDATE() AS date)\nAND ds.ts_datetime < DATEADD(DAY,1,CAST(GETDATE() AS date))\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "refId": "A"
           }
-        ],
-        "title": "New panel",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "device_os_version",
-              "renamePattern": "OS Version"
-            }
+        ]
+      },
+      {
+        "id": 20,
+        "type": "table",
+        "title": "Device Overview",
+        "gridPos": { "x": 0, "y": 4, "w": 24, "h": 20 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "options": {
+          "cellHeight": "md",
+          "showHeader": true,
+          "enablePagination": false,
+          "sortBy": [{ "displayName": "Customer", "desc": false }]
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "thresholds" },
+            "custom": {
+              "align": "center",
+              "cellOptions": { "type": "auto" },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }] }
           },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "no_dimensions%",
-              "renamePattern": "No Dimensions %"
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "Status" },
+              "properties": [
+                { "id": "custom.width", "value": 110 },
+                { "id": "mappings", "value": [{ "type": "value", "options": { "online": { "text": "🟢 Online", "index": 0 }, "offline": { "text": "🔴 Offline", "index": 1 } } }] }
+              ]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Customer" },
+              "properties": [{ "id": "custom.width", "value": 100 }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Location" },
+              "properties": [{ "id": "custom.width", "value": 90 }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Machine" },
+              "properties": [{ "id": "custom.width", "value": 80 }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "OS Version" },
+              "properties": [{ "id": "custom.width", "value": 180 }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "C: Drive %" },
+              "properties": [
+                { "id": "custom.width", "value": 140 },
+                { "id": "unit", "value": "percent" },
+                { "id": "min", "value": 0 },
+                { "id": "max", "value": 100 },
+                { "id": "custom.cellOptions", "value": { "type": "gauge", "mode": "basic", "valueDisplayMode": "color" } },
+                { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }, { "color": "orange", "value": 75 }, { "color": "red", "value": 90 }] } }
+              ]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Items Today" },
+              "properties": [{ "id": "custom.width", "value": 100 }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Good Read %" },
+              "properties": [
+                { "id": "custom.width", "value": 160 },
+                { "id": "unit", "value": "percent" },
+                { "id": "decimals", "value": 1 },
+                { "id": "min", "value": 0 },
+                { "id": "max", "value": 100 },
+                { "id": "custom.cellOptions", "value": { "type": "gauge", "mode": "basic", "valueDisplayMode": "text" } },
+                { "id": "color", "value": { "mode": "thresholds" } },
+                { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "dark-red", "value": 0 }, { "color": "dark-orange", "value": 80 }, { "color": "dark-green", "value": 97 }] } }
+              ]
+            },
+            {
+              "matcher": { "id": "byName", "options": "No Dims %" },
+              "properties": [
+                { "id": "custom.width", "value": 110 },
+                { "id": "unit", "value": "percent" },
+                { "id": "decimals", "value": 1 },
+                { "id": "min", "value": 0 },
+                { "id": "max", "value": 100 },
+                { "id": "color", "value": { "mode": "thresholds" } },
+                { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "dark-green", "value": 0 }, { "color": "dark-orange", "value": 1 }, { "color": "dark-red", "value": 3 }] } }
+              ]
+            },
+            {
+              "matcher": { "id": "byName", "options": "No Weight %" },
+              "properties": [
+                { "id": "custom.width", "value": 120 },
+                { "id": "unit", "value": "percent" },
+                { "id": "decimals", "value": 1 },
+                { "id": "min", "value": 0 },
+                { "id": "max", "value": 100 },
+                { "id": "color", "value": { "mode": "thresholds" } },
+                { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "dark-green", "value": 0 }, { "color": "dark-orange", "value": 1 }, { "color": "dark-red", "value": 3 }] } }
+              ]
             }
-          },
+          ]
+        },
+        "targets": [
           {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "no_weight%",
-              "renamePattern": "No Weight %"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "out_of_spec%",
-              "renamePattern": "Item out of specifications %"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "more_than_one_item%",
-              "renamePattern": "More than one item %"
-            }
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "WITH device_scope AS (\n  SELECT d.id, d.customer, d.location, d.machine_name\n  FROM dbo.devices d\n  WHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nlatest_status AS (\n  SELECT x.device_id, x.status FROM (\n    SELECT ds.device_id, ds.status,\n           ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n    FROM dbo.device_status ds\n  ) x WHERE x.rn = 1\n),\nlatest_os AS (\n  SELECT x.device_id, x.os_version FROM (\n    SELECT os.device_id, os.os_version,\n           ROW_NUMBER() OVER (PARTITION BY os.device_id ORDER BY os.ts_datetime DESC) AS rn\n    FROM dbo.device_os_status os\n  ) x WHERE x.rn = 1\n),\nlatest_c_drive AS (\n  SELECT x.device_id, x.usage_percent FROM (\n    SELECT ss.device_id, ss.usage_percent,\n           ROW_NUMBER() OVER (PARTITION BY ss.device_id ORDER BY ss.ts_datetime DESC) AS rn\n    FROM dbo.device_storage_status ss WHERE ss.drive = 'C'\n  ) x WHERE x.rn = 1\n),\nstats AS (\n  SELECT ds.device_id,\n    SUM(ds.total_items) AS total_items,\n    SUM(ds.good_read)   AS good_read,\n    SUM(ds.no_dimension) AS no_dimension,\n    SUM(ds.no_weight)   AS no_weight\n  FROM dbo.device_statistics ds\n  WHERE ds.ts_datetime >= CAST(GETDATE() AS date)\n  AND ds.ts_datetime < DATEADD(DAY,1,CAST(GETDATE() AS date))\n  GROUP BY ds.device_id\n)\nSELECT\n  sc.customer                                                    AS [Customer],\n  sc.location                                                    AS [Location],\n  sc.machine_name                                                AS [Machine],\n  COALESCE(ls.status, 'unknown')                                 AS [Status],\n  COALESCE(\n    CASE\n      WHEN lo.os_version LIKE '%10.0.26100%' THEN 'Win 11 24H2'\n      WHEN lo.os_version LIKE '%10.0.22631%' THEN 'Win 11 23H2'\n      WHEN lo.os_version LIKE '%10.0.22621%' THEN 'Win 11 22H2'\n      WHEN lo.os_version LIKE '%10.0.22000%' THEN 'Win 11 21H2'\n      WHEN lo.os_version LIKE '%10.0.19045%' THEN 'Win 10 22H2'\n      WHEN lo.os_version LIKE '%10.0.19044%' THEN 'Win 10 21H2'\n      ELSE 'Unknown'\n    END, 'Unknown'\n  )                                                              AS [OS Version],\n  CAST(COALESCE(lc.usage_percent, 0) AS decimal(5,1))           AS [C: Drive %],\n  COALESCE(st.total_items, 0)                                    AS [Items Today],\n  CAST(COALESCE(100.0*st.good_read/NULLIF(st.total_items,0),0) AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*st.no_dimension/NULLIF(st.total_items,0),0) AS decimal(5,1)) AS [No Dims %],\n  CAST(COALESCE(100.0*st.no_weight/NULLIF(st.total_items,0),0) AS decimal(5,1))   AS [No Weight %]\nFROM device_scope sc\nLEFT JOIN latest_status  ls ON ls.device_id = sc.id\nLEFT JOIN latest_os      lo ON lo.device_id = sc.id\nLEFT JOIN latest_c_drive lc ON lc.device_id = sc.id\nLEFT JOIN stats          st ON st.device_id = sc.id\nORDER BY sc.customer, sc.location, sc.machine_name",
+            "refId": "A"
           }
-        ],
-        "type": "table"
+        ]
       }
-    ],
-    "preload": false,
-    "refresh": "5s",
-    "schemaVersion": 42,
-    "tags": [],
-    "templating": {
-      "list": [
-        {
-          "allowCustomValue": false,
-          "current": {
-            "text": "All",
-            "value": "__ALL__"
-          },
-          "definition": "SELECT *\nFROM (\n    SELECT 'All' AS __text, '__ALL__' AS __value\n    UNION ALL\n    SELECT DISTINCT\n        d.customer AS __text,\n        d.customer AS __value\n    FROM dbo.devices d\n) v\nORDER BY\n    CASE WHEN v.__value = '__ALL__' THEN 0 ELSE 1 END,\n    v.__value;\n",
-          "description": "Select the customer you wish to view.",
-          "includeAll": false,
-          "label": "Customer",
-          "name": "tenant",
-          "options": [],
-          "query": "SELECT *\nFROM (\n    SELECT 'All' AS __text, '__ALL__' AS __value\n    UNION ALL\n    SELECT DISTINCT\n        d.customer AS __text,\n        d.customer AS __value\n    FROM dbo.devices d\n) v\nORDER BY\n    CASE WHEN v.__value = '__ALL__' THEN 0 ELSE 1 END,\n    v.__value;\n",
-          "refresh": 1,
-          "regex": "",
-          "sort": 1,
-          "type": "query"
-        }
-      ]
-    },
-    "time": {
-      "from": "now/d",
-      "to": "now"
-    },
-    "timepicker": {
-      "refresh_intervals": [
-        "5s"
-      ]
-    },
-    "timezone": "browser",
-    "title": "admin_panel"
+    ]
   }
 }
