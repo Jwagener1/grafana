@@ -10,15 +10,29 @@
     "schemaVersion": 42,
     "refresh": "30s",
     "timezone": "browser",
-    "time": { "from": "now-24h", "to": "now" },
-    "timepicker": { "refresh_intervals": ["5s","30s","1m","5m"] },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "30s",
+        "1m",
+        "5m"
+      ]
+    },
     "fiscalYearStartMonth": 0,
     "graphTooltip": 1,
     "preload": false,
     "editable": true,
-    "tags": ["detail"],
+    "tags": [
+      "detail"
+    ],
     "links": [],
-    "annotations": { "list": [] },
+    "annotations": {
+      "list": []
+    },
     "templating": {
       "list": [
         {
@@ -26,7 +40,10 @@
           "label": "Machine",
           "description": "Select a device to inspect",
           "type": "query",
-          "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+          "datasource": {
+            "type": "mssql",
+            "uid": "PAAAEB8D7872B0C49"
+          },
           "definition": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
           "query": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
           "refresh": 1,
@@ -44,10 +61,24 @@
         "id": 1,
         "type": "stat",
         "title": "Status",
-        "gridPos": { "x": 0, "y": 0, "w": 4, "h": 4 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "colorMode": "background",
           "graphMode": "none",
           "justifyMode": "center",
@@ -56,17 +87,44 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": { "mode": "thresholds" },
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [
-              { "type": "value", "options": { "online": { "text": "🟢 Online", "color": "dark-green", "index": 0 }, "offline": { "text": "🔴 Offline", "color": "dark-red", "index": 1 } } }
+              {
+                "type": "value",
+                "options": {
+                  "online": {
+                    "text": "\ud83d\udfe2 Online",
+                    "color": "dark-green",
+                    "index": 0
+                  },
+                  "offline": {
+                    "text": "\ud83d\udd34 Offline",
+                    "color": "dark-red",
+                    "index": 1
+                  }
+                }
+              }
             ],
-            "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": 0 }] }
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": 0
+                }
+              ]
+            }
           },
           "overrides": []
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -79,10 +137,24 @@
         "id": 2,
         "type": "stat",
         "title": "OS Version",
-        "gridPos": { "x": 4, "y": 0, "w": 5, "h": 4 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 4,
+          "y": 0,
+          "w": 5,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "colorMode": "background",
           "graphMode": "none",
           "justifyMode": "center",
@@ -91,27 +163,59 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": { "mode": "fixed", "fixedColor": "blue" },
+            "color": {
+              "mode": "fixed",
+              "fixedColor": "blue"
+            },
             "mappings": [
-              { "type": "value", "options": {
-                "Microsoft Windows NT 10.0.26100.0": { "text": "Win 11 24H2", "index": 0 },
-                "Microsoft Windows NT 10.0.22631.0": { "text": "Win 11 23H2", "index": 1 },
-                "Microsoft Windows NT 10.0.22621.0": { "text": "Win 11 22H2", "index": 2 },
-                "Microsoft Windows NT 10.0.19045.0": { "text": "Win 10 22H2", "index": 3 },
-                "Microsoft Windows NT 10.0.19044.0": { "text": "Win 10 21H2", "index": 4 }
-              }}
+              {
+                "type": "value",
+                "options": {
+                  "Microsoft Windows NT 10.0.26100.0": {
+                    "text": "Win 11 24H2",
+                    "index": 0
+                  },
+                  "Microsoft Windows NT 10.0.22631.0": {
+                    "text": "Win 11 23H2",
+                    "index": 1
+                  },
+                  "Microsoft Windows NT 10.0.22621.0": {
+                    "text": "Win 11 22H2",
+                    "index": 2
+                  },
+                  "Microsoft Windows NT 10.0.19045.0": {
+                    "text": "Win 10 22H2",
+                    "index": 3
+                  },
+                  "Microsoft Windows NT 10.0.19044.0": {
+                    "text": "Win 10 21H2",
+                    "index": 4
+                  }
+                }
+              }
             ],
-            "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": 0 }] }
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": 0
+                }
+              ]
+            }
           },
           "overrides": []
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT TOP 1 os_version AS [OS]\nFROM dbo.device_os_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
+            "rawSql": "SELECT TOP 1\nCASE\n  WHEN os_version LIKE '%10.0.26200%' THEN 'Win 11 24H2+'\n  WHEN os_version LIKE '%10.0.26120%' THEN 'Win 11 24H2+'\n  WHEN os_version LIKE '%10.0.26100%' THEN 'Win 11 24H2'\n  WHEN os_version LIKE '%10.0.25398%' THEN 'Win 11 23H2'\n  WHEN os_version LIKE '%10.0.22631%' THEN 'Win 11 23H2'\n  WHEN os_version LIKE '%10.0.22621%' THEN 'Win 11 22H2'\n  WHEN os_version LIKE '%10.0.22000%' THEN 'Win 11 21H2'\n  WHEN os_version LIKE '%10.0.19045%' THEN 'Win 10 22H2'\n  WHEN os_version LIKE '%10.0.19044%' THEN 'Win 10 21H2'\n  WHEN os_version LIKE '%10.0.19043%' THEN 'Win 10 21H1'\n  WHEN os_version LIKE '%10.0.19042%' THEN 'Win 10 20H2'\n  WHEN os_version LIKE '%10.0.19041%' THEN 'Win 10 2004'\n  ELSE os_version\nEND AS [OS]\nFROM dbo.device_os_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
             "refId": "A"
           }
         ]
@@ -120,10 +224,24 @@
         "id": 3,
         "type": "stat",
         "title": "C: Drive Used",
-        "gridPos": { "x": 9, "y": 0, "w": 4, "h": 4 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 9,
+          "y": 0,
+          "w": 4,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "colorMode": "background",
           "graphMode": "none",
           "justifyMode": "center",
@@ -134,14 +252,25 @@
           "defaults": {
             "unit": "percent",
             "decimals": 1,
-            "color": { "mode": "thresholds" },
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                { "color": "dark-green", "value": 0 },
-                { "color": "dark-orange", "value": 75 },
-                { "color": "dark-red", "value": 90 }
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 75
+                },
+                {
+                  "color": "dark-red",
+                  "value": 90
+                }
               ]
             }
           },
@@ -149,7 +278,10 @@
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -162,10 +294,24 @@
         "id": 4,
         "type": "stat",
         "title": "Items Today",
-        "gridPos": { "x": 13, "y": 0, "w": 4, "h": 4 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 13,
+          "y": 0,
+          "w": 4,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "colorMode": "background",
           "graphMode": "none",
           "justifyMode": "center",
@@ -174,15 +320,29 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": { "mode": "fixed", "fixedColor": "purple" },
+            "color": {
+              "mode": "fixed",
+              "fixedColor": "purple"
+            },
             "mappings": [],
-            "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": 0 }] }
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "purple",
+                  "value": 0
+                }
+              ]
+            }
           },
           "overrides": []
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -195,10 +355,24 @@
         "id": 5,
         "type": "stat",
         "title": "Good Read % Today",
-        "gridPos": { "x": 17, "y": 0, "w": 4, "h": 4 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 17,
+          "y": 0,
+          "w": 4,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "colorMode": "background",
           "graphMode": "none",
           "justifyMode": "center",
@@ -209,14 +383,25 @@
           "defaults": {
             "unit": "percent",
             "decimals": 1,
-            "color": { "mode": "thresholds" },
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                { "color": "dark-red", "value": 0 },
-                { "color": "dark-orange", "value": 80 },
-                { "color": "dark-green", "value": 97 }
+                {
+                  "color": "dark-red",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
+                }
               ]
             }
           },
@@ -224,7 +409,10 @@
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -237,10 +425,24 @@
         "id": 6,
         "type": "stat",
         "title": "Customer / Location",
-        "gridPos": { "x": 21, "y": 0, "w": 3, "h": 4 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 21,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "/.*/" , "values": true },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/.*/",
+            "values": true
+          },
           "colorMode": "none",
           "graphMode": "none",
           "justifyMode": "center",
@@ -249,15 +451,29 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": { "mode": "fixed", "fixedColor": "text" },
+            "color": {
+              "mode": "fixed",
+              "fixedColor": "text"
+            },
             "mappings": [],
-            "thresholds": { "mode": "absolute", "steps": [{ "color": "text", "value": 0 }] }
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": 0
+                }
+              ]
+            }
           },
           "overrides": []
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -270,15 +486,32 @@
         "id": 30,
         "type": "timeseries",
         "title": "Items Processed Over Time",
-        "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 0,
+          "y": 4,
+          "w": 12,
+          "h": 8
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "tooltip": { "mode": "single", "sort": "none" },
-          "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
         },
         "fieldConfig": {
           "defaults": {
-            "color": { "mode": "palette-classic" },
+            "color": {
+              "mode": "palette-classic"
+            },
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 15,
@@ -289,17 +522,34 @@
               "spanNulls": false,
               "axisPlacement": "auto",
               "axisLabel": "",
-              "scaleDistribution": { "type": "linear" },
-              "hideFrom": { "legend": false, "tooltip": false, "viz": false }
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
             },
             "mappings": [],
-            "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }] }
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
           },
           "overrides": []
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "time_series",
             "rawQuery": true,
@@ -312,18 +562,36 @@
         "id": 31,
         "type": "timeseries",
         "title": "Good Read % Over Time",
-        "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 12,
+          "y": 4,
+          "w": 12,
+          "h": 8
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "tooltip": { "mode": "single", "sort": "none" },
-          "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
         },
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
             "min": 0,
             "max": 100,
-            "color": { "mode": "fixed", "fixedColor": "green" },
+            "color": {
+              "mode": "fixed",
+              "fixedColor": "green"
+            },
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 20,
@@ -333,16 +601,31 @@
               "showPoints": "auto",
               "spanNulls": false,
               "axisPlacement": "auto",
-              "scaleDistribution": { "type": "linear" },
-              "hideFrom": { "legend": false, "tooltip": false, "viz": false }
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
             },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                { "color": "dark-red", "value": 0 },
-                { "color": "dark-orange", "value": 80 },
-                { "color": "dark-green", "value": 97 }
+                {
+                  "color": "dark-red",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
+                }
               ]
             }
           },
@@ -350,7 +633,10 @@
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "time_series",
             "rawQuery": true,
@@ -363,10 +649,24 @@
         "id": 40,
         "type": "gauge",
         "title": "No Dimensions %",
-        "gridPos": { "x": 0, "y": 12, "w": 6, "h": 5 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 0,
+          "y": 12,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "orientation": "auto",
           "showThresholdLabels": false,
           "showThresholdMarkers": true
@@ -377,14 +677,25 @@
             "decimals": 1,
             "min": 0,
             "max": 10,
-            "color": { "mode": "thresholds" },
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                { "color": "dark-green", "value": 0 },
-                { "color": "dark-orange", "value": 1 },
-                { "color": "dark-red", "value": 3 }
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 3
+                }
               ]
             }
           },
@@ -392,7 +703,10 @@
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -405,10 +719,24 @@
         "id": 41,
         "type": "gauge",
         "title": "No Weight %",
-        "gridPos": { "x": 6, "y": 12, "w": 6, "h": 5 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 6,
+          "y": 12,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "orientation": "auto",
           "showThresholdLabels": false,
           "showThresholdMarkers": true
@@ -419,14 +747,25 @@
             "decimals": 1,
             "min": 0,
             "max": 10,
-            "color": { "mode": "thresholds" },
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                { "color": "dark-green", "value": 0 },
-                { "color": "dark-orange", "value": 1 },
-                { "color": "dark-red", "value": 3 }
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 3
+                }
               ]
             }
           },
@@ -434,7 +773,10 @@
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -447,10 +789,24 @@
         "id": 42,
         "type": "gauge",
         "title": "Out of Spec %",
-        "gridPos": { "x": 12, "y": 12, "w": 6, "h": 5 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 12,
+          "y": 12,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "orientation": "auto",
           "showThresholdLabels": false,
           "showThresholdMarkers": true
@@ -461,14 +817,25 @@
             "decimals": 1,
             "min": 0,
             "max": 10,
-            "color": { "mode": "thresholds" },
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                { "color": "dark-green", "value": 0 },
-                { "color": "dark-orange", "value": 1 },
-                { "color": "dark-red", "value": 5 }
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 5
+                }
               ]
             }
           },
@@ -476,7 +843,10 @@
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -489,10 +859,24 @@
         "id": 43,
         "type": "gauge",
         "title": "Multiple Items %",
-        "gridPos": { "x": 18, "y": 12, "w": 6, "h": 5 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 18,
+          "y": 12,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
           "orientation": "auto",
           "showThresholdLabels": false,
           "showThresholdMarkers": true
@@ -503,14 +887,25 @@
             "decimals": 1,
             "min": 0,
             "max": 10,
-            "color": { "mode": "thresholds" },
+            "color": {
+              "mode": "thresholds"
+            },
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                { "color": "dark-green", "value": 0 },
-                { "color": "dark-orange", "value": 3 },
-                { "color": "dark-red", "value": 10 }
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 3
+                },
+                {
+                  "color": "dark-red",
+                  "value": 10
+                }
               ]
             }
           },
@@ -518,7 +913,10 @@
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -531,49 +929,155 @@
         "id": 50,
         "type": "table",
         "title": "Drive Storage",
-        "gridPos": { "x": 0, "y": 17, "w": 10, "h": 6 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "gridPos": {
+          "x": 0,
+          "y": 17,
+          "w": 10,
+          "h": 6
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
           "cellHeight": "sm",
           "showHeader": true,
           "enablePagination": false,
-          "sortBy": [{ "displayName": "Drive", "desc": false }]
+          "sortBy": [
+            {
+              "displayName": "Drive",
+              "desc": false
+            }
+          ]
         },
         "fieldConfig": {
           "defaults": {
-            "color": { "mode": "thresholds" },
-            "custom": { "align": "center", "cellOptions": { "type": "auto" }, "inspect": false },
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
             "mappings": [],
-            "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }] }
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
           },
           "overrides": [
             {
-              "matcher": { "id": "byName", "options": "Used %" },
+              "matcher": {
+                "id": "byName",
+                "options": "Used %"
+              },
               "properties": [
-                { "id": "unit", "value": "percent" },
-                { "id": "min", "value": 0 },
-                { "id": "max", "value": 100 },
-                { "id": "custom.cellOptions", "value": { "type": "gauge", "mode": "basic", "valueDisplayMode": "color" } },
-                { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "dark-green", "value": 0 }, { "color": "dark-orange", "value": 75 }, { "color": "dark-red", "value": 90 }] } }
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "gauge",
+                    "mode": "basic",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 75
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 90
+                      }
+                    ]
+                  }
+                }
               ]
             },
             {
-              "matcher": { "id": "byName", "options": "Total GB" },
-              "properties": [{ "id": "unit", "value": "decgbytes" }, { "id": "decimals", "value": 1 }]
+              "matcher": {
+                "id": "byName",
+                "options": "Total GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                }
+              ]
             },
             {
-              "matcher": { "id": "byName", "options": "Free GB" },
-              "properties": [{ "id": "unit", "value": "decgbytes" }, { "id": "decimals", "value": 1 }]
+              "matcher": {
+                "id": "byName",
+                "options": "Free GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                }
+              ]
             },
             {
-              "matcher": { "id": "byName", "options": "Used GB" },
-              "properties": [{ "id": "unit", "value": "decgbytes" }, { "id": "decimals", "value": 1 }]
+              "matcher": {
+                "id": "byName",
+                "options": "Used GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                }
+              ]
             }
           ]
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
@@ -585,16 +1089,33 @@
       {
         "id": 51,
         "type": "timeseries",
-        "title": "Data Transmission — Sent vs Not Sent",
-        "gridPos": { "x": 10, "y": 17, "w": 14, "h": 6 },
-        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "title": "Data Transmission \u2014 Sent vs Not Sent",
+        "gridPos": {
+          "x": 10,
+          "y": 17,
+          "w": 14,
+          "h": 6
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
         "options": {
-          "tooltip": { "mode": "multi", "sort": "none" },
-          "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
         },
         "fieldConfig": {
           "defaults": {
-            "color": { "mode": "palette-classic" },
+            "color": {
+              "mode": "palette-classic"
+            },
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 10,
@@ -604,17 +1125,34 @@
               "showPoints": "auto",
               "spanNulls": false,
               "axisPlacement": "auto",
-              "scaleDistribution": { "type": "linear" },
-              "hideFrom": { "legend": false, "tooltip": false, "viz": false }
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
             },
             "mappings": [],
-            "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }] }
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
           },
           "overrides": []
         },
         "targets": [
           {
-            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
             "editorMode": "code",
             "format": "time_series",
             "rawQuery": true,
