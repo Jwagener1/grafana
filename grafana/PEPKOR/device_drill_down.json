@@ -9,7 +9,7 @@
     "uid": "dffbeywf44klxca",
     "schemaVersion": 42,
     "refresh": "30s",
-    "timezone": "browser",
+    "timezone": "Africa/Johannesburg",
     "time": {
       "from": "now-24h",
       "to": "now"
