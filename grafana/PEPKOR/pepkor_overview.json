@@ -16,7 +16,7 @@
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations \u0026 Alerts",
+          "name": "Annotations & Alerts",
           "type": "dashboard"
         }
       ]
@@ -139,7 +139,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "WITH base AS (\r\n    SELECT\r\n        ds.ts_datetime,\r\n        ds.total_items,\r\n        ds.good_read\r\n    FROM dbo.device_statistics ds\r\n    JOIN dbo.devices d\r\n        ON d.id = ds.device_id\r\n    WHERE d.customer = ${Customer:sqlstring}\r\n),\r\nbounds AS (\r\n    SELECT\r\n        CAST(GETDATE() AS date) AS day_start,\r\n        DATEADD(DAY, 1, CAST(GETDATE() AS date)) AS day_end,\r\n\r\n        DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AS month_start,\r\n        DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS month_end,\r\n\r\n        DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AS year_start,\r\n        DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(GETDATE()), 1, 1)) AS year_end\r\n)\r\nSELECT\r\n    -- Year\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.total_items ELSE 0 END), 0)\r\n        AS year_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.year_start AND b.ts_datetime \u003c bo.year_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS year_good_read_pct,\r\n\r\n    -- Month\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.total_items ELSE 0 END), 0)\r\n        AS month_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.month_start AND b.ts_datetime \u003c bo.month_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS month_good_read_pct,\r\n\r\n    -- Day\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.total_items ELSE 0 END), 0)\r\n        AS day_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime \u003e= bo.day_start AND b.ts_datetime \u003c bo.day_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS day_good_read_pct\r\nFROM base b\r\nCROSS JOIN bounds bo;\r\n",
+            "rawSql": "WITH base AS (\r\n    SELECT\r\n        ds.ts_datetime,\r\n        ds.total_items,\r\n        ds.good_read\r\n    FROM dbo.device_statistics ds\r\n    JOIN dbo.devices d\r\n        ON d.id = ds.device_id\r\n    WHERE d.customer = ${Customer:sqlstring}\r\n),\r\nbounds AS (\r\n    SELECT\r\n        CAST(GETDATE() AS date) AS day_start,\r\n        DATEADD(DAY, 1, CAST(GETDATE() AS date)) AS day_end,\r\n\r\n        DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AS month_start,\r\n        DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS month_end,\r\n\r\n        DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AS year_start,\r\n        DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(GETDATE()), 1, 1)) AS year_end\r\n)\r\nSELECT\r\n    -- Year\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime >= bo.year_start AND b.ts_datetime < bo.year_end THEN b.total_items ELSE 0 END), 0)\r\n        AS year_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime >= bo.year_start AND b.ts_datetime < bo.year_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime >= bo.year_start AND b.ts_datetime < bo.year_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS year_good_read_pct,\r\n\r\n    -- Month\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime >= bo.month_start AND b.ts_datetime < bo.month_end THEN b.total_items ELSE 0 END), 0)\r\n        AS month_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime >= bo.month_start AND b.ts_datetime < bo.month_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime >= bo.month_start AND b.ts_datetime < bo.month_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS month_good_read_pct,\r\n\r\n    -- Day\r\n    COALESCE(SUM(CASE WHEN b.ts_datetime >= bo.day_start AND b.ts_datetime < bo.day_end THEN b.total_items ELSE 0 END), 0)\r\n        AS day_total_parcels,\r\n    CAST(\r\n        COALESCE(\r\n            100.0 * SUM(CASE WHEN b.ts_datetime >= bo.day_start AND b.ts_datetime < bo.day_end THEN b.good_read ELSE 0 END)\r\n            / NULLIF(SUM(CASE WHEN b.ts_datetime >= bo.day_start AND b.ts_datetime < bo.day_end THEN b.total_items ELSE 0 END), 0),\r\n            0\r\n        ) AS decimal(6,2)\r\n    ) AS day_good_read_pct\r\nFROM base b\r\nCROSS JOIN bounds bo;\r\n",
             "refId": "A",
             "sql": {
               "columns": [
@@ -611,6 +611,162 @@
                   "value": 149
                 }
               ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "CPU %"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 70
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "colored-text"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 70
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 90
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Mem %"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 70
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "colored-text"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 75
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 90
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Temp C"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 70
+                },
+                {
+                  "id": "unit",
+                  "value": "celsius"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "colored-text"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 70
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 85
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "App Status"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 105
+                }
+              ]
             }
           ]
         },
@@ -638,7 +794,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "WITH latest_stats AS (\r\n    SELECT\r\n        x.device_id,\r\n        x.ts_datetime AS last_statistics_ts\r\n    FROM (\r\n        SELECT\r\n            ds.device_id,\r\n            ds.ts_datetime,\r\n            ROW_NUMBER() OVER (\r\n                PARTITION BY ds.device_id\r\n                ORDER BY ds.ts_datetime DESC\r\n            ) AS rn\r\n        FROM dbo.device_statistics ds\r\n    ) x\r\n    WHERE x.rn = 1\r\n)\r\nSELECT\r\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\r\n    CASE\r\n        WHEN lstat.last_statistics_ts IS NULL THEN NULL\r\n        ELSE\r\n            CONCAT(\r\n                CASE\r\n                    WHEN DATEDIFF(MINUTE, lstat.last_statistics_ts, SYSDATETIME()) / 1440 \u003e 0\r\n                        THEN CONCAT(DATEDIFF(MINUTE, lstat.last_statistics_ts, SYSDATETIME()) / 1440, 'd ')\r\n                    ELSE ''\r\n                END,\r\n                RIGHT('0' + CAST((DATEDIFF(MINUTE, lstat.last_statistics_ts, SYSDATETIME()) % 1440) / 60 AS varchar(2)), 2),\r\n                'h ',\r\n                RIGHT('0' + CAST(DATEDIFF(MINUTE, lstat.last_statistics_ts, SYSDATETIME()) % 60 AS varchar(2)), 2),\r\n                'm'\r\n            )\r\n    END AS time_since_last_packet\r\nFROM dbo.devices d\r\nLEFT JOIN latest_stats lstat\r\n    ON lstat.device_id = d.id\r\nWHERE d.customer = '${Customer}'\r\nORDER BY\r\n    d.location,\r\n    d.machine_name;\r\n",
+            "rawSql": "WITH latest_stats AS (\n    SELECT x.device_id, x.ts_datetime AS last_statistics_ts\n    FROM (\n        SELECT ds.device_id, ds.ts_datetime,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_statistics ds\n    ) x WHERE x.rn = 1\n),\nlatest_app AS (\n    SELECT x.device_id, x.application_running FROM (\n        SELECT a.device_id, a.application_running,\n               ROW_NUMBER() OVER (PARTITION BY a.device_id ORDER BY a.ts_datetime DESC) AS rn\n        FROM dbo.device_application_status a\n    ) x WHERE x.rn = 1\n),\nlatest_metrics AS (\n    SELECT x.device_id, x.cpu_percent, x.mem_usage_pct, x.temp_celsius FROM (\n        SELECT m.device_id, m.cpu_percent, m.mem_usage_pct, m.temp_celsius,\n               ROW_NUMBER() OVER (PARTITION BY m.device_id ORDER BY m.ts_datetime DESC) AS rn\n        FROM dbo.device_os_metrics m\n    ) x WHERE x.rn = 1\n)\nSELECT\n    CONCAT(d.location, ' - ', d.machine_name) AS device_name,\n    CASE\n        WHEN lstat.last_statistics_ts IS NULL THEN NULL\n        ELSE CONCAT(\n            CASE WHEN DATEDIFF(MINUTE, lstat.last_statistics_ts, SYSDATETIME()) / 1440 > 0\n                 THEN CONCAT(DATEDIFF(MINUTE, lstat.last_statistics_ts, SYSDATETIME()) / 1440, 'd ')\n                 ELSE '' END,\n            RIGHT('0' + CAST((DATEDIFF(MINUTE, lstat.last_statistics_ts, SYSDATETIME()) % 1440) / 60 AS varchar(2)), 2),\n            'h ',\n            RIGHT('0' + CAST(DATEDIFF(MINUTE, lstat.last_statistics_ts, SYSDATETIME()) % 60 AS varchar(2)), 2),\n            'm')\n    END AS time_since_last_packet,\n    CASE COALESCE(CAST(la.application_running AS int), -1)\n        WHEN 1 THEN N'🟢 Running'\n        WHEN 0 THEN N'🔴 Stopped'\n        ELSE 'No Data'\n    END AS app_status,\n    CAST(COALESCE(lm.cpu_percent, 0) AS decimal(5,1)) AS cpu_pct,\n    CAST(COALESCE(lm.mem_usage_pct, 0) AS decimal(5,1)) AS mem_pct,\n    CAST(COALESCE(lm.temp_celsius, 0) AS decimal(5,1)) AS temp_c\nFROM dbo.devices d\nLEFT JOIN latest_stats lstat ON lstat.device_id = d.id\nLEFT JOIN latest_app la ON la.device_id = d.id\nLEFT JOIN latest_metrics lm ON lm.device_id = d.id\nWHERE d.customer = '${Customer}'\nORDER BY d.location, d.machine_name;",
             "refId": "A",
             "sql": {
               "columns": [
@@ -673,6 +829,34 @@
             "options": {
               "regex": "time_since_last_packet",
               "renamePattern": "Time Since Last Packet"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "app_status",
+              "renamePattern": "App Status"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "cpu_pct",
+              "renamePattern": "CPU %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "mem_pct",
+              "renamePattern": "Mem %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "temp_c",
+              "renamePattern": "Temp C"
             }
           }
         ],

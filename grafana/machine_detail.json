@@ -95,12 +95,12 @@
                 "type": "value",
                 "options": {
                   "online": {
-                    "text": "\ud83d\udfe2 Online",
+                    "text": "🟢 Online",
                     "color": "dark-green",
                     "index": 0
                   },
                   "offline": {
-                    "text": "\ud83d\udd34 Offline",
+                    "text": "🔴 Offline",
                     "color": "dark-red",
                     "index": 1
                   }
@@ -427,9 +427,9 @@
         "title": "Customer / Location",
         "gridPos": {
           "x": 21,
-          "y": 0,
+          "y": 2,
           "w": 3,
-          "h": 4
+          "h": 2
         },
         "datasource": {
           "type": "mssql",
@@ -488,7 +488,7 @@
         "title": "Items Processed Over Time",
         "gridPos": {
           "x": 0,
-          "y": 4,
+          "y": 8,
           "w": 12,
           "h": 8
         },
@@ -564,7 +564,7 @@
         "title": "Good Read % Over Time",
         "gridPos": {
           "x": 12,
-          "y": 4,
+          "y": 8,
           "w": 12,
           "h": 8
         },
@@ -651,7 +651,7 @@
         "title": "No Dimensions %",
         "gridPos": {
           "x": 0,
-          "y": 12,
+          "y": 16,
           "w": 6,
           "h": 5
         },
@@ -721,7 +721,7 @@
         "title": "No Weight %",
         "gridPos": {
           "x": 6,
-          "y": 12,
+          "y": 16,
           "w": 6,
           "h": 5
         },
@@ -791,7 +791,7 @@
         "title": "Out of Spec %",
         "gridPos": {
           "x": 12,
-          "y": 12,
+          "y": 16,
           "w": 6,
           "h": 5
         },
@@ -861,7 +861,7 @@
         "title": "Multiple Items %",
         "gridPos": {
           "x": 18,
-          "y": 12,
+          "y": 16,
           "w": 6,
           "h": 5
         },
@@ -931,7 +931,7 @@
         "title": "Drive Storage",
         "gridPos": {
           "x": 0,
-          "y": 17,
+          "y": 21,
           "w": 10,
           "h": 6
         },
@@ -1089,10 +1089,10 @@
       {
         "id": 51,
         "type": "timeseries",
-        "title": "Data Transmission \u2014 Sent vs Not Sent",
+        "title": "Data Transmission — Sent vs Not Sent",
         "gridPos": {
           "x": 10,
-          "y": 17,
+          "y": 21,
           "w": 14,
           "h": 6
         },
@@ -1157,6 +1157,484 @@
             "format": "time_series",
             "rawQuery": true,
             "rawSql": "SELECT ts_datetime AS time, data_sent AS [Data Sent], not_sent AS [Not Sent], image_sent AS [Images Sent], image_not_sent AS [Images Not Sent]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "type": "stat",
+        "title": "App Status",
+        "gridPos": {
+          "x": 21,
+          "y": 0,
+          "w": 3,
+          "h": 2
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "-1": {
+                    "text": "No Data",
+                    "color": "gray",
+                    "index": 0
+                  },
+                  "0": {
+                    "text": "🔴 Stopped",
+                    "color": "dark-red",
+                    "index": 1
+                  },
+                  "1": {
+                    "text": "🟢 Running",
+                    "color": "dark-green",
+                    "index": 2
+                  }
+                }
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "gray",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 COALESCE(CAST(application_running AS int), -1) AS [App Running]\nFROM dbo.device_application_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "type": "stat",
+        "title": "CPU %",
+        "gridPos": {
+          "x": 0,
+          "y": 4,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 70
+                },
+                {
+                  "color": "dark-red",
+                  "value": 90
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 CAST(cpu_percent AS decimal(5,1)) AS [CPU %]\nFROM dbo.device_os_metrics\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "type": "stat",
+        "title": "Memory %",
+        "gridPos": {
+          "x": 3,
+          "y": 4,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 75
+                },
+                {
+                  "color": "dark-red",
+                  "value": 90
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 CAST(mem_usage_pct AS decimal(5,1)) AS [Mem %]\nFROM dbo.device_os_metrics\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "type": "stat",
+        "title": "Temperature",
+        "gridPos": {
+          "x": 6,
+          "y": 4,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "celsius",
+            "decimals": 1,
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 70
+                },
+                {
+                  "color": "dark-red",
+                  "value": 85
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 CAST(temp_celsius AS decimal(5,1)) AS [Temp C]\nFROM dbo.device_os_metrics\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "type": "stat",
+        "title": "Uptime",
+        "gridPos": {
+          "x": 9,
+          "y": 4,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "decimals": 0,
+            "color": {
+              "mode": "fixed",
+              "fixedColor": "blue"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 uptime_seconds AS [Uptime]\nFROM dbo.device_uptime_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "type": "timeseries",
+        "title": "CPU / Memory / Temperature Over Time",
+        "gridPos": {
+          "x": 12,
+          "y": 4,
+          "w": 12,
+          "h": 8
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "drawStyle": "line",
+              "pointSize": 4,
+              "showPoints": "auto",
+              "spanNulls": false,
+              "axisPlacement": "auto",
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "CPU %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.axisLabel",
+                  "value": "CPU / Mem %"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Mem %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Temp C"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "celsius"
+                },
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "custom.axisLabel",
+                  "value": "Temperature"
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "time_series",
+            "rawQuery": true,
+            "rawSql": "SELECT ts_datetime AS time,\n  CAST(cpu_percent AS decimal(5,1)) AS [CPU %],\n  CAST(mem_usage_pct AS decimal(5,1)) AS [Mem %],\n  CAST(temp_celsius AS decimal(5,1)) AS [Temp C]\nFROM dbo.device_os_metrics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
             "refId": "A"
           }
         ]
