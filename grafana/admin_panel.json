@@ -575,7 +575,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT COUNT(*) AS [Online Now]\nFROM dbo.devices d\nWHERE d.id IN (\n  SELECT device_id FROM dbo.device_statistics\n  GROUP BY device_id\n  HAVING DATEDIFF(MINUTE, MAX(ts_datetime), GETDATE()) < 60\n)\nAND NOT (d.machine_name = 'DIM2' AND d.location = 'JBH')",
+            "rawSql": "SELECT COUNT(*) AS [Online Now]\nFROM (\n  SELECT x.device_id FROM (\n    SELECT ds.device_id, ds.status,\n           ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n    FROM dbo.device_status ds\n    JOIN dbo.devices d ON d.id = ds.device_id\n    WHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n  ) x WHERE x.rn = 1 AND x.status = 'online'\n) t",
             "refId": "A"
           }
         ],
