@@ -77,7 +77,7 @@
             "calcs": [
               "lastNotNull"
             ],
-            "fields": "",
+            "fields": "/^Status$/",
             "values": false
           },
           "colorMode": "background",
