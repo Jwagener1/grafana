@@ -1278,7 +1278,7 @@
       {
         "id": 60,
         "type": "timeseries",
-        "title": "Items Processed \u2014 30 Min Totals + 15 Min Avg per Device",
+        "title": "Items Processed \u2014 30 Min Totals + Monthly 15 Min Avg",
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
@@ -1351,7 +1351,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Avg / Device"
+                "options": "Monthly Avg"
               },
               "properties": [
                 {
@@ -1391,7 +1391,7 @@
                 },
                 {
                   "id": "custom.axisLabel",
-                  "value": "Avg items / device"
+                  "value": "Monthly avg items / 15 min"
                 }
               ]
             }
@@ -1418,7 +1418,7 @@
             "format": "time_series",
             "rawQuery": true,
             "refId": "B",
-            "rawSql": "SELECT\n  CAST(DATEADD(MINUTE, DATEDIFF(MINUTE,'2000-01-01',ts_datetime)/15*15,'2000-01-01') AS datetime2) AS time,\n  CAST(SUM(total_items)*1.0/NULLIF(COUNT(DISTINCT ds.device_id),0) AS decimal(10,1)) AS [Avg / Device]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEDIFF(MINUTE,'2000-01-01',ts_datetime)/15\nORDER BY time"
+            "rawSql": "SELECT\n  DATEADD(MINUTE, slot*15, CAST(CAST(GETDATE() AS date) AS datetime2)) AS time,\n  CAST(SUM(total_items)*1.0 / NULLIF(COUNT(DISTINCT CAST(ts_datetime AS date)),0) AS decimal(10,1)) AS [Monthly Avg]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nCROSS APPLY (\n  SELECT DATEDIFF(MINUTE, CAST(CAST(ts_datetime AS date) AS datetime2), ts_datetime)/15 AS slot\n) s\nWHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY slot\nORDER BY time"
           }
         ],
         "pluginVersion": "12.3.1"
