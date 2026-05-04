@@ -1276,9 +1276,29 @@
         "type": "barchart"
       },
       {
+        "id": 60,
+        "type": "timeseries",
+        "title": "Items Processed \u2014 30 Min Totals + 15 Min Avg per Device",
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 24,
+          "x": 0,
+          "y": 17
+        },
+        "options": {
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
         },
         "fieldConfig": {
           "defaults": {
@@ -1287,21 +1307,30 @@
               "mode": "fixed"
             },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "Items",
-              "axisPlacement": "auto",
-              "fillOpacity": 80,
+              "drawStyle": "bars",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "lineWidth": 1,
+              "fillOpacity": 70,
               "gradientMode": "none",
+              "spanNulls": false,
+              "showPoints": "never",
+              "pointSize": 4,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "Items",
+              "axisColorMode": "text",
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
               },
               "thresholdsStyle": {
                 "mode": "off"
@@ -1312,47 +1341,62 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "blue",
-                  "value": 0
+                  "color": "green",
+                  "value": null
                 }
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg / Device"
+              },
+              "properties": [
+                {
+                  "id": "custom.drawStyle",
+                  "value": "line"
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.showPoints",
+                  "value": "always"
+                },
+                {
+                  "id": "custom.pointSize",
+                  "value": 5
+                },
+                {
+                  "id": "custom.spanNulls",
+                  "value": false
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "custom.axisLabel",
+                  "value": "Avg items / device"
+                }
+              ]
+            }
+          ]
         },
-        "gridPos": {
-          "h": 9,
-          "w": 24,
-          "x": 0,
-          "y": 17
-        },
-        "id": 60,
-        "options": {
-          "barRadius": 0,
-          "barWidth": 0.7,
-          "fillOpacity": 80,
-          "fullHighlight": false,
-          "gradientMode": "none",
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "orientation": "auto",
-          "showValue": "auto",
-          "stacking": "none",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          },
-          "xField": "Time",
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
-        },
-        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1360,14 +1404,24 @@
               "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
-            "format": "table",
+            "format": "time_series",
             "rawQuery": true,
-            "rawSql": "SELECT\n  RIGHT('0'+CAST(DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) AS varchar),2)+':'+RIGHT('0'+CAST((DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/30)*30 AS varchar),2) AS [Time],\n  SUM(total_items) AS [Items]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)), (DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/30)*30\nORDER BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)), (DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/30)*30",
-            "refId": "A"
+            "refId": "A",
+            "rawSql": "SELECT\n  CAST(DATEADD(MINUTE, DATEDIFF(MINUTE,'2000-01-01',ts_datetime)/30*30,'2000-01-01') AS datetime2) AS time,\n  SUM(total_items) AS [Items (30 min)]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEDIFF(MINUTE,'2000-01-01',ts_datetime)/30\nORDER BY time"
+          },
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "time_series",
+            "rawQuery": true,
+            "refId": "B",
+            "rawSql": "SELECT\n  CAST(DATEADD(MINUTE, DATEDIFF(MINUTE,'2000-01-01',ts_datetime)/15*15,'2000-01-01') AS datetime2) AS time,\n  CAST(SUM(total_items)*1.0/NULLIF(COUNT(DISTINCT ds.device_id),0) AS decimal(10,1)) AS [Avg / Device]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEDIFF(MINUTE,'2000-01-01',ts_datetime)/15\nORDER BY time"
           }
         ],
-        "title": "Items Processed \u2014 Per 30 Min Today",
-        "type": "barchart"
+        "pluginVersion": "12.3.1"
       },
       {
         "id": 62,
