@@ -88,7 +88,7 @@
             "refId": "A"
           }
         ],
-        "title": "Year — Total Parcels",
+        "title": "Year \u2014 Total Parcels",
         "type": "stat"
       },
       {
@@ -164,7 +164,7 @@
             "refId": "A"
           }
         ],
-        "title": "Year — Good Read %",
+        "title": "Year \u2014 Good Read %",
         "type": "stat"
       },
       {
@@ -229,7 +229,7 @@
             "refId": "A"
           }
         ],
-        "title": "Month — Total Parcels",
+        "title": "Month \u2014 Total Parcels",
         "type": "stat"
       },
       {
@@ -305,7 +305,7 @@
             "refId": "A"
           }
         ],
-        "title": "Month — Good Read %",
+        "title": "Month \u2014 Good Read %",
         "type": "stat"
       },
       {
@@ -370,7 +370,7 @@
             "refId": "A"
           }
         ],
-        "title": "Day — Total Parcels",
+        "title": "Day \u2014 Total Parcels",
         "type": "stat"
       },
       {
@@ -446,7 +446,7 @@
             "refId": "A"
           }
         ],
-        "title": "Day — Good Read %",
+        "title": "Day \u2014 Good Read %",
         "type": "stat"
       },
       {
@@ -631,11 +631,11 @@
                       "options": {
                         "offline": {
                           "index": 1,
-                          "text": "🔴 Offline"
+                          "text": "\ud83d\udd34 Offline"
                         },
                         "online": {
                           "index": 0,
-                          "text": "🟢 Online"
+                          "text": "\ud83d\udfe2 Online"
                         }
                       },
                       "type": "value"
@@ -933,11 +933,11 @@
                           "index": 0
                         },
                         "0": {
-                          "text": "🔴 Stopped",
+                          "text": "\ud83d\udd34 Stopped",
                           "index": 1
                         },
                         "1": {
-                          "text": "🟢 Running",
+                          "text": "\ud83d\udfe2 Running",
                           "index": 2
                         }
                       }
@@ -1348,7 +1348,7 @@
             "mode": "single",
             "sort": "none"
           },
-          "xField": "Hour",
+          "xField": "Time",
           "xTickLabelRotation": 0,
           "xTickLabelSpacing": 0
         },
@@ -1362,17 +1362,17 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\n  RIGHT('0'+CAST(DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) AS varchar),2)+':00' AS [Hour],\n  SUM(total_items) AS [Items]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime))\nORDER BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime))",
+            "rawSql": "SELECT\n  RIGHT('0'+CAST(DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) AS varchar),2)+':'+RIGHT('0'+CAST((DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/15)*15 AS varchar),2) AS [Time],\n  SUM(total_items) AS [Items]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)), (DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/15)*15\nORDER BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)), (DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/15)*15",
             "refId": "A"
           }
         ],
-        "title": "Items Processed — Per Hour Today",
+        "title": "Items Processed \u2014 Per 15 Min Today",
         "type": "barchart"
       },
       {
         "id": 62,
         "type": "table",
-        "title": "🔴 Offline Devices (>60 min since last packet)",
+        "title": "\ud83d\udd34 Offline Devices (>60 min since last packet)",
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
@@ -1679,7 +1679,7 @@
             "refId": "A"
           }
         ],
-        "title": "⚠️ Telemetry Dead Letter Queue (Last 100)",
+        "title": "\u26a0\ufe0f Telemetry Dead Letter Queue (Last 100)",
         "type": "table"
       }
     ],
