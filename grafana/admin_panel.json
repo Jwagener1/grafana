@@ -1227,15 +1227,15 @@
           ]
         },
         "gridPos": {
-          "h": 14,
-          "w": 10,
-          "x": 14,
+          "h": 12,
+          "w": 24,
+          "x": 0,
           "y": 3
         },
         "id": 61,
         "options": {
           "barRadius": 0.35,
-          "barWidth": 0.6,
+          "barWidth": 0.7,
           "fillOpacity": 80,
           "fullHighlight": false,
           "gradientMode": "none",
@@ -1246,7 +1246,7 @@
             "placement": "bottom",
             "showLegend": false
           },
-          "orientation": "horizontal",
+          "orientation": "auto",
           "showValue": "auto",
           "stacking": "none",
           "tooltip": {
@@ -1255,8 +1255,8 @@
             "sort": "none"
           },
           "xField": "Machine",
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
+          "xTickLabelRotation": -45,
+          "xTickLabelSpacing": 100
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -1278,7 +1278,7 @@
       {
         "id": 60,
         "type": "timeseries",
-        "title": "Items Processed \u2014 Today vs Monthly Avg (15 Min, 00:00\u201324:00)",
+        "title": "Items Processed \u2014 Today vs Monthly Avg (15 Min)",
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
@@ -1412,9 +1412,10 @@
             "rawSql": "WITH\n-- Generate all 96 x 15-min slots for the day\nall_slots AS (\n  SELECT TOP 96 ROW_NUMBER() OVER (ORDER BY (SELECT NULL))-1 AS slot\n  FROM sys.all_objects\n),\nslots AS (\n  SELECT\n    DATEDIFF(MINUTE,\n      CAST(CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS datetime2),\n      DATEADD(HOUR,2,ts_datetime)\n    )/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n),\ntoday_data AS (\n  SELECT slot, day_total\n  FROM by_day\n  WHERE local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n),\nmonthly_avg AS (\n  SELECT slot, CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS avg_total\n  FROM by_day\n  GROUP BY slot\n)\nSELECT\n  DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) AS time,\n  -- Today: NULL for future slots so the line stops at current time\n  CASE\n    WHEN DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) > DATEADD(HOUR,2,GETDATE())\n    THEN NULL\n    ELSE COALESCE(t.day_total, 0)\n  END AS [Today],\n  m.avg_total AS [Monthly Avg]\nFROM all_slots a\nLEFT JOIN today_data  t ON t.slot = a.slot\nLEFT JOIN monthly_avg m ON m.slot = a.slot\nORDER BY a.slot"
           }
         ],
-        "timeFrom": "now/d",
+        "timeFrom": "12h",
         "timeShift": null,
-        "timeTo": "now/d+1d"
+        "timeTo": "12h",
+        "hideTimeOverride": true
       },
       {
         "datasource": {
