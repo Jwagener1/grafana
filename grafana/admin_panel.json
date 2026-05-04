@@ -1277,8 +1277,8 @@
       },
       {
         "id": 60,
-        "type": "timeseries",
-        "title": "Items Processed \u2014 30 Min Totals + Monthly 15 Min Avg",
+        "type": "barchart",
+        "title": "Items Processed \u2014 Today vs Monthly Avg (30 Min)",
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
@@ -1289,12 +1289,27 @@
           "x": 0,
           "y": 17
         },
+        "pluginVersion": "12.3.1",
         "options": {
+          "barRadius": 0,
+          "barWidth": 0.7,
+          "fillOpacity": 80,
+          "fullHighlight": false,
+          "gradientMode": "none",
+          "groupWidth": 0.7,
+          "orientation": "auto",
+          "showValue": "auto",
+          "stacking": "none",
           "tooltip": {
+            "hideZeros": false,
             "mode": "multi",
             "sort": "none"
           },
+          "xField": "Time",
+          "xTickLabelRotation": -45,
+          "xTickLabelSpacing": 0,
           "legend": {
+            "calcs": [],
             "displayMode": "list",
             "placement": "bottom",
             "showLegend": true
@@ -1302,35 +1317,22 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "fixedColor": "blue",
-              "mode": "fixed"
-            },
             "custom": {
-              "drawStyle": "bars",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "lineWidth": 1,
-              "fillOpacity": 70,
-              "gradientMode": "none",
-              "spanNulls": false,
-              "showPoints": "never",
-              "pointSize": 4,
-              "stacking": {
-                "mode": "none",
-                "group": "A"
-              },
-              "axisPlacement": "auto",
-              "axisLabel": "Items",
-              "axisColorMode": "text",
-              "scaleDistribution": {
-                "type": "linear"
-              },
+              "axisBorderShow": false,
               "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Items",
+              "axisPlacement": "auto",
+              "fillOpacity": 80,
+              "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
+              },
+              "lineWidth": 1,
+              "scaleDistribution": {
+                "type": "linear"
               },
               "thresholdsStyle": {
                 "mode": "off"
@@ -1351,47 +1353,30 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Monthly Avg"
+                "options": "Today"
               },
               "properties": [
                 {
-                  "id": "custom.drawStyle",
-                  "value": "line"
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.showPoints",
-                  "value": "always"
-                },
-                {
-                  "id": "custom.pointSize",
-                  "value": 5
-                },
-                {
-                  "id": "custom.spanNulls",
-                  "value": false
-                },
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Monthly Avg"
+              },
+              "properties": [
                 {
                   "id": "color",
                   "value": {
                     "fixedColor": "orange",
                     "mode": "fixed"
                   }
-                },
-                {
-                  "id": "custom.axisPlacement",
-                  "value": "right"
-                },
-                {
-                  "id": "custom.axisLabel",
-                  "value": "Monthly avg items / 15 min"
                 }
               ]
             }
@@ -1404,24 +1389,12 @@
               "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
-            "format": "time_series",
+            "format": "table",
             "rawQuery": true,
             "refId": "A",
-            "rawSql": "SELECT\n  CAST(DATEADD(MINUTE, DATEDIFF(MINUTE,'2000-01-01',ts_datetime)/30*30,'2000-01-01') AS datetime2) AS time,\n  SUM(total_items) AS [Items (30 min)]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEDIFF(MINUTE,'2000-01-01',ts_datetime)/30\nORDER BY time"
-          },
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "time_series",
-            "rawQuery": true,
-            "refId": "B",
-            "rawSql": "SELECT\n  DATEADD(MINUTE, slot*15, CAST(CAST(GETDATE() AS date) AS datetime2)) AS time,\n  CAST(SUM(total_items)*1.0 / NULLIF(COUNT(DISTINCT CAST(ts_datetime AS date)),0) AS decimal(10,1)) AS [Monthly Avg]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nCROSS APPLY (\n  SELECT DATEDIFF(MINUTE, CAST(CAST(ts_datetime AS date) AS datetime2), ts_datetime)/15 AS slot\n) s\nWHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY slot\nORDER BY time"
+            "rawSql": "WITH slots AS (\n  SELECT\n    DATEDIFF(MINUTE,'2000-01-01', DATEADD(HOUR,2,ts_datetime))/30 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date)                      AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n)\nSELECT\n  RIGHT('0'+CAST((slot*30/60) AS varchar),2)+':'+RIGHT('0'+CAST((slot*30)%60 AS varchar),2) AS [Time],\n  SUM(CASE WHEN local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date) THEN day_total ELSE 0 END) AS [Today],\n  CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS [Monthly Avg]\nFROM by_day\nGROUP BY slot\nORDER BY slot"
           }
-        ],
-        "pluginVersion": "12.3.1"
+        ]
       },
       {
         "id": 62,
