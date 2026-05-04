@@ -1405,10 +1405,10 @@
               "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
-            "format": "table",
+            "format": "time_series",
             "rawQuery": true,
             "refId": "A",
-            "rawSql": "WITH slots AS (\n  SELECT\n    DATEDIFF(MINUTE,'2000-01-01', DATEADD(HOUR,2,ts_datetime))/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date)                      AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n)\nSELECT\n  RIGHT('0'+CAST((slot*15/60) AS varchar),2)+':'+RIGHT('0'+CAST((slot*15)%60 AS varchar),2) AS [Time],\n  SUM(CASE WHEN local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date) THEN day_total ELSE 0 END) AS [Today],\n  CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS [Monthly Avg]\nFROM by_day\nGROUP BY slot\nORDER BY slot"
+            "rawSql": "WITH slots AS (\n  SELECT\n    DATEDIFF(MINUTE,\n      CAST(CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS datetime2),\n      DATEADD(HOUR,2,ts_datetime)\n    )/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n)\nSELECT\n  DATEADD(MINUTE, slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) AS time,\n  SUM(CASE WHEN local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date) THEN day_total ELSE 0 END) AS [Today],\n  CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS [Monthly Avg]\nFROM by_day\nGROUP BY slot\nORDER BY slot"
           }
         ]
       },
