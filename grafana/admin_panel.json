@@ -1362,11 +1362,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\n  RIGHT('0'+CAST(DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) AS varchar),2)+':'+RIGHT('0'+CAST((DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/15)*15 AS varchar),2) AS [Time],\n  SUM(total_items) AS [Items]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)), (DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/15)*15\nORDER BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)), (DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/15)*15",
+            "rawSql": "SELECT\n  RIGHT('0'+CAST(DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) AS varchar),2)+':'+RIGHT('0'+CAST((DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/30)*30 AS varchar),2) AS [Time],\n  SUM(total_items) AS [Items]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)), (DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/30)*30\nORDER BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)), (DATEPART(MINUTE, DATEADD(HOUR, 2, ts_datetime))/30)*30",
             "refId": "A"
           }
         ],
-        "title": "Items Processed \u2014 Per 15 Min Today",
+        "title": "Items Processed \u2014 Per 30 Min Today",
         "type": "barchart"
       },
       {
