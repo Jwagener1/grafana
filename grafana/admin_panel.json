@@ -16,7 +16,7 @@
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations & Alerts",
+          "name": "Annotations \u0026 Alerts",
           "type": "dashboard"
         }
       ]
@@ -84,11 +84,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Year Parcels]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),1,1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Year Parcels]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),1,1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
             "refId": "A"
           }
         ],
-        "title": "Year \u2014 Total Parcels",
+        "title": "Year — Total Parcels",
         "type": "stat"
       },
       {
@@ -160,11 +160,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Year Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),1,1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Year Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),1,1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
             "refId": "A"
           }
         ],
-        "title": "Year \u2014 Good Read %",
+        "title": "Year — Good Read %",
         "type": "stat"
       },
       {
@@ -225,11 +225,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Month Parcels]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),MONTH(DATEADD(HOUR, 2, GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Month Parcels]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),MONTH(DATEADD(HOUR, 2, GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
             "refId": "A"
           }
         ],
-        "title": "Month \u2014 Total Parcels",
+        "title": "Month — Total Parcels",
         "type": "stat"
       },
       {
@@ -301,11 +301,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Month Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),MONTH(DATEADD(HOUR, 2, GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Month Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),MONTH(DATEADD(HOUR, 2, GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
             "refId": "A"
           }
         ],
-        "title": "Month \u2014 Good Read %",
+        "title": "Month — Good Read %",
         "type": "stat"
       },
       {
@@ -370,7 +370,7 @@
             "refId": "A"
           }
         ],
-        "title": "Day \u2014 Total Parcels",
+        "title": "Day — Total Parcels",
         "type": "stat"
       },
       {
@@ -446,7 +446,75 @@
             "refId": "A"
           }
         ],
-        "title": "Day \u2014 Good Read %",
+        "title": "Day — Good Read %",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-red",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 15,
+          "y": 0
+        },
+        "id": 63,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT COUNT(*) AS [Apps Not Running]\nFROM (\n  SELECT x.device_id FROM (\n    SELECT a.device_id, a.application_running,\n           ROW_NUMBER() OVER (PARTITION BY a.device_id ORDER BY a.ts_datetime DESC) AS rn\n    FROM dbo.device_application_status a\n    JOIN dbo.devices d ON d.id = a.device_id\n    WHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n  ) x WHERE x.rn = 1 AND x.application_running = 0\n) t",
+            "refId": "A"
+          }
+        ],
+        "title": "Apps Not Running",
         "type": "stat"
       },
       {
@@ -631,11 +699,11 @@
                       "options": {
                         "offline": {
                           "index": 1,
-                          "text": "\ud83d\udd34 Offline"
+                          "text": "🔴 Offline"
                         },
                         "online": {
                           "index": 0,
-                          "text": "\ud83d\udfe2 Online"
+                          "text": "🟢 Online"
                         }
                       },
                       "type": "value"
@@ -926,21 +994,21 @@
                   "id": "mappings",
                   "value": [
                     {
-                      "type": "value",
                       "options": {
                         "-1": {
-                          "text": "No Data",
-                          "index": 0
+                          "index": 0,
+                          "text": "No Data"
                         },
                         "0": {
-                          "text": "\ud83d\udd34 Stopped",
-                          "index": 1
+                          "index": 1,
+                          "text": "🔴 Stopped"
                         },
                         "1": {
-                          "text": "\ud83d\udfe2 Running",
-                          "index": 2
+                          "index": 2,
+                          "text": "🟢 Running"
                         }
-                      }
+                      },
+                      "type": "value"
                     }
                   ]
                 }
@@ -1227,15 +1295,15 @@
           ]
         },
         "gridPos": {
-          "h": 12,
-          "w": 24,
-          "x": 0,
+          "h": 14,
+          "w": 10,
+          "x": 14,
           "y": 3
         },
         "id": 61,
         "options": {
-          "barRadius": 0.35,
-          "barWidth": 0.7,
+          "barRadius": 0,
+          "barWidth": 0.19,
           "fillOpacity": 80,
           "fullHighlight": false,
           "gradientMode": "none",
@@ -1249,13 +1317,16 @@
           "orientation": "auto",
           "showValue": "auto",
           "stacking": "none",
+          "text": {
+            "valueSize": 10
+          },
           "tooltip": {
             "hideZeros": false,
             "mode": "single",
             "sort": "none"
           },
           "xField": "Machine",
-          "xTickLabelRotation": -45,
+          "xTickLabelRotation": -90,
           "xTickLabelSpacing": 100
         },
         "pluginVersion": "12.3.1",
@@ -1276,54 +1347,44 @@
         "type": "barchart"
       },
       {
-        "id": 60,
-        "type": "timeseries",
-        "title": "Items Processed \u2014 Today vs Monthly Avg (15 Min)",
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
-        "gridPos": {
-          "h": 9,
-          "w": 24,
-          "x": 0,
-          "y": 17
-        },
-        "pluginVersion": "12.3.1",
-        "options": {
-          "tooltip": {
-            "mode": "multi",
-            "sort": "none"
-          },
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "xAxis": {}
-        },
         "fieldConfig": {
           "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
             "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Items",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "lineInterpolation": "smooth",
-              "lineWidth": 2,
               "fillOpacity": 10,
               "gradientMode": "none",
-              "showPoints": "never",
-              "spanNulls": false,
-              "axisPlacement": "auto",
-              "axisLabel": "Items",
-              "axisColorMode": "text",
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "axisCenteredZero": false,
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
               },
               "thresholdsStyle": {
                 "mode": "off"
@@ -1335,7 +1396,7 @@
               "steps": [
                 {
                   "color": "green",
-                  "value": null
+                  "value": 0
                 }
               ]
             }
@@ -1399,74 +1460,27 @@
             }
           ]
         },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "time_series",
-            "rawQuery": true,
-            "refId": "A",
-            "rawSql": "WITH\n-- Generate all 96 x 15-min slots for the day\nall_slots AS (\n  SELECT TOP 96 ROW_NUMBER() OVER (ORDER BY (SELECT NULL))-1 AS slot\n  FROM sys.all_objects\n),\nslots AS (\n  SELECT\n    DATEDIFF(MINUTE,\n      CAST(CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS datetime2),\n      DATEADD(HOUR,2,ts_datetime)\n    )/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n),\ntoday_data AS (\n  SELECT slot, day_total\n  FROM by_day\n  WHERE local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n),\nmonthly_avg AS (\n  SELECT slot, CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS avg_total\n  FROM by_day\n  GROUP BY slot\n)\nSELECT\n  DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) AS time,\n  -- Today: NULL for future slots so the line stops at current time\n  CASE\n    WHEN DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) > DATEADD(HOUR,2,GETDATE())\n    THEN NULL\n    ELSE COALESCE(t.day_total, 0)\n  END AS [Today],\n  m.avg_total AS [Monthly Avg]\nFROM all_slots a\nLEFT JOIN today_data  t ON t.slot = a.slot\nLEFT JOIN monthly_avg m ON m.slot = a.slot\nORDER BY a.slot"
-          }
-        ],
-        "timeFrom": "12h",
-        "timeShift": null,
-        "timeTo": "12h",
-        "hideTimeOverride": true
-      },
-      {
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-red",
-                  "value": 1
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
-          "h": 3,
-          "w": 2,
-          "x": 15,
-          "y": 0
+          "h": 9,
+          "w": 24,
+          "x": 0,
+          "y": 17
         },
-        "id": 63,
+        "hideTimeOverride": true,
+        "id": 60,
         "options": {
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
           },
-          "showPercentChange": false,
-          "textMode": "auto",
-          "wideLayout": true
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          },
+          "xAxis": {}
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -1476,14 +1490,15 @@
               "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
-            "format": "table",
+            "format": "time_series",
             "rawQuery": true,
-            "rawSql": "SELECT COUNT(*) AS [Apps Not Running]\nFROM (\n  SELECT x.device_id FROM (\n    SELECT a.device_id, a.application_running,\n           ROW_NUMBER() OVER (PARTITION BY a.device_id ORDER BY a.ts_datetime DESC) AS rn\n    FROM dbo.device_application_status a\n    JOIN dbo.devices d ON d.id = a.device_id\n    WHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n  ) x WHERE x.rn = 1 AND x.application_running = 0\n) t",
+            "rawSql": "WITH\n-- Generate all 96 x 15-min slots for the day\nall_slots AS (\n  SELECT TOP 96 ROW_NUMBER() OVER (ORDER BY (SELECT NULL))-1 AS slot\n  FROM sys.all_objects\n),\nslots AS (\n  SELECT\n    DATEDIFF(MINUTE,\n      CAST(CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS datetime2),\n      DATEADD(HOUR,2,ts_datetime)\n    )/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n),\ntoday_data AS (\n  SELECT slot, day_total\n  FROM by_day\n  WHERE local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n),\nmonthly_avg AS (\n  SELECT slot, CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS avg_total\n  FROM by_day\n  GROUP BY slot\n)\nSELECT\n  DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) AS time,\n  -- Today: NULL for future slots so the line stops at current time\n  CASE\n    WHEN DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) \u003e DATEADD(HOUR,2,GETDATE())\n    THEN NULL\n    ELSE COALESCE(t.day_total, 0)\n  END AS [Today],\n  m.avg_total AS [Monthly Avg]\nFROM all_slots a\nLEFT JOIN today_data  t ON t.slot = a.slot\nLEFT JOIN monthly_avg m ON m.slot = a.slot\nORDER BY a.slot",
             "refId": "A"
           }
         ],
-        "title": "Apps Not Running",
-        "type": "stat"
+        "timeFrom": "12h",
+        "title": "Items Processed — Today vs Monthly Avg (15 Min)",
+        "type": "timeseries"
       }
     ],
     "preload": false,
