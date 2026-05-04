@@ -1277,8 +1277,8 @@
       },
       {
         "id": 60,
-        "type": "barchart",
-        "title": "Items Processed \u2014 Today vs Monthly Avg (30 Min)",
+        "type": "timeseries",
+        "title": "Items Processed \u2014 Today vs Monthly Avg (15 Min)",
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
@@ -1291,23 +1291,10 @@
         },
         "pluginVersion": "12.3.1",
         "options": {
-          "barRadius": 0,
-          "barWidth": 0.7,
-          "fillOpacity": 80,
-          "fullHighlight": false,
-          "gradientMode": "none",
-          "groupWidth": 0.7,
-          "orientation": "auto",
-          "showValue": "auto",
-          "stacking": "none",
           "tooltip": {
-            "hideZeros": false,
             "mode": "multi",
             "sort": "none"
           },
-          "xField": "Time",
-          "xTickLabelRotation": -45,
-          "xTickLabelSpacing": 0,
           "legend": {
             "calcs": [],
             "displayMode": "list",
@@ -1318,21 +1305,24 @@
         "fieldConfig": {
           "defaults": {
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "Items",
-              "axisPlacement": "auto",
-              "fillOpacity": 80,
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "fillOpacity": 10,
               "gradientMode": "none",
+              "showPoints": "never",
+              "spanNulls": false,
+              "axisPlacement": "auto",
+              "axisLabel": "Items",
+              "axisColorMode": "text",
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
               },
               "thresholdsStyle": {
                 "mode": "off"
@@ -1362,6 +1352,14 @@
                     "fixedColor": "blue",
                     "mode": "fixed"
                   }
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 15
                 }
               ]
             },
@@ -1377,6 +1375,24 @@
                     "fixedColor": "orange",
                     "mode": "fixed"
                   }
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      8,
+                      4
+                    ],
+                    "fill": "dash"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
                 }
               ]
             }
@@ -1392,7 +1408,7 @@
             "format": "table",
             "rawQuery": true,
             "refId": "A",
-            "rawSql": "WITH slots AS (\n  SELECT\n    DATEDIFF(MINUTE,'2000-01-01', DATEADD(HOUR,2,ts_datetime))/30 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date)                      AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n)\nSELECT\n  RIGHT('0'+CAST((slot*30/60) AS varchar),2)+':'+RIGHT('0'+CAST((slot*30)%60 AS varchar),2) AS [Time],\n  SUM(CASE WHEN local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date) THEN day_total ELSE 0 END) AS [Today],\n  CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS [Monthly Avg]\nFROM by_day\nGROUP BY slot\nORDER BY slot"
+            "rawSql": "WITH slots AS (\n  SELECT\n    DATEDIFF(MINUTE,'2000-01-01', DATEADD(HOUR,2,ts_datetime))/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date)                      AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n)\nSELECT\n  RIGHT('0'+CAST((slot*15/60) AS varchar),2)+':'+RIGHT('0'+CAST((slot*15)%60 AS varchar),2) AS [Time],\n  SUM(CASE WHEN local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date) THEN day_total ELSE 0 END) AS [Today],\n  CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS [Monthly Avg]\nFROM by_day\nGROUP BY slot\nORDER BY slot"
           }
         ]
       },
