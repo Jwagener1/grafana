@@ -16,7 +16,7 @@
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations \u0026 Alerts",
+          "name": "Annotations & Alerts",
           "type": "dashboard"
         }
       ]
@@ -84,11 +84,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Year Parcels]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),1,1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Year Parcels]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),1,1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
             "refId": "A"
           }
         ],
-        "title": "Year — Total Parcels",
+        "title": "Year \u2014 Total Parcels",
         "type": "stat"
       },
       {
@@ -160,11 +160,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Year Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),1,1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Year Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),1,1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
             "refId": "A"
           }
         ],
-        "title": "Year — Good Read %",
+        "title": "Year \u2014 Good Read %",
         "type": "stat"
       },
       {
@@ -225,11 +225,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Month Parcels]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),MONTH(DATEADD(HOUR, 2, GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "rawSql": "SELECT COALESCE(SUM(ds.total_items),0) AS [Month Parcels]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),MONTH(DATEADD(HOUR, 2, GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
             "refId": "A"
           }
         ],
-        "title": "Month — Total Parcels",
+        "title": "Month \u2014 Total Parcels",
         "type": "stat"
       },
       {
@@ -301,11 +301,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Month Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),MONTH(DATEADD(HOUR, 2, GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Month Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE DATEADD(HOUR, 2, ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())),MONTH(DATEADD(HOUR, 2, GETDATE())),1)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})",
             "refId": "A"
           }
         ],
-        "title": "Month — Good Read %",
+        "title": "Month \u2014 Good Read %",
         "type": "stat"
       },
       {
@@ -370,7 +370,7 @@
             "refId": "A"
           }
         ],
-        "title": "Day — Total Parcels",
+        "title": "Day \u2014 Total Parcels",
         "type": "stat"
       },
       {
@@ -446,7 +446,7 @@
             "refId": "A"
           }
         ],
-        "title": "Day — Good Read %",
+        "title": "Day \u2014 Good Read %",
         "type": "stat"
       },
       {
@@ -699,11 +699,11 @@
                       "options": {
                         "offline": {
                           "index": 1,
-                          "text": "🔴 Offline"
+                          "text": "\ud83d\udd34 Offline"
                         },
                         "online": {
                           "index": 0,
-                          "text": "🟢 Online"
+                          "text": "\ud83d\udfe2 Online"
                         }
                       },
                       "type": "value"
@@ -1001,11 +1001,11 @@
                         },
                         "0": {
                           "index": 1,
-                          "text": "🔴 Stopped"
+                          "text": "\ud83d\udd34 Stopped"
                         },
                         "1": {
                           "index": 2,
-                          "text": "🟢 Running"
+                          "text": "\ud83d\udfe2 Running"
                         }
                       },
                       "type": "value"
@@ -1303,7 +1303,7 @@
         "id": 61,
         "options": {
           "barRadius": 0,
-          "barWidth": 0.19,
+          "barWidth": 0.6,
           "fillOpacity": 80,
           "fullHighlight": false,
           "gradientMode": "none",
@@ -1315,11 +1315,8 @@
             "showLegend": false
           },
           "orientation": "auto",
-          "showValue": "auto",
+          "showValue": "never",
           "stacking": "none",
-          "text": {
-            "valueSize": 10
-          },
           "tooltip": {
             "hideZeros": false,
             "mode": "single",
@@ -1327,7 +1324,7 @@
           },
           "xField": "Machine",
           "xTickLabelRotation": -90,
-          "xTickLabelSpacing": 100
+          "xTickLabelSpacing": 0
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -1339,7 +1336,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\n  d.machine_name AS [Machine],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY d.machine_name\nORDER BY [Good Read %] ASC",
+            "rawSql": "SELECT\n  d.location + ' ' + d.machine_name AS [Machine],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nAND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY d.location, d.machine_name\nORDER BY [Good Read %] ASC",
             "refId": "A"
           }
         ],
@@ -1492,12 +1489,12 @@
             "editorMode": "code",
             "format": "time_series",
             "rawQuery": true,
-            "rawSql": "WITH\n-- Generate all 96 x 15-min slots for the day\nall_slots AS (\n  SELECT TOP 96 ROW_NUMBER() OVER (ORDER BY (SELECT NULL))-1 AS slot\n  FROM sys.all_objects\n),\nslots AS (\n  SELECT\n    DATEDIFF(MINUTE,\n      CAST(CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS datetime2),\n      DATEADD(HOUR,2,ts_datetime)\n    )/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) \u003e= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n),\ntoday_data AS (\n  SELECT slot, day_total\n  FROM by_day\n  WHERE local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n),\nmonthly_avg AS (\n  SELECT slot, CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS avg_total\n  FROM by_day\n  GROUP BY slot\n)\nSELECT\n  DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) AS time,\n  -- Today: NULL for future slots so the line stops at current time\n  CASE\n    WHEN DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) \u003e DATEADD(HOUR,2,GETDATE())\n    THEN NULL\n    ELSE COALESCE(t.day_total, 0)\n  END AS [Today],\n  m.avg_total AS [Monthly Avg]\nFROM all_slots a\nLEFT JOIN today_data  t ON t.slot = a.slot\nLEFT JOIN monthly_avg m ON m.slot = a.slot\nORDER BY a.slot",
+            "rawSql": "WITH\n-- Generate all 96 x 15-min slots for the day\nall_slots AS (\n  SELECT TOP 96 ROW_NUMBER() OVER (ORDER BY (SELECT NULL))-1 AS slot\n  FROM sys.all_objects\n),\nslots AS (\n  SELECT\n    DATEDIFF(MINUTE,\n      CAST(CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS datetime2),\n      DATEADD(HOUR,2,ts_datetime)\n    )/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n),\ntoday_data AS (\n  SELECT slot, day_total\n  FROM by_day\n  WHERE local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n),\nmonthly_avg AS (\n  SELECT slot, CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS avg_total\n  FROM by_day\n  GROUP BY slot\n)\nSELECT\n  DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) AS time,\n  -- Today: NULL for future slots so the line stops at current time\n  CASE\n    WHEN DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) > DATEADD(HOUR,2,GETDATE())\n    THEN NULL\n    ELSE COALESCE(t.day_total, 0)\n  END AS [Today],\n  m.avg_total AS [Monthly Avg]\nFROM all_slots a\nLEFT JOIN today_data  t ON t.slot = a.slot\nLEFT JOIN monthly_avg m ON m.slot = a.slot\nORDER BY a.slot",
             "refId": "A"
           }
         ],
         "timeFrom": "12h",
-        "title": "Items Processed — Today vs Monthly Avg (15 Min)",
+        "title": "Items Processed \u2014 Today vs Monthly Avg (15 Min)",
         "type": "timeseries"
       }
     ],
