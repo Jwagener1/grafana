@@ -1300,7 +1300,8 @@
             "displayMode": "list",
             "placement": "bottom",
             "showLegend": true
-          }
+          },
+          "xAxis": {}
         },
         "fieldConfig": {
           "defaults": {
@@ -1410,94 +1411,10 @@
             "refId": "A",
             "rawSql": "WITH\n-- Generate all 96 x 15-min slots for the day\nall_slots AS (\n  SELECT TOP 96 ROW_NUMBER() OVER (ORDER BY (SELECT NULL))-1 AS slot\n  FROM sys.all_objects\n),\nslots AS (\n  SELECT\n    DATEDIFF(MINUTE,\n      CAST(CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS datetime2),\n      DATEADD(HOUR,2,ts_datetime)\n    )/15 AS slot,\n    CAST(DATEADD(HOUR,2,ts_datetime) AS date) AS local_date,\n    total_items\n  FROM dbo.device_statistics ds\n  JOIN dbo.devices d ON d.id = ds.device_id\n  WHERE DATEADD(HOUR,2,ds.ts_datetime) >= DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())),MONTH(DATEADD(HOUR,2,GETDATE())),1)\n  AND (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\n),\nby_day AS (\n  SELECT slot, local_date, SUM(total_items) AS day_total\n  FROM slots\n  GROUP BY slot, local_date\n),\ntoday_data AS (\n  SELECT slot, day_total\n  FROM by_day\n  WHERE local_date = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n),\nmonthly_avg AS (\n  SELECT slot, CAST(AVG(CAST(day_total AS float)) AS decimal(10,1)) AS avg_total\n  FROM by_day\n  GROUP BY slot\n)\nSELECT\n  DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) AS time,\n  -- Today: NULL for future slots so the line stops at current time\n  CASE\n    WHEN DATEADD(MINUTE, a.slot*15, CAST(CAST(DATEADD(HOUR,2,GETDATE()) AS date) AS datetime2)) > DATEADD(HOUR,2,GETDATE())\n    THEN NULL\n    ELSE COALESCE(t.day_total, 0)\n  END AS [Today],\n  m.avg_total AS [Monthly Avg]\nFROM all_slots a\nLEFT JOIN today_data  t ON t.slot = a.slot\nLEFT JOIN monthly_avg m ON m.slot = a.slot\nORDER BY a.slot"
           }
-        ]
-      },
-      {
-        "id": 62,
-        "type": "table",
-        "title": "\ud83d\udd34 Offline Devices (>60 min since last packet)",
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 24,
-          "x": 0,
-          "y": 26
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "format": "table",
-            "rawSql": "SELECT\n  d.machine_name   AS [Device],\n  d.location       AS [Location],\n  d.customer       AS [Customer],\n  MAX(ds.ts_datetime) AS [Last Packet],\n  DATEDIFF(MINUTE, MAX(ds.ts_datetime), GETDATE()) AS [Minutes Offline]\nFROM dbo.devices d\nJOIN dbo.device_statistics ds ON ds.device_id = d.id\nWHERE NOT (d.machine_name = 'DIM2' AND d.location = 'JBH')\nGROUP BY d.machine_name, d.location, d.customer\nHAVING DATEDIFF(MINUTE, MAX(ds.ts_datetime), GETDATE()) >= 60\nORDER BY [Minutes Offline] DESC",
-            "refId": "A"
-          }
         ],
-        "options": {
-          "footer": {
-            "show": false
-          },
-          "showHeader": true,
-          "cellHeight": "sm"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "custom": {
-              "align": "left",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": false
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Minutes Offline"
-              },
-              "properties": [
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "type": "color-background",
-                    "mode": "basic"
-                  }
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "yellow",
-                        "value": 60
-                      },
-                      {
-                        "color": "orange",
-                        "value": 120
-                      },
-                      {
-                        "color": "red",
-                        "value": 360
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                }
-              ]
-            }
-          ]
-        }
+        "timeFrom": "now/d",
+        "timeShift": null,
+        "timeTo": "now/d+1d"
       },
       {
         "datasource": {
@@ -1566,164 +1483,6 @@
         ],
         "title": "Apps Not Running",
         "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "custom": {
-              "align": "left",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": true
-            },
-            "color": {
-              "mode": "thresholds"
-            },
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Failure Reason"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 350
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Topic"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 280
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Retries"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 65
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                },
-                {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "type": "color-background",
-                    "mode": "basic"
-                  }
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "dark-yellow",
-                        "value": 0
-                      },
-                      {
-                        "color": "dark-orange",
-                        "value": 3
-                      },
-                      {
-                        "color": "dark-red",
-                        "value": 5
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "First Seen"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 160
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Source"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 150
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 24,
-          "x": 0,
-          "y": 34
-        },
-        "id": 64,
-        "options": {
-          "cellHeight": "sm",
-          "enablePagination": true,
-          "showHeader": true,
-          "sortBy": [
-            {
-              "desc": true,
-              "displayName": "First Seen"
-            }
-          ]
-        },
-        "pluginVersion": "12.3.1",
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT TOP 100\n  dl.first_seen_utc  AS [First Seen],\n  dl.source_id       AS [Source],\n  dl.mqtt_topic      AS [Topic],\n  dl.failure_reason  AS [Failure Reason],\n  dl.retry_count     AS [Retries]\nFROM dbo.telemetry_deadletter dl\nORDER BY dl.first_seen_utc DESC",
-            "refId": "A"
-          }
-        ],
-        "title": "\u26a0\ufe0f Telemetry Dead Letter Queue (Last 100)",
-        "type": "table"
       }
     ],
     "preload": false,
@@ -1759,7 +1518,7 @@
     },
     "time": {
       "from": "now/d",
-      "to": "now"
+      "to": "now/d+1d"
     },
     "timepicker": {
       "refresh_intervals": [
