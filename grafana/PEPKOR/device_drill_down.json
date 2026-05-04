@@ -544,7 +544,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT COALESCE(SUM(total_items),0) AS [Items Today]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND ts_datetime >= CAST(GETDATE() AS date)\nAND ts_datetime < DATEADD(DAY,1,CAST(GETDATE() AS date))",
+            "rawSql": "SELECT COALESCE(SUM(total_items),0) AS [Items Today]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)",
             "refId": "A"
           }
         ]
@@ -614,7 +614,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(good_read)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND ts_datetime >= CAST(GETDATE() AS date)\nAND ts_datetime < DATEADD(DAY,1,CAST(GETDATE() AS date))",
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(good_read)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)",
             "refId": "A"
           }
         ]
