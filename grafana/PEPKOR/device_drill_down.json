@@ -96,12 +96,12 @@
                 "type": "value",
                 "options": {
                   "online": {
-                    "text": "🟢 Online",
+                    "text": "\ud83d\udfe2 Online",
                     "color": "dark-green",
                     "index": 0
                   },
                   "offline": {
-                    "text": "🔴 Offline",
+                    "text": "\ud83d\udd34 Offline",
                     "color": "dark-red",
                     "index": 1
                   }
@@ -177,12 +177,12 @@
                     "index": 0
                   },
                   "0": {
-                    "text": "🔴 Stopped",
+                    "text": "\ud83d\udd34 Stopped",
                     "color": "dark-red",
                     "index": 1
                   },
                   "1": {
-                    "text": "🟢 Running",
+                    "text": "\ud83d\udfe2 Running",
                     "color": "dark-green",
                     "index": 2
                   }
@@ -1155,7 +1155,7 @@
       {
         "id": 31,
         "type": "timeseries",
-        "title": "Data Transmission — Sent vs Not Sent",
+        "title": "Data Transmission \u2014 Sent vs Not Sent",
         "gridPos": {
           "x": 0,
           "y": 12,
@@ -1224,6 +1224,143 @@
             "rawQuery": true,
             "rawSql": "SELECT ts_datetime AS time, data_sent AS [Data Sent], not_sent AS [Not Sent], image_sent AS [Images Sent], image_not_sent AS [Images Not Sent]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
             "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "type": "barchart",
+        "title": "Hourly Items \u2014 Today vs Daily Average",
+        "gridPos": {
+          "x": 0,
+          "y": 31,
+          "w": 24,
+          "h": 9
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "ffapo5htl28e8e"
+        },
+        "options": {
+          "barWidth": 0.7,
+          "groupWidth": 0.7,
+          "barRadius": 0.1,
+          "xTickLabelRotation": 0,
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "fullHighlight": false,
+          "stacking": {
+            "mode": "none",
+            "group": "A"
+          },
+          "orientation": "auto",
+          "xField": "hour_label"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "fillOpacity": 80,
+              "lineWidth": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "axisPlacement": "auto",
+              "scaleDistribution": {
+                "type": "linear"
+              }
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "fixed",
+                    "fixedColor": "orange"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 45
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 0
+                },
+                {
+                  "id": "displayName",
+                  "value": "Daily Average (same weekday, 30d)"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Actual Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "fixed",
+                    "fixedColor": "rgb(31, 120, 193)"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 88
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 0
+                },
+                {
+                  "id": "displayName",
+                  "value": "Actual Items (today)"
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "ffapo5htl28e8e"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "refId": "A",
+            "rawSql": "SELECT\n    RIGHT('0' + CAST(h.hour_num AS varchar), 2) + ':00' AS hour_label,\n    COALESCE(AVG(CAST(agg.total_items AS float)), 0) AS [Avg Items]\nFROM (\n    SELECT 0 AS hour_num UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3\n    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7\n    UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11\n    UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15\n    UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19\n    UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23\n) h\nLEFT JOIN (\n    SELECT\n        DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) AS hr,\n        SUM(total_items) AS total_items,\n        CAST(DATEADD(HOUR, 2, ts_datetime) AS date) AS day_date\n    FROM dbo.device_statistics\n    WHERE device_id = ${device}\n      AND DATEPART(WEEKDAY, DATEADD(HOUR, 2, ts_datetime)) =\n          DATEPART(WEEKDAY, DATEADD(HOUR, 2, GETDATE()))\n      AND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) >= CAST(DATEADD(DAY, -30, DATEADD(HOUR, 2, GETDATE())) AS date)\n      AND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) < CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\n    GROUP BY\n        DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)),\n        CAST(DATEADD(HOUR, 2, ts_datetime) AS date)\n) agg ON agg.hr = h.hour_num\nGROUP BY h.hour_num\nORDER BY h.hour_num"
+          },
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "ffapo5htl28e8e"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "refId": "B",
+            "rawSql": "SELECT\n    RIGHT('0' + CAST(h.hour_num AS varchar), 2) + ':00' AS hour_label,\n    COALESCE(SUM(ds.total_items), 0) AS [Actual Items]\nFROM (\n    SELECT 0 AS hour_num UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3\n    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7\n    UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11\n    UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15\n    UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19\n    UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23\n) h\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = ${device}\n    AND DATEPART(HOUR, DATEADD(HOUR, 2, ds.ts_datetime)) = h.hour_num\n    AND CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\n    AND DATEPART(HOUR, DATEADD(HOUR, 2, ds.ts_datetime)) < DATEPART(HOUR, DATEADD(HOUR, 2, GETDATE()))\nWHERE h.hour_num < DATEPART(HOUR, DATEADD(HOUR, 2, GETDATE()))\nGROUP BY h.hour_num\nORDER BY h.hour_num"
           }
         ]
       }
