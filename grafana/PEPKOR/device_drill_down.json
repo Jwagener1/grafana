@@ -43,7 +43,7 @@
           "type": "query",
           "datasource": {
             "type": "mssql",
-            "uid": "ffapo5htl28e8e"
+            "uid": "PAAAEB8D7872B0C49"
           },
           "definition": "SELECT CONCAT(location, ' - ', machine_name) AS __text, id AS __value FROM dbo.devices WHERE customer = 'PEPKOR' ORDER BY location, machine_name",
           "query": "SELECT CONCAT(location, ' - ', machine_name) AS __text, id AS __value FROM dbo.devices WHERE customer = 'PEPKOR' ORDER BY location, machine_name",
@@ -70,7 +70,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -124,7 +124,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -146,7 +146,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -205,7 +205,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -227,7 +227,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -275,7 +275,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -297,7 +297,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -345,7 +345,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -367,7 +367,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -415,7 +415,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -437,7 +437,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -478,7 +478,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -500,7 +500,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -539,7 +539,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -561,7 +561,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -609,7 +609,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -631,7 +631,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "tooltip": {
@@ -684,7 +684,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "time_series",
@@ -706,7 +706,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "tooltip": {
@@ -771,7 +771,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "time_series",
@@ -793,7 +793,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -841,7 +841,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -863,7 +863,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -911,7 +911,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -933,7 +933,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "reduceOptions": {
@@ -981,7 +981,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -1003,7 +1003,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "cellHeight": "sm",
@@ -1142,7 +1142,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -1164,7 +1164,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "tooltip": {
@@ -1217,7 +1217,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "time_series",
@@ -1239,7 +1239,7 @@
         },
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "options": {
           "barWidth": 0.7,
@@ -1344,7 +1344,7 @@
           {
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",

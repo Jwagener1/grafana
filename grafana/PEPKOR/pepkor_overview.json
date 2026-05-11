@@ -30,7 +30,7 @@
       {
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "fieldConfig": {
           "defaults": {
@@ -134,7 +134,7 @@
             "dataset": "S1_Remote_Monitoring",
             "datasource": {
               "type": "mssql",
-              "uid": "ffapo5htl28e8e"
+              "uid": "PAAAEB8D7872B0C49"
             },
             "editorMode": "code",
             "format": "table",
@@ -211,7 +211,7 @@
       {
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "fieldConfig": {
           "defaults": {
@@ -336,7 +336,7 @@
       {
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "fieldConfig": {
           "defaults": {
@@ -541,7 +541,7 @@
       {
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "fieldConfig": {
           "defaults": {
@@ -698,7 +698,7 @@
       {
         "datasource": {
           "type": "mssql",
-          "uid": "ffapo5htl28e8e"
+          "uid": "PAAAEB8D7872B0C49"
         },
         "fieldConfig": {
           "defaults": {
