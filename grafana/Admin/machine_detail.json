@@ -2,91 +2,34 @@
   "apiVersion": "dashboard.grafana.app/v1beta1",
   "kind": "Dashboard",
   "metadata": {
-    "name": "machine-detail-s1",
-    "labels": {
-      "grafana.app/folder": "internal-admin"
-    }
+    "name": "machine-detail-s1"
   },
   "spec": {
-    "title": "Machine Detail",
-    "uid": "machine-detail-s1",
-    "schemaVersion": 42,
-    "refresh": "30s",
-    "timezone": "Africa/Johannesburg",
-    "time": {
-      "from": "now-24h",
-      "to": "now"
-    },
-    "timepicker": {
-      "refresh_intervals": [
-        "5s",
-        "30s",
-        "1m",
-        "5m"
-      ]
-    },
-    "fiscalYearStartMonth": 0,
-    "graphTooltip": 1,
-    "preload": false,
-    "editable": true,
-    "tags": [
-      "detail"
-    ],
-    "links": [],
     "annotations": {
-      "list": []
-    },
-    "templating": {
       "list": [
         {
-          "name": "machine",
-          "label": "Machine",
-          "description": "Select a device to inspect",
-          "type": "query",
+          "builtIn": 1,
           "datasource": {
-            "type": "mssql",
-            "uid": "PAAAEB8D7872B0C49"
+            "type": "grafana",
+            "uid": "-- Grafana --"
           },
-          "definition": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
-          "query": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
-          "refresh": 1,
-          "regex": "",
-          "sort": 0,
-          "includeAll": false,
-          "allowCustomValue": false,
-          "current": {},
-          "options": []
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
         }
       ]
     },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "links": [],
     "panels": [
       {
-        "id": 1,
-        "type": "stat",
-        "title": "Status",
-        "gridPos": {
-          "x": 0,
-          "y": 0,
-          "w": 4,
-          "h": 4
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "/.*/",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
         },
         "fieldConfig": {
           "defaults": {
@@ -95,19 +38,19 @@
             },
             "mappings": [
               {
-                "type": "value",
                 "options": {
-                  "online": {
-                    "text": "\ud83d\udfe2 Online",
-                    "color": "dark-green",
-                    "index": 0
-                  },
                   "offline": {
-                    "text": "\ud83d\udd34 Offline",
                     "color": "dark-red",
-                    "index": 1
+                    "index": 1,
+                    "text": "🔴 Offline"
+                  },
+                  "online": {
+                    "color": "dark-green",
+                    "index": 0,
+                    "text": "🟢 Online"
                   }
-                }
+                },
+                "type": "value"
               }
             ],
             "thresholds": {
@@ -122,6 +65,31 @@
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/.*/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -134,67 +102,46 @@
             "rawSql": "SELECT TOP 1 status AS [Status]\nFROM dbo.device_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Status",
+        "type": "stat"
       },
       {
-        "id": 2,
-        "type": "stat",
-        "title": "OS Version",
-        "gridPos": {
-          "x": 4,
-          "y": 0,
-          "w": 5,
-          "h": 4
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "/.*/",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
-        },
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "fixed",
-              "fixedColor": "blue"
+              "fixedColor": "blue",
+              "mode": "fixed"
             },
             "mappings": [
               {
-                "type": "value",
                 "options": {
-                  "Microsoft Windows NT 10.0.26100.0": {
-                    "text": "Win 11 24H2",
-                    "index": 0
-                  },
-                  "Microsoft Windows NT 10.0.22631.0": {
-                    "text": "Win 11 23H2",
-                    "index": 1
-                  },
-                  "Microsoft Windows NT 10.0.22621.0": {
-                    "text": "Win 11 22H2",
-                    "index": 2
+                  "Microsoft Windows NT 10.0.19044.0": {
+                    "index": 4,
+                    "text": "Win 10 21H2"
                   },
                   "Microsoft Windows NT 10.0.19045.0": {
-                    "text": "Win 10 22H2",
-                    "index": 3
+                    "index": 3,
+                    "text": "Win 10 22H2"
                   },
-                  "Microsoft Windows NT 10.0.19044.0": {
-                    "text": "Win 10 21H2",
-                    "index": 4
+                  "Microsoft Windows NT 10.0.22621.0": {
+                    "index": 2,
+                    "text": "Win 11 22H2"
+                  },
+                  "Microsoft Windows NT 10.0.22631.0": {
+                    "index": 1,
+                    "text": "Win 11 23H2"
+                  },
+                  "Microsoft Windows NT 10.0.26100.0": {
+                    "index": 0,
+                    "text": "Win 11 24H2"
                   }
-                }
+                },
+                "type": "value"
               }
             ],
             "thresholds": {
@@ -209,6 +156,31 @@
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 4,
+          "w": 5,
+          "x": 4,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/.*/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -221,44 +193,24 @@
             "rawSql": "SELECT TOP 1\nCASE\n  WHEN os_version LIKE '%10.0.26200%' THEN 'Win 11 24H2+'\n  WHEN os_version LIKE '%10.0.26120%' THEN 'Win 11 24H2+'\n  WHEN os_version LIKE '%10.0.26100%' THEN 'Win 11 24H2'\n  WHEN os_version LIKE '%10.0.25398%' THEN 'Win 11 23H2'\n  WHEN os_version LIKE '%10.0.22631%' THEN 'Win 11 23H2'\n  WHEN os_version LIKE '%10.0.22621%' THEN 'Win 11 22H2'\n  WHEN os_version LIKE '%10.0.22000%' THEN 'Win 11 21H2'\n  WHEN os_version LIKE '%10.0.19045%' THEN 'Win 10 22H2'\n  WHEN os_version LIKE '%10.0.19044%' THEN 'Win 10 21H2'\n  WHEN os_version LIKE '%10.0.19043%' THEN 'Win 10 21H1'\n  WHEN os_version LIKE '%10.0.19042%' THEN 'Win 10 20H2'\n  WHEN os_version LIKE '%10.0.19041%' THEN 'Win 10 2004'\n  ELSE os_version\nEND AS [OS]\nFROM dbo.device_os_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "OS Version",
+        "type": "stat"
       },
       {
-        "id": 3,
-        "type": "stat",
-        "title": "C: Drive Used",
-        "gridPos": {
-          "x": 9,
-          "y": 0,
-          "w": 4,
-          "h": 4
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
-        },
         "fieldConfig": {
           "defaults": {
-            "unit": "percent",
-            "decimals": 1,
             "color": {
               "mode": "thresholds"
             },
+            "decimals": 1,
             "mappings": [],
+            "max": 100,
+            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -275,10 +227,36 @@
                   "value": 90
                 }
               ]
-            }
+            },
+            "unit": "percent"
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 9,
+          "y": 0
+        },
+        "id": 3,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -291,41 +269,20 @@
             "rawSql": "SELECT TOP 1 CAST(usage_percent AS decimal(5,1)) AS [C: Drive %]\nFROM dbo.device_storage_status\nWHERE device_id = ${machine} AND drive = 'C:'\nORDER BY ts_datetime DESC",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "C: Drive Used",
+        "type": "stat"
       },
       {
-        "id": 4,
-        "type": "stat",
-        "title": "Items Today",
-        "gridPos": {
-          "x": 13,
-          "y": 0,
-          "w": 4,
-          "h": 4
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
-        },
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "fixed",
-              "fixedColor": "purple"
+              "fixedColor": "purple",
+              "mode": "fixed"
             },
             "mappings": [],
             "thresholds": {
@@ -340,6 +297,31 @@
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 13,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -352,44 +334,24 @@
             "rawSql": "SELECT COALESCE(SUM(total_items),0) AS [Items Today]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Items Today",
+        "type": "stat"
       },
       {
-        "id": 5,
-        "type": "stat",
-        "title": "Good Read % Today",
-        "gridPos": {
-          "x": 17,
-          "y": 0,
-          "w": 4,
-          "h": 4
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
-        },
         "fieldConfig": {
           "defaults": {
-            "unit": "percent",
-            "decimals": 1,
             "color": {
               "mode": "thresholds"
             },
+            "decimals": 1,
             "mappings": [],
+            "max": 100,
+            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -406,10 +368,36 @@
                   "value": 97
                 }
               ]
-            }
+            },
+            "unit": "percent"
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 17,
+          "y": 0
+        },
+        "id": 5,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -422,41 +410,105 @@
             "rawSql": "SELECT CAST(COALESCE(100.0*SUM(good_read)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Good Read % Today",
+        "type": "stat"
       },
       {
-        "id": 6,
-        "type": "stat",
-        "title": "Customer / Location",
-        "gridPos": {
-          "x": 21,
-          "y": 2,
-          "w": 3,
-          "h": 2
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "-1": {
+                    "color": "gray",
+                    "index": 0,
+                    "text": "No Data"
+                  },
+                  "0": {
+                    "color": "dark-red",
+                    "index": 1,
+                    "text": "🔴 Stopped"
+                  },
+                  "1": {
+                    "color": "dark-green",
+                    "index": 2,
+                    "text": "🟢 Running"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "gray",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 3,
+          "x": 21,
+          "y": 0
+        },
+        "id": 7,
         "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
           "reduceOptions": {
             "calcs": [
               "lastNotNull"
             ],
-            "fields": "/.*/",
-            "values": true
+            "fields": "",
+            "values": false
           },
-          "colorMode": "none",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "value",
-          "orientation": "vertical"
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 COALESCE(CAST(application_running AS int), -1) AS [App Running]\nFROM dbo.device_application_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ],
+        "title": "App Status",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
         },
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "fixed",
-              "fixedColor": "text"
+              "fixedColor": "text",
+              "mode": "fixed"
             },
             "mappings": [],
             "thresholds": {
@@ -471,6 +523,31 @@
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 2,
+          "w": 3,
+          "x": 21,
+          "y": 2
+        },
+        "id": 6,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "vertical",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/.*/",
+            "values": true
+          },
+          "showPercentChange": false,
+          "textMode": "value",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -483,186 +560,58 @@
             "rawSql": "SELECT customer AS [Customer], location AS [Location] FROM dbo.devices WHERE id = ${machine}",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Customer / Location",
+        "type": "stat"
       },
       {
-        "id": 30,
-        "type": "timeseries",
-        "title": "Items Processed Over Time",
-        "gridPos": {
-          "x": 0,
-          "y": 8,
-          "w": 12,
-          "h": 8
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          }
         },
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "palette-classic"
+              "mode": "thresholds"
             },
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 15,
-              "gradientMode": "none",
-              "drawStyle": "line",
-              "pointSize": 4,
-              "showPoints": "auto",
-              "spanNulls": false,
-              "axisPlacement": "auto",
-              "axisLabel": "",
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
+            "decimals": 1,
             "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "time_series",
-            "rawQuery": true,
-            "rawSql": "SELECT ts_datetime AS time, total_items AS [Total Items], good_read AS [Good Reads], no_read AS [No Reads]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 31,
-        "type": "timeseries",
-        "title": "Good Read % Over Time",
-        "gridPos": {
-          "x": 12,
-          "y": 8,
-          "w": 12,
-          "h": 8
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          }
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "min": 0,
             "max": 100,
-            "color": {
-              "mode": "fixed",
-              "fixedColor": "green"
-            },
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 20,
-              "gradientMode": "opacity",
-              "drawStyle": "line",
-              "pointSize": 4,
-              "showPoints": "auto",
-              "spanNulls": false,
-              "axisPlacement": "auto",
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
-            "mappings": [],
+            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "dark-red",
+                  "color": "dark-green",
                   "value": 0
                 },
                 {
                   "color": "dark-orange",
-                  "value": 80
+                  "value": 75
                 },
                 {
-                  "color": "dark-green",
-                  "value": 97
+                  "color": "dark-red",
+                  "value": 90
                 }
               ]
-            }
+            },
+            "unit": "percent"
           },
           "overrides": []
         },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "time_series",
-            "rawQuery": true,
-            "rawSql": "SELECT ts_datetime AS time,\n  CAST(CASE WHEN total_items > 0 THEN 100.0*good_read/total_items ELSE NULL END AS decimal(6,2)) AS [Good Read %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 40,
-        "type": "gauge",
-        "title": "No Dimensions %",
         "gridPos": {
+          "h": 4,
+          "w": 3,
           "x": 0,
-          "y": 16,
-          "w": 6,
-          "h": 5
+          "y": 4
         },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
+        "id": 9,
         "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
           "reduceOptions": {
             "calcs": [
               "lastNotNull"
@@ -670,19 +619,38 @@
             "fields": "",
             "values": false
           },
-          "orientation": "auto",
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 CAST(mem_usage_pct AS decimal(5,1)) AS [Mem %]\nFROM dbo.device_os_metrics\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ],
+        "title": "Memory %",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
         },
         "fieldConfig": {
           "defaults": {
-            "unit": "percent",
-            "decimals": 1,
-            "min": 0,
-            "max": 10,
             "color": {
               "mode": "thresholds"
             },
+            "decimals": 1,
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
@@ -693,17 +661,43 @@
                 },
                 {
                   "color": "dark-orange",
-                  "value": 1
+                  "value": 70
                 },
                 {
                   "color": "dark-red",
-                  "value": 3
+                  "value": 85
                 }
               ]
-            }
+            },
+            "unit": "celsius"
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 3,
+          "y": 4
+        },
+        "id": 10,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -713,26 +707,52 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(no_dimension)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [No Dims %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)",
+            "rawSql": "SELECT TOP 1 CAST(temp_celsius AS decimal(5,1)) AS [Temp C]\nFROM dbo.device_os_metrics\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Temperature",
+        "type": "stat"
       },
       {
-        "id": 41,
-        "type": "gauge",
-        "title": "No Weight %",
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "decimals": 0,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
         "gridPos": {
+          "h": 4,
+          "w": 3,
           "x": 6,
-          "y": 16,
-          "w": 6,
-          "h": 5
+          "y": 4
         },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
+        "id": 11,
         "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
           "reduceOptions": {
             "calcs": [
               "lastNotNull"
@@ -740,40 +760,11 @@
             "fields": "",
             "values": false
           },
-          "orientation": "auto",
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
         },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 1,
-            "min": 0,
-            "max": 10,
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 1
-                },
-                {
-                  "color": "dark-red",
-                  "value": 3
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -783,47 +774,27 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(no_weight)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [No Weight %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)",
+            "rawSql": "SELECT TOP 1 uptime_seconds AS [Uptime]\nFROM dbo.device_uptime_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Uptime",
+        "type": "stat"
       },
       {
-        "id": 42,
-        "type": "gauge",
-        "title": "Out of Spec %",
-        "gridPos": {
-          "x": 12,
-          "y": 16,
-          "w": 6,
-          "h": 5
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "orientation": "auto",
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true
-        },
         "fieldConfig": {
           "defaults": {
-            "unit": "percent",
-            "decimals": 1,
-            "min": 0,
-            "max": 10,
             "color": {
               "mode": "thresholds"
             },
+            "decimals": 1,
             "mappings": [],
+            "max": 10,
+            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -840,10 +811,34 @@
                   "value": 5
                 }
               ]
-            }
+            },
+            "unit": "percent"
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 14,
+          "y": 4
+        },
+        "id": 42,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -856,44 +851,24 @@
             "rawSql": "SELECT CAST(COALESCE(100.0*SUM(item_out_of_spec)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Out of Spec %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Out of Spec %",
+        "type": "gauge"
       },
       {
-        "id": 43,
-        "type": "gauge",
-        "title": "Multiple Items %",
-        "gridPos": {
-          "x": 18,
-          "y": 16,
-          "w": 6,
-          "h": 5
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "orientation": "auto",
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true
-        },
         "fieldConfig": {
           "defaults": {
-            "unit": "percent",
-            "decimals": 1,
-            "min": 0,
-            "max": 10,
             "color": {
               "mode": "thresholds"
             },
+            "decimals": 1,
             "mappings": [],
+            "max": 10,
+            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -910,10 +885,34 @@
                   "value": 10
                 }
               ]
-            }
+            },
+            "unit": "percent"
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 17,
+          "y": 4
+        },
+        "id": 43,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -926,32 +925,362 @@
             "rawSql": "SELECT CAST(COALESCE(100.0*SUM(more_than_1_item)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Multiple Items %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Multiple Items %",
+        "type": "gauge"
       },
       {
-        "id": 50,
-        "type": "table",
-        "title": "Drive Storage",
-        "gridPos": {
-          "x": 0,
-          "y": 21,
-          "w": 10,
-          "h": 6
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
         },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 1,
+            "mappings": [],
+            "max": 10,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 3
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 20,
+          "y": 4
+        },
+        "id": 41,
         "options": {
-          "cellHeight": "sm",
-          "showHeader": true,
-          "enablePagination": false,
-          "sortBy": [
-            {
-              "displayName": "Drive",
-              "desc": false
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(no_weight)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [No Weight %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)",
+            "refId": "A"
+          }
+        ],
+        "title": "No Weight %",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 1,
+            "mappings": [],
+            "max": 10,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 3
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 22,
+          "y": 4
+        },
+        "id": 40,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(no_dimension)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [No Dims %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)",
+            "refId": "A"
+          }
+        ],
+        "title": "No Dimensions %",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 15,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 4,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
             }
-          ]
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "id": 30,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "time_series",
+            "rawQuery": true,
+            "rawSql": "SELECT ts_datetime AS time, total_items AS [Total Items], good_read AS [Good Reads], no_read AS [No Reads]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
+            "refId": "A"
+          }
+        ],
+        "title": "Items Processed Over Time",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "green",
+              "mode": "fixed"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 20,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 4,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        },
+        "id": 31,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "time_series",
+            "rawQuery": true,
+            "rawSql": "SELECT ts_datetime AS time,\n  CAST(CASE WHEN total_items \u003e 0 THEN 100.0*good_read/total_items ELSE NULL END AS decimal(6,2)) AS [Good Read %]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
+            "refId": "A"
+          }
+        ],
+        "title": "Good Read % Over Time",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
         },
         "fieldConfig": {
           "defaults": {
@@ -962,6 +1291,9 @@
               "align": "center",
               "cellOptions": {
                 "type": "auto"
+              },
+              "footer": {
+                "reducers": []
               },
               "inspect": false
             },
@@ -998,8 +1330,8 @@
                 {
                   "id": "custom.cellOptions",
                   "value": {
-                    "type": "gauge",
                     "mode": "basic",
+                    "type": "gauge",
                     "valueDisplayMode": "color"
                   }
                 },
@@ -1075,6 +1407,25 @@
             }
           ]
         },
+        "gridPos": {
+          "h": 6,
+          "w": 10,
+          "x": 0,
+          "y": 16
+        },
+        "id": 50,
+        "options": {
+          "cellHeight": "sm",
+          "enablePagination": false,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "Drive"
+            }
+          ]
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1087,32 +1438,14 @@
             "rawSql": "SELECT x.drive AS [Drive], x.total_gb AS [Total GB], x.used_gb AS [Used GB], x.free_gb AS [Free GB], CAST(x.usage_percent AS decimal(5,1)) AS [Used %]\nFROM (\n  SELECT drive, total_gb, free_gb, used_gb, usage_percent,\n         ROW_NUMBER() OVER (PARTITION BY drive ORDER BY ts_datetime DESC) AS rn\n  FROM dbo.device_storage_status\n  WHERE device_id = ${machine}\n) x WHERE x.rn = 1\nORDER BY x.drive",
             "refId": "A"
           }
-        ]
+        ],
+        "title": "Drive Storage",
+        "type": "table"
       },
       {
-        "id": 51,
-        "type": "timeseries",
-        "title": "Data Transmission \u2014 Sent vs Not Sent",
-        "gridPos": {
-          "x": 10,
-          "y": 21,
-          "w": 14,
-          "h": 6
-        },
         "datasource": {
           "type": "mssql",
           "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "tooltip": {
-            "mode": "multi",
-            "sort": "none"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          }
         },
         "fieldConfig": {
           "defaults": {
@@ -1120,21 +1453,37 @@
               "mode": "palette-classic"
             },
             "custom": {
-              "lineWidth": 2,
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
               "fillOpacity": 10,
               "gradientMode": "none",
-              "drawStyle": "line",
-              "pointSize": 4,
-              "showPoints": "auto",
-              "spanNulls": false,
-              "axisPlacement": "auto",
-              "scaleDistribution": {
-                "type": "linear"
-              },
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 4,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
               }
             },
             "mappings": [],
@@ -1150,6 +1499,27 @@
           },
           "overrides": []
         },
+        "gridPos": {
+          "h": 6,
+          "w": 14,
+          "x": 10,
+          "y": 16
+        },
+        "id": 51,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1162,292 +1532,55 @@
             "rawSql": "SELECT ts_datetime AS time, data_sent AS [Data Sent], not_sent AS [Not Sent]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
             "refId": "A"
           }
-        ]
-      },
-      {
-        "id": 7,
-        "type": "stat",
-        "title": "App Status",
-        "gridPos": {
-          "x": 21,
-          "y": 0,
-          "w": 3,
-          "h": 2
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [
-              {
-                "type": "value",
-                "options": {
-                  "-1": {
-                    "text": "No Data",
-                    "color": "gray",
-                    "index": 0
-                  },
-                  "0": {
-                    "text": "\ud83d\udd34 Stopped",
-                    "color": "dark-red",
-                    "index": 1
-                  },
-                  "1": {
-                    "text": "\ud83d\udfe2 Running",
-                    "color": "dark-green",
-                    "index": 2
-                  }
-                }
-              }
-            ],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "gray",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT TOP 1 COALESCE(CAST(application_running AS int), -1) AS [App Running]\nFROM dbo.device_application_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 9,
-        "type": "stat",
-        "title": "Memory %",
-        "gridPos": {
-          "x": 3,
-          "y": 4,
-          "w": 3,
-          "h": 4
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 1,
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 75
-                },
-                {
-                  "color": "dark-red",
-                  "value": 90
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT TOP 1 CAST(mem_usage_pct AS decimal(5,1)) AS [Mem %]\nFROM dbo.device_os_metrics\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 10,
-        "type": "stat",
-        "title": "Temperature",
-        "gridPos": {
-          "x": 6,
-          "y": 4,
-          "w": 3,
-          "h": 4
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "celsius",
-            "decimals": 1,
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 70
-                },
-                {
-                  "color": "dark-red",
-                  "value": 85
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT TOP 1 CAST(temp_celsius AS decimal(5,1)) AS [Temp C]\nFROM dbo.device_os_metrics\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 11,
-        "type": "stat",
-        "title": "Uptime",
-        "gridPos": {
-          "x": 9,
-          "y": 4,
-          "w": 3,
-          "h": 4
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "textMode": "auto",
-          "orientation": "auto"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "s",
-            "decimals": 0,
-            "color": {
-              "mode": "fixed",
-              "fixedColor": "blue"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "blue",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT TOP 1 uptime_seconds AS [Uptime]\nFROM dbo.device_uptime_status\nWHERE device_id = ${machine}\nORDER BY ts_datetime DESC",
-            "refId": "A"
-          }
-        ]
+        ],
+        "title": "Data Transmission — Sent vs Not Sent",
+        "type": "timeseries"
       }
-    ]
+    ],
+    "preload": false,
+    "refresh": "30s",
+    "schemaVersion": 42,
+    "tags": [
+      "detail"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allowCustomValue": false,
+          "current": {
+            "text": "DIM3",
+            "value": "2"
+          },
+          "datasource": {
+            "type": "mssql",
+            "uid": "PAAAEB8D7872B0C49"
+          },
+          "definition": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
+          "description": "Select a device to inspect",
+          "includeAll": false,
+          "label": "Machine",
+          "name": "machine",
+          "options": [],
+          "query": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "30s",
+        "1m",
+        "5m"
+      ]
+    },
+    "timezone": "Africa/Johannesburg",
+    "title": "Machine Detail"
   }
 }
