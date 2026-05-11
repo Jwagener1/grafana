@@ -1159,7 +1159,7 @@
             "editorMode": "code",
             "format": "time_series",
             "rawQuery": true,
-            "rawSql": "SELECT ts_datetime AS time, data_sent AS [Data Sent], not_sent AS [Not Sent], image_sent AS [Images Sent], image_not_sent AS [Images Not Sent]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
+            "rawSql": "SELECT ts_datetime AS time, data_sent AS [Data Sent], not_sent AS [Not Sent]\nFROM dbo.device_statistics\nWHERE device_id = ${machine}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
             "refId": "A"
           }
         ]
