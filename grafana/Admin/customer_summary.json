@@ -422,8 +422,28 @@
               "mode": "fixed"
             },
             "custom": {
-              "align": "auto",
-              "displayMode": "auto"
+              "align": "center",
+              "cellOptions": {
+                "type": "color-text"
+              },
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
             }
           },
           "overrides": [
@@ -464,25 +484,10 @@
               },
               "properties": [
                 {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "#73BF69",
-                        "value": 0
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -494,29 +499,10 @@
               },
               "properties": [
                 {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 1
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -539,75 +525,14 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Not Sent"
-              },
-              "properties": [
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 1
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
                 "options": "Good Read %"
               },
               "properties": [
                 {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "#C4162A",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 85
-                      },
-                      {
-                        "color": "#73BF69",
-                        "value": 95
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -619,37 +544,10 @@
               },
               "properties": [
                 {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -661,37 +559,10 @@
               },
               "properties": [
                 {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -703,37 +574,10 @@
               },
               "properties": [
                 {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -745,37 +589,10 @@
               },
               "properties": [
                 {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -787,37 +604,10 @@
               },
               "properties": [
                 {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -829,37 +619,25 @@
               },
               "properties": [
                 {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
+                  "id": "color",
                   "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
                   }
-                },
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
                   }
                 }
               ]
@@ -1260,8 +1038,28 @@
               "mode": "fixed"
             },
             "custom": {
-              "align": "auto",
-              "displayMode": "auto"
+              "align": "center",
+              "cellOptions": {
+                "type": "color-text"
+              },
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
             }
           },
           "overrides": [
@@ -1302,8 +1100,10 @@
               },
               "properties": [
                 {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-background"
+                  }
                 },
                 {
                   "id": "mappings",
@@ -1368,6 +1168,81 @@
             {
               "matcher": {
                 "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dim %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scan %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
                 "options": "Sent"
               },
               "properties": [
@@ -1387,239 +1262,10 @@
               },
               "properties": [
                 {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 1
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Good Read %"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "#C4162A",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 85
-                      },
-                      {
-                        "color": "#73BF69",
-                        "value": 95
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "No Read %"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "No Dim %"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "No Weight %"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Hand Scan %"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "percent"
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "transparent",
-                        "value": 0
-                      },
-                      {
-                        "color": "#FADE2A",
-                        "value": 0.1
-                      },
-                      {
-                        "color": "#C4162A",
-                        "value": 5
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
                   }
                 }
               ]
