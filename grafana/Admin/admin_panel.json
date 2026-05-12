@@ -34,7 +34,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "fixedColor": "dark-blue",
+              "fixedColor": "#1F60C4",
               "mode": "fixed"
             },
             "mappings": [],
@@ -46,7 +46,8 @@
                   "value": 0
                 }
               ]
-            }
+            },
+            "custom": {}
           },
           "overrides": []
         },
@@ -99,7 +100,8 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
+              "fixedColor": "#73BF69",
+              "mode": "fixed"
             },
             "decimals": 1,
             "mappings": [],
@@ -122,7 +124,8 @@
                 }
               ]
             },
-            "unit": "percent"
+            "unit": "percent",
+            "custom": {}
           },
           "overrides": []
         },
@@ -175,7 +178,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "fixedColor": "blue",
+              "fixedColor": "#1F60C4",
               "mode": "fixed"
             },
             "mappings": [],
@@ -187,7 +190,8 @@
                   "value": 0
                 }
               ]
-            }
+            },
+            "custom": {}
           },
           "overrides": []
         },
@@ -240,7 +244,8 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
+              "fixedColor": "#73BF69",
+              "mode": "fixed"
             },
             "decimals": 1,
             "mappings": [],
@@ -263,7 +268,8 @@
                 }
               ]
             },
-            "unit": "percent"
+            "unit": "percent",
+            "custom": {}
           },
           "overrides": []
         },
@@ -316,7 +322,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "fixedColor": "purple",
+              "fixedColor": "#1F60C4",
               "mode": "fixed"
             },
             "mappings": [],
@@ -328,7 +334,8 @@
                   "value": 0
                 }
               ]
-            }
+            },
+            "custom": {}
           },
           "overrides": []
         },
@@ -381,7 +388,8 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
+              "fixedColor": "#73BF69",
+              "mode": "fixed"
             },
             "decimals": 1,
             "mappings": [],
@@ -404,7 +412,8 @@
                 }
               ]
             },
-            "unit": "percent"
+            "unit": "percent",
+            "custom": {}
           },
           "overrides": []
         },
@@ -457,7 +466,8 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
+              "fixedColor": "#C4162A",
+              "mode": "fixed"
             },
             "mappings": [],
             "thresholds": {
@@ -472,7 +482,8 @@
                   "value": 1
                 }
               ]
-            }
+            },
+            "custom": {}
           },
           "overrides": []
         },
@@ -525,7 +536,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "fixedColor": "blue",
+              "fixedColor": "#1F60C4",
               "mode": "fixed"
             },
             "mappings": [],
@@ -537,7 +548,8 @@
                   "value": 0
                 }
               ]
-            }
+            },
+            "custom": {}
           },
           "overrides": []
         },
@@ -590,7 +602,8 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
+              "fixedColor": "#73BF69",
+              "mode": "fixed"
             },
             "mappings": [],
             "thresholds": {
@@ -605,7 +618,8 @@
                   "value": 1
                 }
               ]
-            }
+            },
+            "custom": {}
           },
           "overrides": []
         },
@@ -658,7 +672,8 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
+              "fixedColor": "#808080",
+              "mode": "fixed"
             },
             "custom": {
               "align": "center",
@@ -781,7 +796,8 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
                   }
                 },
                 {
@@ -845,7 +861,8 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
                   }
                 },
                 {
@@ -897,7 +914,8 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
                   }
                 },
                 {
@@ -949,7 +967,8 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
                   }
                 },
                 {
@@ -1035,7 +1054,8 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
                   }
                 },
                 {
@@ -1087,7 +1107,8 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
                   }
                 },
                 {
@@ -1139,7 +1160,8 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "thresholds"
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
                   }
                 },
                 {
@@ -1231,7 +1253,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
+              "mode": "palette-classic"
             },
             "custom": {
               "axisBorderShow": false,
@@ -1289,6 +1311,291 @@
                 {
                   "id": "max",
                   "value": 104
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Actual Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#64B0C8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dimension %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out of Spec %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
                 }
               ]
             }
@@ -1397,6 +1704,9 @@
               "scaleDistribution": {
                 "type": "linear"
               }
+            },
+            "color": {
+              "mode": "palette-classic"
             }
           },
           "overrides": [
@@ -1409,21 +1719,9 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "fixed",
-                    "fixedColor": "orange"
+                    "fixedColor": "#64B0C8",
+                    "mode": "fixed"
                   }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 45
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 0
-                },
-                {
-                  "id": "displayName",
-                  "value": "Monthly Average"
                 }
               ]
             },
@@ -1436,21 +1734,264 @@
                 {
                   "id": "color",
                   "value": {
-                    "mode": "fixed",
-                    "fixedColor": "rgb(31, 120, 193)"
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
                   }
-                },
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Items"
+              },
+              "properties": [
                 {
-                  "id": "custom.fillOpacity",
-                  "value": 88
-                },
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
                 {
-                  "id": "custom.lineWidth",
-                  "value": 0
-                },
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Reads"
+              },
+              "properties": [
                 {
-                  "id": "displayName",
-                  "value": "Actual Items (today)"
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dimension %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out of Spec %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
                 }
               ]
             }
