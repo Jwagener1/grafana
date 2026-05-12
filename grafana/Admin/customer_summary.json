@@ -175,7 +175,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT COUNT(*) AS [Online]\nFROM dbo.devices d\nJOIN (\n    SELECT device_id, MAX(ts_datetime) AS last_seen\n    FROM dbo.device_status GROUP BY device_id\n) ls ON ls.device_id = d.id\nWHERE ls.last_seen >= DATEADD(MINUTE, -35, GETUTCDATE())\n",
+            "rawSql": "\nWITH latest_status AS (\n    SELECT x.device_id, x.status FROM (\n        SELECT ds.device_id, ds.status,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_status ds\n    ) x WHERE x.rn = 1\n)\nSELECT COUNT(*) AS [Online]\nFROM dbo.devices d\nJOIN latest_status ls ON ls.device_id = d.id\nWHERE ls.status = 'online'",
             "refId": "A"
           }
         ],
@@ -229,7 +229,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT COUNT(*) AS [Offline]\nFROM dbo.devices d\nJOIN (\n    SELECT device_id, MAX(ts_datetime) AS last_seen\n    FROM dbo.device_status GROUP BY device_id\n) ls ON ls.device_id = d.id\nWHERE ls.last_seen < DATEADD(MINUTE, -35, GETUTCDATE())\n",
+            "rawSql": "\nWITH latest_status AS (\n    SELECT x.device_id, x.status FROM (\n        SELECT ds.device_id, ds.status,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_status ds\n    ) x WHERE x.rn = 1\n)\nSELECT COUNT(*) AS [Offline]\nFROM dbo.devices d\nLEFT JOIN latest_status ls ON ls.device_id = d.id\nWHERE COALESCE(ls.status,'offline') != 'online'",
             "refId": "A"
           }
         ],
@@ -445,7 +445,86 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Items"
+                "options": "Devices"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Online"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#73BF69",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Offline"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Items Today"
               },
               "properties": [
                 {
@@ -464,10 +543,29 @@
               },
               "properties": [
                 {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 1
+                      }
+                    ]
+                  }
+                },
+                {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#C4162A",
-                    "mode": "fixed"
+                    "mode": "thresholds"
                   }
                 }
               ]
@@ -765,25 +863,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Online"
-              },
-              "properties": [
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -815,7 +894,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT\n  d.customer                                                        AS [Customer],\n  COUNT(DISTINCT d.id)                                              AS [Machines],\n  COUNT(DISTINCT CASE WHEN ls.last_seen >= DATEADD(MINUTE,-35,GETUTCDATE()) THEN d.id END) AS [Online],\n  COALESCE(SUM(ds.total_items),0)                                   AS [Items],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  CAST(COALESCE(100.0*SUM(ds.item_out_of_spec)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Out Spec %],\n  CAST(COALESCE(100.0*SUM(ds.more_than_1_item)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Multi-Item %],\n  COALESCE(SUM(ds.not_sent),0)                                      AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN (\n    SELECT device_id, MAX(ts_datetime) AS last_seen FROM dbo.device_status GROUP BY device_id\n) ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;\n",
+            "rawSql": "\nWITH latest_status AS (\n    SELECT x.device_id, x.status FROM (\n        SELECT ds.device_id, ds.status,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_status ds\n    ) x WHERE x.rn = 1\n)\nSELECT\n  d.customer                                                               AS [Customer],\n  COUNT(DISTINCT d.id)                                                     AS [Devices],\n  SUM(CASE WHEN ls.status='online' THEN 1 ELSE 0 END)                     AS [Online],\n  COUNT(DISTINCT d.id) - SUM(CASE WHEN ls.status='online' THEN 1 ELSE 0 END) AS [Offline],\n  COALESCE(SUM(ds.total_items),0)                                          AS [Items Today],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)    AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  CAST(COALESCE(100.0*SUM(ds.item_out_of_spec)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Out Spec %],\n  CAST(COALESCE(100.0*SUM(ds.more_than_1_item)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Multi-Item %],\n  COALESCE(SUM(ds.not_sent),0)                                             AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN latest_status ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;",
             "refId": "A"
           }
         ],
@@ -1115,10 +1194,6 @@
           "defaults": {
             "color": {
               "mode": "palette-classic"
-            },
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 10
             }
           },
           "overrides": []
@@ -1131,6 +1206,11 @@
         },
         "id": 14,
         "options": {
+          "barRadius": 0.05,
+          "barWidth": 0.7,
+          "groupWidth": 0.7,
+          "stacking": "none",
+          "xField": "Date",
           "legend": {
             "displayMode": "list",
             "placement": "bottom",
@@ -1149,12 +1229,12 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT\n  DATEADD(HOUR,-2, CAST(CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) AS datetime)) AS time,\n  d.customer AS metric,\n  CAST(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE $__timeFilter(ds.ts_datetime)\nGROUP BY CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date), d.customer\nORDER BY time, d.customer;\n",
+            "rawSql": "\nSELECT\n  CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date)                             AS [Date],\n  d.customer                                                                AS [Customer],\n  SUM(ds.total_items)                                                       AS [Items]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= DATEADD(DAY,-7,GETUTCDATE())\nGROUP BY CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date), d.customer\nORDER BY [Date];",
             "refId": "A"
           }
         ],
-        "title": "Good Read % per Customer \u2014 7 Days",
-        "type": "timeseries"
+        "title": "Daily Item Volumes per Customer \u2014 7 Days",
+        "type": "barchart"
       },
       {
         "collapsed": false,
@@ -1188,6 +1268,21 @@
             {
               "matcher": {
                 "id": "byName",
+                "options": "Customer"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#808080",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
                 "options": "Machine"
               },
               "properties": [
@@ -1196,6 +1291,61 @@
                   "value": {
                     "fixedColor": "#808080",
                     "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Status"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "type": "value",
+                      "options": {
+                        "online": {
+                          "text": "\ud83d\udfe2 Online",
+                          "color": "#73BF69",
+                          "index": 0
+                        },
+                        "offline": {
+                          "text": "\ud83d\udd34 Offline",
+                          "color": "#C4162A",
+                          "index": 1
+                        },
+                        "unknown": {
+                          "text": "\u26aa Unknown",
+                          "color": "#808080",
+                          "index": 2
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#C4162A",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
                   }
                 }
               ]
@@ -1237,49 +1387,8 @@
               },
               "properties": [
                 {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#C4162A",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Status"
-              },
-              "properties": [
-                {
                   "id": "custom.displayMode",
                   "value": "color-background"
-                },
-                {
-                  "id": "mappings",
-                  "value": [
-                    {
-                      "type": "value",
-                      "options": {
-                        "Online": {
-                          "text": "\ud83d\udfe2 Online",
-                          "color": "#73BF69",
-                          "index": 0
-                        },
-                        "Offline": {
-                          "text": "\ud83d\udd34 Offline",
-                          "color": "#C4162A",
-                          "index": 1
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
                 },
                 {
                   "id": "thresholds",
@@ -1287,10 +1396,20 @@
                     "mode": "absolute",
                     "steps": [
                       {
-                        "color": "#C4162A",
+                        "color": "transparent",
                         "value": 0
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 1
                       }
                     ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
                   }
                 }
               ]
@@ -1535,7 +1654,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT\n  d.customer                                                                AS [Customer],\n  d.location + ' ' + d.machine_name                                        AS [Machine],\n  CASE WHEN ls.last_seen >= DATEADD(MINUTE,-35,GETUTCDATE()) THEN 'Online' ELSE 'Offline' END AS [Status],\n  COALESCE(SUM(ds.total_items),0)                                           AS [Items],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  COALESCE(SUM(ds.data_sent),0)                                             AS [Sent],\n  COALESCE(SUM(ds.not_sent),0)                                              AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN (\n    SELECT device_id, MAX(ts_datetime) AS last_seen FROM dbo.device_status GROUP BY device_id\n) ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer, d.location, d.machine_name, ls.last_seen\nORDER BY d.customer, d.location, d.machine_name;\n",
+            "rawSql": "\nWITH latest_status AS (\n    SELECT x.device_id, x.status FROM (\n        SELECT ds.device_id, ds.status,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_status ds\n    ) x WHERE x.rn = 1\n)\nSELECT\n  d.customer                                                               AS [Customer],\n  d.location + ' ' + d.machine_name                                       AS [Machine],\n  COALESCE(ls.status, 'offline')                                          AS [Status],\n  COALESCE(SUM(ds.total_items),0)                                         AS [Items],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)    AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  COALESCE(SUM(ds.data_sent),0)                                           AS [Sent],\n  COALESCE(SUM(ds.not_sent),0)                                            AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN latest_status ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer, d.location, d.machine_name, ls.status\nORDER BY d.customer, d.location, d.machine_name;",
             "refId": "A"
           }
         ],
