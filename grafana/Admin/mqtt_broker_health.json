@@ -435,11 +435,10 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": [],
           "fields": "/.*/",
-          "values": false
+          "values": true,
+          "limit": 1
         },
         "textMode": "value",
         "wideLayout": true
