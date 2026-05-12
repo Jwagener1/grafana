@@ -216,7 +216,8 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "palette-classic"
+              "fixedColor": "#808080",
+              "mode": "fixed"
             },
             "custom": {
               "axisBorderShow": false,
