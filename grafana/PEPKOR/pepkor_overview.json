@@ -413,21 +413,6 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "No Weight %"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#1F60C4",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
                 "options": "Hand Scanned %"
               },
               "properties": [
@@ -542,7 +527,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\n    CONCAT(d.location, ' - ', d.machine_name) AS [Device],\n    CAST(100.0 * SUM(COALESCE(ds.good_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Good Read %],\n    CAST(100.0 * SUM(COALESCE(ds.no_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Read %],\n    CAST(100.0 * SUM(COALESCE(ds.no_dimension,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Dimension %],\n    CAST(100.0 * SUM(COALESCE(ds.item_out_of_spec,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Out of Spec %],\n    CAST(100.0 * SUM(COALESCE(ds.more_than_1_item,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Multi-Item %],\n    CAST(100.0 * SUM(COALESCE(ds.no_weight,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Weight %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n   AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
+            "rawSql": "SELECT\n    CONCAT(d.location, ' - ', d.machine_name) AS [Device],\n    CAST(100.0 * SUM(COALESCE(ds.good_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Good Read %],\n    CAST(100.0 * SUM(COALESCE(ds.no_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Read %],\n    CAST(100.0 * SUM(COALESCE(ds.no_dimension,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Dimension %],\n    CAST(100.0 * SUM(COALESCE(ds.item_out_of_spec,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Out of Spec %],\n    CAST(100.0 * SUM(COALESCE(ds.more_than_1_item,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Multi-Item %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n   AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
             "refId": "A",
             "sql": {
               "columns": [
@@ -1054,7 +1039,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\n  CONCAT(d.location, ' - ', d.machine_name)     AS [Device],\n  SUM(COALESCE(ds.total_items,0))               AS [Total Items],\n  SUM(COALESCE(ds.good_read,0))                 AS [Good Reads],\n  SUM(COALESCE(ds.no_read,0))                   AS [No Read],\n  SUM(COALESCE(ds.no_dimension,0))              AS [No Dimension],\n  SUM(COALESCE(ds.item_out_of_spec,0))          AS [Out of Spec],\n  SUM(COALESCE(ds.more_than_1_item,0))          AS [Multi-Item],\n  SUM(COALESCE(ds.no_weight,0))                 AS [No Weight],\n  SUM(COALESCE(ds.data_sent,0))                 AS [Data Sent],\n  SUM(COALESCE(ds.not_sent,0))                  AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n  ON ds.device_id = d.id\n  AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
+            "rawSql": "SELECT\n  CONCAT(d.location, ' - ', d.machine_name)     AS [Device],\n  SUM(COALESCE(ds.total_items,0))               AS [Total Items],\n  SUM(COALESCE(ds.good_read,0))                 AS [Good Reads],\n  SUM(COALESCE(ds.no_read,0))                   AS [No Read],\n  SUM(COALESCE(ds.no_dimension,0))              AS [No Dimension],\n  SUM(COALESCE(ds.item_out_of_spec,0))          AS [Out of Spec],\n  SUM(COALESCE(ds.more_than_1_item,0))          AS [Multi-Item],\n  SUM(COALESCE(ds.data_sent,0))                 AS [Data Sent],\n  SUM(COALESCE(ds.not_sent,0))                  AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n  ON ds.device_id = d.id\n  AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
             "refId": "A",
             "sql": {
               "columns": [
