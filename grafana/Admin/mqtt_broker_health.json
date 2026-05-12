@@ -414,20 +414,11 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "dark-blue",
+            "fixedColor": "#1F60C4",
             "mode": "fixed"
           },
           "mappings": [],
-          "unit": "short",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "dark-blue",
-                "value": 0
-              }
-            ]
-          }
+          "unit": "string"
         },
         "overrides": []
       },
@@ -447,10 +438,10 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/.*/",
           "values": false
         },
-        "textMode": "auto",
+        "textMode": "value",
         "wideLayout": true
       },
       "pluginVersion": "12.3.1",
