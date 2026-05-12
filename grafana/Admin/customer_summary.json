@@ -31,6 +31,217 @@
               "fixedColor": "#1F60C4",
               "mode": "fixed"
             },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Year Total Parcels"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "text",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Month Total Parcels"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "text",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today Total Parcels"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "text",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Year Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Month Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 100,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "dataset": "S1_Remote_Monitoring",
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "WITH base AS (\n    SELECT\n        DATEADD(HOUR, 2, ds.ts_datetime) AS ts_local,\n        ds.total_items,\n        ds.good_read\n    FROM dbo.device_statistics ds\n),\nbounds AS (\n    SELECT\n        CAST(DATEADD(HOUR, 2, GETDATE()) AS date) AS day_start,\n        DATEADD(DAY, 1, CAST(DATEADD(HOUR, 2, GETDATE()) AS date)) AS day_end,\n        DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())), MONTH(DATEADD(HOUR, 2, GETDATE())), 1) AS month_start,\n        DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())), MONTH(DATEADD(HOUR, 2, GETDATE())), 1)) AS month_end,\n        DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())), 1, 1) AS year_start,\n        DATEADD(YEAR, 1, DATEFROMPARTS(YEAR(DATEADD(HOUR, 2, GETDATE())), 1, 1)) AS year_end\n)\nSELECT\n    COALESCE(SUM(CASE WHEN b.ts_local >= bo.year_start  AND b.ts_local < bo.year_end  THEN b.total_items ELSE 0 END), 0) AS year_total_parcels,\n    CAST(COALESCE(100.0 * SUM(CASE WHEN b.ts_local >= bo.year_start  AND b.ts_local < bo.year_end  THEN b.good_read ELSE 0 END)\n        / NULLIF(SUM(CASE WHEN b.ts_local >= bo.year_start  AND b.ts_local < bo.year_end  THEN b.total_items ELSE 0 END), 0), 0) AS decimal(6,2)) AS year_good_read_pct,\n    COALESCE(SUM(CASE WHEN b.ts_local >= bo.month_start AND b.ts_local < bo.month_end THEN b.total_items ELSE 0 END), 0) AS month_total_parcels,\n    CAST(COALESCE(100.0 * SUM(CASE WHEN b.ts_local >= bo.month_start AND b.ts_local < bo.month_end THEN b.good_read ELSE 0 END)\n        / NULLIF(SUM(CASE WHEN b.ts_local >= bo.month_start AND b.ts_local < bo.month_end THEN b.total_items ELSE 0 END), 0), 0) AS decimal(6,2)) AS month_good_read_pct,\n    COALESCE(SUM(CASE WHEN b.ts_local >= bo.day_start   AND b.ts_local < bo.day_end   THEN b.total_items ELSE 0 END), 0) AS day_total_parcels,\n    CAST(COALESCE(100.0 * SUM(CASE WHEN b.ts_local >= bo.day_start   AND b.ts_local < bo.day_end   THEN b.good_read ELSE 0 END)\n        / NULLIF(SUM(CASE WHEN b.ts_local >= bo.day_start   AND b.ts_local < bo.day_end   THEN b.total_items ELSE 0 END), 0), 0) AS decimal(6,2)) AS day_good_read_pct\nFROM base b\nCROSS JOIN bounds bo;",
+            "refId": "A"
+          }
+        ],
+        "title": "",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "year_total_parcels",
+              "renamePattern": "Year Total Parcels"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "year_good_read_pct",
+              "renamePattern": "Year Good Read %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "month_total_parcels",
+              "renamePattern": "Month Total Parcels"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "month_good_read_pct",
+              "renamePattern": "Month Good Read %"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "day_total_parcels",
+              "renamePattern": "Today Total Parcels"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "day_good_read_pct",
+              "renamePattern": "Today Good Read %"
+            }
+          }
+        ],
+        "transparent": true,
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#1F60C4",
+              "mode": "fixed"
+            },
             "unit": "short",
             "decimals": 0
           },
@@ -40,7 +251,7 @@
           "h": 3,
           "w": 3,
           "x": 0,
-          "y": 0
+          "y": 4
         },
         "id": 1,
         "options": {
@@ -94,7 +305,7 @@
           "h": 3,
           "w": 3,
           "x": 3,
-          "y": 0
+          "y": 4
         },
         "id": 2,
         "options": {
@@ -148,7 +359,7 @@
           "h": 3,
           "w": 3,
           "x": 6,
-          "y": 0
+          "y": 4
         },
         "id": 3,
         "options": {
@@ -202,7 +413,7 @@
           "h": 3,
           "w": 3,
           "x": 9,
-          "y": 0
+          "y": 4
         },
         "id": 4,
         "options": {
@@ -256,7 +467,7 @@
           "h": 3,
           "w": 4,
           "x": 12,
-          "y": 0
+          "y": 4
         },
         "id": 5,
         "options": {
@@ -310,7 +521,7 @@
           "h": 3,
           "w": 4,
           "x": 16,
-          "y": 0
+          "y": 4
         },
         "id": 6,
         "options": {
@@ -364,7 +575,7 @@
           "h": 3,
           "w": 4,
           "x": 20,
-          "y": 0
+          "y": 4
         },
         "id": 7,
         "options": {
@@ -404,7 +615,7 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 3
+          "y": 7
         },
         "id": 8,
         "title": "Customer Summary \u2014 Today",
@@ -644,7 +855,7 @@
           "h": 8,
           "w": 24,
           "x": 0,
-          "y": 4
+          "y": 8
         },
         "id": 9,
         "options": {
@@ -681,7 +892,7 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 12
+          "y": 16
         },
         "id": 10,
         "title": "Performance Charts",
@@ -812,7 +1023,7 @@
           "h": 9,
           "w": 12,
           "x": 0,
-          "y": 13
+          "y": 17
         },
         "id": 11,
         "options": {
@@ -912,7 +1123,7 @@
           "h": 9,
           "w": 12,
           "x": 12,
-          "y": 13
+          "y": 17
         },
         "id": 12,
         "options": {
@@ -953,7 +1164,7 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 22
+          "y": 26
         },
         "id": 13,
         "title": "7-Day Trend",
@@ -976,7 +1187,7 @@
           "h": 9,
           "w": 24,
           "x": 0,
-          "y": 23
+          "y": 27
         },
         "id": 14,
         "options": {
@@ -1016,7 +1227,7 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 32
+          "y": 36
         },
         "id": 15,
         "title": "Per-Machine Detail \u2014 Today",
@@ -1241,7 +1452,7 @@
           "h": 10,
           "w": 24,
           "x": 0,
-          "y": 33
+          "y": 37
         },
         "id": 16,
         "options": {
