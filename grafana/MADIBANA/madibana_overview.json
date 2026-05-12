@@ -266,7 +266,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "green",
+                    "fixedColor": "#73BF69",
                     "mode": "fixed"
                   }
                 }
@@ -281,7 +281,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "dark-red",
+                    "fixedColor": "#C4162A",
                     "mode": "fixed"
                   }
                 }
@@ -296,7 +296,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "dark-orange",
+                    "fixedColor": "#FF780A",
                     "mode": "fixed"
                   }
                 }
@@ -311,7 +311,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "dark-yellow",
+                    "fixedColor": "#FADE2A",
                     "mode": "fixed"
                   }
                 }
@@ -326,7 +326,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "dark-purple",
+                    "fixedColor": "#8F3BB8",
                     "mode": "fixed"
                   }
                 }
@@ -341,7 +341,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "dark-blue",
+                    "fixedColor": "#1F60C4",
                     "mode": "fixed"
                   }
                 }
@@ -356,7 +356,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "light-blue",
+                    "fixedColor": "#5794F2",
                     "mode": "fixed"
                   }
                 }
@@ -394,7 +394,8 @@
             "sort": "none"
           },
           "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
+          "xTickLabelSpacing": 0,
+          "xField": "Device"
         },
         "pluginVersion": "12.3.1",
         "targets": [
@@ -425,36 +426,7 @@
           }
         ],
         "title": "Performance Overview",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "no_read_pct",
-              "renamePattern": "No Read %"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "no_dimension_pct",
-              "renamePattern": "No Dimension % "
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "item_out_of_spec_pct",
-              "renamePattern": "Item out of spec %"
-            }
-          },
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "more_than_1_item_pct",
-              "renamePattern": "More than one item %"
-            }
-          }
-        ],
+        "transformations": [],
         "transparent": true,
         "type": "barchart"
       },
