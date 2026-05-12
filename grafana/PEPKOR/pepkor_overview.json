@@ -607,9 +607,25 @@
             {
               "matcher": {
                 "id": "byName",
+                "options": "Device"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 200
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
                 "options": "Status"
               },
               "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 110
+                },
                 {
                   "id": "mappings",
                   "value": [
@@ -631,97 +647,6 @@
                       }
                     }
                   ]
-                },
-                {
-                  "id": "custom.width",
-                  "value": 110
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Machine Name"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 160
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Good Reads"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Good Read %"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Good Read % Today"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "good_read_pct"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "good_read"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
                 }
               ]
             }
@@ -827,28 +752,13 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "No Read"
+                "options": "Device"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "dark-red",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Machine"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "text",
+                    "fixedColor": "#808080",
                     "mode": "fixed"
                   }
                 }
@@ -863,82 +773,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "text",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "No Dimension"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "dark-orange",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Item Out Of Spec"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "dark-yellow",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "More Than One Item"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "dark-purple",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Data Sent"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "dark-blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Not Sent"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "dark-red",
+                    "fixedColor": "#1F60C4",
                     "mode": "fixed"
                   }
                 }
@@ -962,13 +797,13 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Good Read %"
+                "options": "No Read"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#73BF69",
+                    "fixedColor": "#C4162A",
                     "mode": "fixed"
                   }
                 }
@@ -977,13 +812,13 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Good Read % Today"
+                "options": "No Dimension"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#73BF69",
+                    "fixedColor": "#FF780A",
                     "mode": "fixed"
                   }
                 }
@@ -992,13 +827,13 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "good_read_pct"
+                "options": "Out of Spec"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#73BF69",
+                    "fixedColor": "#FADE2A",
                     "mode": "fixed"
                   }
                 }
@@ -1007,13 +842,73 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "good_read"
+                "options": "Multi-Item"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#73BF69",
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#64B0C8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
                     "mode": "fixed"
                   }
                 }

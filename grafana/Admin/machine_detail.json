@@ -3028,6 +3028,75 @@
             {
               "matcher": {
                 "id": "byName",
+                "options": "Drive"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Free GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
                 "options": "Used %"
               },
               "properties": [
@@ -3057,141 +3126,18 @@
                     "mode": "absolute",
                     "steps": [
                       {
-                        "color": "dark-green",
+                        "color": "#73BF69",
                         "value": 0
                       },
                       {
-                        "color": "dark-orange",
+                        "color": "#FF780A",
                         "value": 75
                       },
                       {
-                        "color": "dark-red",
+                        "color": "#C4162A",
                         "value": 90
                       }
                     ]
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Total GB"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "decgbytes"
-                },
-                {
-                  "id": "decimals",
-                  "value": 1
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Free GB"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "decgbytes"
-                },
-                {
-                  "id": "decimals",
-                  "value": 1
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Used GB"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "decgbytes"
-                },
-                {
-                  "id": "decimals",
-                  "value": 1
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Good Reads"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Good Read %"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Good Read % Today"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "good_read_pct"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "good_read"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
                   }
                 }
               ]
