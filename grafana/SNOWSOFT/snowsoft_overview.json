@@ -216,7 +216,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "fixed"
+              "mode": "palette-classic"
             },
             "custom": {
               "axisBorderShow": false,
@@ -260,6 +260,21 @@
             {
               "matcher": {
                 "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
                 "options": "No Read %"
               },
               "properties": [
@@ -275,7 +290,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "No Dimension % "
+                "options": "No Dimension %"
               },
               "properties": [
                 {
@@ -290,7 +305,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Item out of spec %"
+                "options": "Out of Spec %"
               },
               "properties": [
                 {
@@ -305,13 +320,43 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "more_than_1_item_pct"
+                "options": "Multi-Item %"
               },
               "properties": [
                 {
                   "id": "color",
                   "value": {
                     "fixedColor": "dark-purple",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "dark-blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "light-blue",
                     "mode": "fixed"
                   }
                 }
