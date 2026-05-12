@@ -1336,7 +1336,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\n  d.location + ' ' + d.machine_name AS [Machine],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n  ON ds.device_id = d.id\n  AND CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nWHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name ASC",
+            "rawSql": "SELECT\n  d.customer + ' \u2014 ' + d.location + ' ' + d.machine_name AS [Machine],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n  ON ds.device_id = d.id\n  AND CAST(DATEADD(HOUR, 2, ds.ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\nWHERE (${tenant:sqlstring} = '__ALL__' OR d.customer = ${tenant:sqlstring})\nGROUP BY d.customer, d.location, d.machine_name\nORDER BY d.customer, d.location, d.machine_name ASC",
             "refId": "A"
           }
         ],
