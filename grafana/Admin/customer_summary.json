@@ -424,7 +424,7 @@
             "custom": {
               "align": "center",
               "cellOptions": {
-                "type": "color-text"
+                "type": "auto"
               },
               "footer": {
                 "reducers": []
@@ -438,10 +438,6 @@
                 {
                   "color": "green",
                   "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             }
@@ -672,7 +668,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nWITH latest_status AS (\n    SELECT x.device_id, x.status FROM (\n        SELECT ds.device_id, ds.status,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_status ds\n    ) x WHERE x.rn = 1\n)\nSELECT\n  d.customer                                                               AS [Customer],\n  COUNT(DISTINCT d.id)                                                     AS [Devices],\n  SUM(CASE WHEN ls.status='online' THEN 1 ELSE 0 END)                     AS [Online],\n  COUNT(DISTINCT d.id) - SUM(CASE WHEN ls.status='online' THEN 1 ELSE 0 END) AS [Offline],\n  COALESCE(SUM(ds.total_items),0)                                          AS [Items Today],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)    AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  CAST(COALESCE(100.0*SUM(ds.item_out_of_spec)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Out Spec %],\n  CAST(COALESCE(100.0*SUM(ds.more_than_1_item)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Multi-Item %],\n  COALESCE(SUM(ds.not_sent),0)                                             AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN latest_status ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;",
+            "rawSql": "\nWITH latest_status AS (\n    SELECT x.device_id, x.status FROM (\n        SELECT ds.device_id, ds.status,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_status ds\n    ) x WHERE x.rn = 1\n)\nSELECT\n  d.customer                                                               AS [Customer],\n  COUNT(DISTINCT d.id)                                                     AS [Devices],\n  SUM(CASE WHEN ls.status='online' THEN 1 ELSE 0 END)                     AS [Online],\n  SUM(CASE WHEN COALESCE(ls.status,'offline')!='online' THEN 1 ELSE 0 END) AS [Offline],\n  COALESCE(SUM(ds.total_items),0)                                          AS [Items Today],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)    AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  CAST(COALESCE(100.0*SUM(ds.item_out_of_spec)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Out Spec %],\n  CAST(COALESCE(100.0*SUM(ds.more_than_1_item)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Multi-Item %],\n  COALESCE(SUM(ds.not_sent),0)                                             AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN latest_status ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;",
             "refId": "A"
           }
         ],
@@ -1040,7 +1036,7 @@
             "custom": {
               "align": "center",
               "cellOptions": {
-                "type": "color-text"
+                "type": "auto"
               },
               "footer": {
                 "reducers": []
@@ -1054,10 +1050,6 @@
                 {
                   "color": "green",
                   "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             }
@@ -1100,12 +1092,6 @@
               },
               "properties": [
                 {
-                  "id": "custom.cellOptions",
-                  "value": {
-                    "type": "color-background"
-                  }
-                },
-                {
                   "id": "mappings",
                   "value": [
                     {
@@ -1113,40 +1099,19 @@
                       "options": {
                         "online": {
                           "text": "\ud83d\udfe2 Online",
-                          "color": "#73BF69",
                           "index": 0
                         },
                         "offline": {
                           "text": "\ud83d\udd34 Offline",
-                          "color": "#C4162A",
                           "index": 1
                         },
                         "unknown": {
                           "text": "\u26aa Unknown",
-                          "color": "#808080",
                           "index": 2
                         }
                       }
                     }
                   ]
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "#C4162A",
-                        "value": 0
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "thresholds"
-                  }
                 }
               ]
             },
