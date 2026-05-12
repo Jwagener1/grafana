@@ -782,222 +782,12 @@
         ]
       },
       {
-        "id": 20,
-        "type": "gauge",
-        "title": "No Dimensions %",
-        "gridPos": {
-          "x": 0,
-          "y": 20,
-          "w": 8,
-          "h": 5
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "orientation": "auto",
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 1,
-            "min": 0,
-            "max": 10,
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 1
-                },
-                {
-                  "color": "dark-red",
-                  "value": 3
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(no_dimension)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [No Dims %]\nFROM dbo.device_statistics\nWHERE device_id = ${device} AND $__timeFilter(ts_datetime)",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 22,
-        "type": "gauge",
-        "title": "Out of Spec %",
-        "gridPos": {
-          "x": 8,
-          "y": 20,
-          "w": 8,
-          "h": 5
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "orientation": "auto",
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 1,
-            "min": 0,
-            "max": 10,
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 1
-                },
-                {
-                  "color": "dark-red",
-                  "value": 5
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(item_out_of_spec)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Out of Spec %]\nFROM dbo.device_statistics\nWHERE device_id = ${device} AND $__timeFilter(ts_datetime)",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 23,
-        "type": "gauge",
-        "title": "Multiple Items %",
-        "gridPos": {
-          "x": 16,
-          "y": 20,
-          "w": 8,
-          "h": 5
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "options": {
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "orientation": "auto",
-          "showThresholdLabels": false,
-          "showThresholdMarkers": true
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "decimals": 1,
-            "min": 0,
-            "max": 10,
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": 0
-                },
-                {
-                  "color": "dark-orange",
-                  "value": 3
-                },
-                {
-                  "color": "dark-red",
-                  "value": 10
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(more_than_1_item)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Multiple Items %]\nFROM dbo.device_statistics\nWHERE device_id = ${device} AND $__timeFilter(ts_datetime)",
-            "refId": "A"
-          }
-        ]
-      },
-      {
         "id": 30,
         "type": "table",
         "title": "Drive Storage",
         "gridPos": {
           "x": 0,
-          "y": 25,
+          "y": 20,
           "w": 24,
           "h": 6
         },
@@ -1222,7 +1012,7 @@
             "editorMode": "code",
             "format": "time_series",
             "rawQuery": true,
-            "rawSql": "SELECT ts_datetime AS time, data_sent AS [Data Sent], not_sent AS [Not Sent], image_sent AS [Images Sent], image_not_sent AS [Images Not Sent]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
+            "rawSql": "SELECT ts_datetime AS time, data_sent AS [Data Sent], not_sent AS [Not Sent]\nFROM dbo.device_statistics\nWHERE device_id = ${device} AND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
             "refId": "A"
           }
         ]
@@ -1233,7 +1023,7 @@
         "title": "Hourly Items \u2014 Today vs Daily Average",
         "gridPos": {
           "x": 0,
-          "y": 31,
+          "y": 26,
           "w": 24,
           "h": 9
         },
