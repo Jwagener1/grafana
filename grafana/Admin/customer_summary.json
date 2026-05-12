@@ -1,0 +1,1547 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "customer-summary",
+    "namespace": "default"
+  },
+  "spec": {
+    "title": "Customer Summary",
+    "uid": "customer-summary-001",
+    "schemaVersion": 39,
+    "refresh": "1m",
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timezone": "Africa/Johannesburg",
+    "tags": [
+      "admin",
+      "summary"
+    ],
+    "panels": [
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#1F60C4",
+              "mode": "fixed"
+            },
+            "unit": "short",
+            "decimals": 0
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT COUNT(DISTINCT customer) AS [Customers] FROM dbo.devices\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Customers",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#1565C0",
+              "mode": "fixed"
+            },
+            "unit": "short",
+            "decimals": 0
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 3,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT COUNT(*) AS [Machines] FROM dbo.devices\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Machines",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#73BF69",
+              "mode": "fixed"
+            },
+            "unit": "short",
+            "decimals": 0
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 6,
+          "y": 0
+        },
+        "id": 3,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT COUNT(*) AS [Online]\nFROM dbo.devices d\nJOIN (\n    SELECT device_id, MAX(ts_datetime) AS last_seen\n    FROM dbo.device_status GROUP BY device_id\n) ls ON ls.device_id = d.id\nWHERE ls.last_seen >= DATEADD(MINUTE, -35, GETUTCDATE())\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Online Now",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#C4162A",
+              "mode": "fixed"
+            },
+            "unit": "short",
+            "decimals": 0
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 9,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT COUNT(*) AS [Offline]\nFROM dbo.devices d\nJOIN (\n    SELECT device_id, MAX(ts_datetime) AS last_seen\n    FROM dbo.device_status GROUP BY device_id\n) ls ON ls.device_id = d.id\nWHERE ls.last_seen < DATEADD(MINUTE, -35, GETUTCDATE())\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Offline Now",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#1F60C4",
+              "mode": "fixed"
+            },
+            "unit": "short",
+            "decimals": 0
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 12,
+          "y": 0
+        },
+        "id": 5,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT COALESCE(SUM(total_items),0) AS [Items Today]\nFROM dbo.device_statistics\nWHERE CAST(DATEADD(HOUR,2,ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Items Today \u2014 All Customers",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#73BF69",
+              "mode": "fixed"
+            },
+            "unit": "short",
+            "decimals": 1
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 16,
+          "y": 0
+        },
+        "id": 6,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT CAST(100.0*SUM(good_read)/NULLIF(SUM(total_items),0) AS decimal(4,1)) AS [Good Read %]\nFROM dbo.device_statistics\nWHERE CAST(DATEADD(HOUR,2,ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Fleet Good Read % Today",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#C4162A",
+              "mode": "fixed"
+            },
+            "unit": "short",
+            "decimals": 0
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 20,
+          "y": 0
+        },
+        "id": 7,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT COALESCE(SUM(not_sent),0) AS [Not Sent]\nFROM dbo.device_statistics\nWHERE CAST(DATEADD(HOUR,2,ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Not Sent Today",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 3
+        },
+        "id": 8,
+        "title": "Customer Summary \u2014 Today",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#808080",
+              "mode": "fixed"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Customer"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#808080",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#C4162A",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 85
+                      },
+                      {
+                        "color": "#73BF69",
+                        "value": 95
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dim %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scan %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out Spec %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Online"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 4
+        },
+        "id": 9,
+        "options": {
+          "footer": {
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "displayName": "Customer",
+              "desc": false
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT\n  d.customer                                                        AS [Customer],\n  COUNT(DISTINCT d.id)                                              AS [Machines],\n  COUNT(DISTINCT CASE WHEN ls.last_seen >= DATEADD(MINUTE,-35,GETUTCDATE()) THEN d.id END) AS [Online],\n  COALESCE(SUM(ds.total_items),0)                                   AS [Items],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  CAST(COALESCE(100.0*SUM(ds.item_out_of_spec)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Out Spec %],\n  CAST(COALESCE(100.0*SUM(ds.more_than_1_item)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Multi-Item %],\n  COALESCE(SUM(ds.not_sent),0)                                      AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN (\n    SELECT device_id, MAX(ts_datetime) AS last_seen FROM dbo.device_status GROUP BY device_id\n) ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Customer Performance Summary \u2014 Today",
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 12
+        },
+        "id": 10,
+        "title": "Performance Charts",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#808080",
+              "mode": "fixed"
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dim %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out Spec %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scan %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 13
+        },
+        "id": 11,
+        "options": {
+          "barRadius": 0.05,
+          "barWidth": 0.7,
+          "groupWidth": 0.7,
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "orientation": "auto",
+          "stacking": "none",
+          "tooltip": {
+            "mode": "multi"
+          },
+          "xField": "Customer"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT\n  d.customer AS [Customer],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.item_out_of_spec)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Out Spec %],\n  CAST(COALESCE(100.0*SUM(ds.more_than_1_item)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Multi-Item %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Performance % by Customer \u2014 Today",
+        "type": "barchart"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#808080",
+              "mode": "fixed"
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 13
+        },
+        "id": 12,
+        "options": {
+          "barRadius": 0.05,
+          "barWidth": 0.7,
+          "groupWidth": 0.7,
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "orientation": "auto",
+          "stacking": "none",
+          "tooltip": {
+            "mode": "multi"
+          },
+          "xField": "Customer"
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT\n  d.customer AS [Customer],\n  COALESCE(SUM(ds.total_items),0) AS [Total Items],\n  COALESCE(SUM(ds.good_read),0)   AS [Good Reads],\n  COALESCE(SUM(ds.no_read),0)     AS [No Reads]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Item Volumes by Customer \u2014 Today",
+        "type": "barchart"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 22
+        },
+        "id": 13,
+        "title": "7-Day Trend",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 24,
+          "x": 0,
+          "y": 23
+        },
+        "id": 14,
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT\n  DATEADD(HOUR,-2, CAST(CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) AS datetime)) AS time,\n  d.customer AS metric,\n  CAST(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE $__timeFilter(ds.ts_datetime)\nGROUP BY CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date), d.customer\nORDER BY time, d.customer;\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Good Read % per Customer \u2014 7 Days",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 32
+        },
+        "id": 15,
+        "title": "Per-Machine Detail \u2014 Today",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#808080",
+              "mode": "fixed"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Machine"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#808080",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#64B0C8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Status"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "type": "value",
+                      "options": {
+                        "Online": {
+                          "text": "\ud83d\udfe2 Online",
+                          "color": "#73BF69",
+                          "index": 0
+                        },
+                        "Offline": {
+                          "text": "\ud83d\udd34 Offline",
+                          "color": "#C4162A",
+                          "index": 1
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#C4162A",
+                        "value": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#C4162A",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 85
+                      },
+                      {
+                        "color": "#73BF69",
+                        "value": 95
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dim %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scan %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FADE2A",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 5
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 33
+        },
+        "id": 16,
+        "options": {
+          "footer": {
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "displayName": "Customer",
+              "desc": false
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "\nSELECT\n  d.customer                                                                AS [Customer],\n  d.location + ' ' + d.machine_name                                        AS [Machine],\n  CASE WHEN ls.last_seen >= DATEADD(MINUTE,-35,GETUTCDATE()) THEN 'Online' ELSE 'Offline' END AS [Status],\n  COALESCE(SUM(ds.total_items),0)                                           AS [Items],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  COALESCE(SUM(ds.data_sent),0)                                             AS [Sent],\n  COALESCE(SUM(ds.not_sent),0)                                              AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN (\n    SELECT device_id, MAX(ts_datetime) AS last_seen FROM dbo.device_status GROUP BY device_id\n) ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer, d.location, d.machine_name, ls.last_seen\nORDER BY d.customer, d.location, d.machine_name;\n",
+            "refId": "A"
+          }
+        ],
+        "title": "All Machines \u2014 Today",
+        "type": "table"
+      }
+    ]
+  }
+}
