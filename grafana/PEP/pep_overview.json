@@ -612,7 +612,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 200
+                  "value": 150
                 }
               ]
             },
@@ -624,7 +624,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 110
+                  "value": 160
                 },
                 {
                   "id": "mappings",
