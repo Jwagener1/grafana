@@ -799,6 +799,156 @@
                   }
                 }
               ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dimension %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out of Spec %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -842,7 +992,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\n    CONCAT(d.location, ' - ', d.machine_name) AS [Device],\n    CAST(100.0 * SUM(COALESCE(ds.good_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Good Read %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n   AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
+            "rawSql": "SELECT\n    CONCAT(d.location, ' - ', d.machine_name) AS [Device],\n    CAST(100.0 * SUM(COALESCE(ds.good_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Good Read %],\n    CAST(100.0 * SUM(COALESCE(ds.no_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Read %],\n    CAST(100.0 * SUM(COALESCE(ds.no_dimension,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Dimension %],\n    CAST(100.0 * SUM(COALESCE(ds.item_out_of_spec,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Out of Spec %],\n    CAST(100.0 * SUM(COALESCE(ds.more_than_1_item,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Multi-Item %],\n    CAST(100.0 * SUM(COALESCE(ds.no_weight,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Weight %],\n    CAST(100.0 * SUM(COALESCE(ds.hand_scanned,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Hand Scanned %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n   AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
             "refId": "A",
             "sql": {
               "columns": [
