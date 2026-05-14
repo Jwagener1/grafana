@@ -338,21 +338,6 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Good Read %"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#73BF69",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
                 "options": "No Read %"
               },
               "properties": [
@@ -542,7 +527,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT\n    CONCAT(d.location, ' - ', d.machine_name) AS [Device],\n    CAST(100.0 * SUM(COALESCE(ds.good_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Good Read %],\n    CAST(100.0 * SUM(COALESCE(ds.no_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Read %],\n    CAST(100.0 * SUM(COALESCE(ds.item_out_of_spec,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Out of Spec %],\n    CAST(100.0 * SUM(COALESCE(ds.more_than_1_item,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Multi-Item %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n   AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
+            "rawSql": "SELECT\n    CONCAT(d.location, ' - ', d.machine_name) AS [Device],\n    CAST(100.0 * SUM(COALESCE(ds.no_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [No Read %],\n    CAST(100.0 * SUM(COALESCE(ds.item_out_of_spec,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Out of Spec %],\n    CAST(100.0 * SUM(COALESCE(ds.more_than_1_item,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Multi-Item %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n   AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
             "refId": "A",
             "sql": {
               "columns": [
