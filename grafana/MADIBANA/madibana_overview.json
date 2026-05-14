@@ -747,6 +747,139 @@
               "mode": "fixed"
             },
             "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisGridShow": true,
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 1,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 24,
+          "x": 0,
+          "y": 26
+        },
+        "id": 99,
+        "options": {
+          "barRadius": 0,
+          "barWidth": 1,
+          "fullHighlight": false,
+          "groupWidth": 0.9,
+          "legend": {
+            "calcs": [],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "orientation": "auto",
+          "showValue": "never",
+          "stacking": "none",
+          "text": {
+            "valueSize": 90
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          },
+          "xTickLabelRotation": -45,
+          "xTickLabelSpacing": 0,
+          "xField": "Device"
+        },
+        "pluginVersion": "12.3.1",
+        "targets": [
+          {
+            "dataset": "S1_Remote_Monitoring",
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT\n    CONCAT(d.location, ' - ', d.machine_name) AS [Device],\n    CAST(100.0 * SUM(COALESCE(ds.good_read,0)) / NULLIF(SUM(COALESCE(ds.total_items,0)),0) AS decimal(6,2)) AS [Good Read %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n   AND $__timeFilter(ds.ts_datetime)\nWHERE d.customer = '${Customer}'\nGROUP BY d.location, d.machine_name\nORDER BY d.location, d.machine_name;",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "Good Read % Overview",
+        "transformations": [],
+        "transparent": true,
+        "type": "barchart"
+      },
+      {
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#808080",
+              "mode": "fixed"
+            },
+            "custom": {
               "align": "center",
               "cellOptions": {
                 "type": "color-text"
@@ -944,7 +1077,7 @@
           "h": 11,
           "w": 24,
           "x": 0,
-          "y": 26
+          "y": 37
         },
         "id": 5,
         "options": {
