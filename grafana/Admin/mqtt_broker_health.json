@@ -453,7 +453,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT TOP 1 version AS [Version] FROM [broker].[broker_stats] ORDER BY id DESC",
+          "rawSql": "SELECT TOP 1 \n SUBSTRING(version, PATINDEX('%[0-9]%', version), LEN(version)) AS [Version]\nFROM [broker].[broker_stats]\nORDER BY id DESC",
           "refId": "A"
         }
       ],
