@@ -418,7 +418,7 @@
             "mode": "fixed"
           },
           "mappings": [],
-          "unit": "string"
+          "unit": "none"
         },
         "overrides": []
       },
@@ -435,10 +435,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [],
-          "fields": "/.*/",
-          "values": true,
-          "limit": 1
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
         "textMode": "value",
         "wideLayout": true
