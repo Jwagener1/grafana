@@ -1182,8 +1182,35 @@
         },
         "fieldConfig": {
           "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
             "color": {
               "mode": "palette-classic"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
+                }
+              ]
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 1,
+              "thresholdsStyle": {
+                "mode": "line"
+              }
             }
           },
           "overrides": []
@@ -1197,7 +1224,7 @@
         "id": 14,
         "options": {
           "barRadius": 0.05,
-          "barWidth": 0.7,
+          "barWidth": 0.6,
           "groupWidth": 0.7,
           "stacking": "none",
           "xField": "Date",
@@ -1208,7 +1235,8 @@
           },
           "tooltip": {
             "mode": "multi"
-          }
+          },
+          "colorMode": "palette-classic"
         },
         "targets": [
           {
@@ -1219,11 +1247,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT\n  CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date)                             AS [Date],\n  d.customer                                                                AS [Customer],\n  SUM(ds.total_items)                                                       AS [Items]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= DATEADD(DAY,-7,GETUTCDATE())\nGROUP BY CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date), d.customer\nORDER BY [Date];",
+            "rawSql": "\nSELECT\n  CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date)                             AS [Date],\n  d.customer                                                                AS [Customer],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= DATEADD(DAY,-7,GETUTCDATE())\nGROUP BY CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date), d.customer\nHAVING SUM(ds.total_items) > 0\nORDER BY [Date], d.customer;",
             "refId": "A"
           }
         ],
-        "title": "Daily Item Volumes per Customer \u2014 7 Days",
+        "title": "Daily Good Read % per Customer \u2014 7 Days",
         "type": "barchart"
       },
       {

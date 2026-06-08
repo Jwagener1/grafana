@@ -1,0 +1,3443 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "bex-device-drill-001"
+  },
+  "spec": {
+    "title": "BEX Device Drill Down",
+    "schemaVersion": 42,
+    "refresh": "30s",
+    "timezone": "Africa/Johannesburg",
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "30s",
+        "1m",
+        "5m"
+      ]
+    },
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "preload": false,
+    "editable": true,
+    "tags": [
+      "detail",
+      "bex"
+    ],
+    "links": [],
+    "annotations": {
+      "list": []
+    },
+    "templating": {
+      "list": [
+        {
+          "name": "device",
+          "label": "Device",
+          "description": "Select a BEX device",
+          "type": "query",
+          "datasource": {
+            "type": "mssql",
+            "uid": "PAAAEB8D7872B0C49"
+          },
+          "definition": "SELECT CONCAT(location, ' - ', machine_name) AS __text, id AS __value FROM dbo.devices WHERE customer = 'BEX' ORDER BY location, machine_name",
+          "query": "SELECT CONCAT(location, ' - ', machine_name) AS __text, id AS __value FROM dbo.devices WHERE customer = 'BEX' ORDER BY location, machine_name",
+          "refresh": 1,
+          "regex": "",
+          "sort": 0,
+          "includeAll": false,
+          "allowCustomValue": false,
+          "current": {},
+          "options": []
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "type": "stat",
+        "title": "Status",
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^Status$/",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "online": {
+                    "text": "\ud83d\udfe2 Online",
+                    "color": "dark-green",
+                    "index": 0
+                  },
+                  "offline": {
+                    "text": "\ud83d\udd34 Offline",
+                    "color": "dark-red",
+                    "index": 1
+                  }
+                }
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 status AS [Status]\nFROM dbo.device_status\nWHERE device_id = ${device}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "type": "stat",
+        "title": "App Status",
+        "gridPos": {
+          "x": 3,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "-1": {
+                    "text": "No Data",
+                    "color": "gray",
+                    "index": 0
+                  },
+                  "0": {
+                    "text": "\ud83d\udd34 Stopped",
+                    "color": "dark-red",
+                    "index": 1
+                  },
+                  "1": {
+                    "text": "\ud83d\udfe2 Running",
+                    "color": "dark-green",
+                    "index": 2
+                  }
+                }
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "gray",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 COALESCE(CAST(application_running AS int), -1) AS [App Running]\nFROM dbo.device_application_status\nWHERE device_id = ${device}\nORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "type": "stat",
+        "title": "CPU %",
+        "gridPos": {
+          "x": 6,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "color": {
+              "fixedColor": "#FF780A",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 70
+                },
+                {
+                  "color": "dark-red",
+                  "value": 90
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 CAST(cpu_percent AS decimal(5,1)) AS [CPU %]\nFROM dbo.device_os_metrics WHERE device_id = ${device} ORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "stat",
+        "title": "Memory %",
+        "gridPos": {
+          "x": 9,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "color": {
+              "fixedColor": "#8F3BB8",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 75
+                },
+                {
+                  "color": "dark-red",
+                  "value": 90
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 CAST(mem_usage_pct AS decimal(5,1)) AS [Mem %]\nFROM dbo.device_os_metrics WHERE device_id = ${device} ORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "type": "stat",
+        "title": "Temperature",
+        "gridPos": {
+          "x": 12,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "celsius",
+            "decimals": 1,
+            "color": {
+              "fixedColor": "#C4162A",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 70
+                },
+                {
+                  "color": "dark-red",
+                  "value": 85
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 CAST(temp_celsius AS decimal(5,1)) AS [Temp C]\nFROM dbo.device_os_metrics WHERE device_id = ${device} ORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "type": "stat",
+        "title": "Uptime",
+        "gridPos": {
+          "x": 15,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "decimals": 0,
+            "color": {
+              "fixedColor": "#64B0C8",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": 0
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT TOP 1 uptime_seconds AS [Uptime]\nFROM dbo.device_uptime_status WHERE device_id = ${device} ORDER BY ts_datetime DESC",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "type": "stat",
+        "title": "Items Today",
+        "gridPos": {
+          "x": 18,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#1F60C4",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "purple",
+                  "value": 0
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT COALESCE(SUM(total_items),0) AS [Items Today]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "type": "stat",
+        "title": "Good Read % Today",
+        "gridPos": {
+          "x": 21,
+          "y": 0,
+          "w": 3,
+          "h": 4
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "color": {
+              "fixedColor": "#73BF69",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(good_read)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "type": "timeseries",
+        "title": "Items Processed Over Time",
+        "gridPos": {
+          "x": 0,
+          "y": 4,
+          "w": 12,
+          "h": 8
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 15,
+              "gradientMode": "none",
+              "drawStyle": "line",
+              "pointSize": 4,
+              "showPoints": "auto",
+              "spanNulls": false,
+              "axisPlacement": "auto",
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Actual Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#64B0C8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dimension %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out of Spec %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "time_series",
+            "rawQuery": true,
+            "rawSql": "SELECT ts_datetime AS time, total_items AS [Total Items], good_read AS [Good Reads], no_read AS [No Reads]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "type": "timeseries",
+        "title": "Good Read % Over Time",
+        "gridPos": {
+          "x": 12,
+          "y": 4,
+          "w": 12,
+          "h": 8
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 20,
+              "gradientMode": "opacity",
+              "drawStyle": "line",
+              "pointSize": 4,
+              "showPoints": "auto",
+              "spanNulls": false,
+              "axisPlacement": "auto",
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 80
+                },
+                {
+                  "color": "dark-green",
+                  "value": 97
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Actual Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#64B0C8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dimension %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out of Spec %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "time_series",
+            "rawQuery": true,
+            "rawSql": "SELECT ts_datetime AS time,\n  CAST(CASE WHEN total_items > 0 THEN 100.0*good_read/total_items ELSE NULL END AS decimal(6,2)) AS [Good Read %]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "type": "gauge",
+        "title": "No Dimensions %",
+        "gridPos": {
+          "x": 0,
+          "y": 20,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "orientation": "auto",
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "min": 0,
+            "max": 10,
+            "color": {
+              "fixedColor": "#FF780A",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 3
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(no_dimension)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [No Dims %]\nFROM dbo.device_statistics\nWHERE device_id = ${device} AND $__timeFilter(ts_datetime)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "type": "gauge",
+        "title": "Out of Spec %",
+        "gridPos": {
+          "x": 6,
+          "y": 20,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "orientation": "auto",
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "min": 0,
+            "max": 10,
+            "color": {
+              "fixedColor": "#FADE2A",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1
+                },
+                {
+                  "color": "dark-red",
+                  "value": 5
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(item_out_of_spec)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Out of Spec %]\nFROM dbo.device_statistics\nWHERE device_id = ${device} AND $__timeFilter(ts_datetime)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "type": "gauge",
+        "title": "Multiple Items %",
+        "gridPos": {
+          "x": 12,
+          "y": 20,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "orientation": "auto",
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "min": 0,
+            "max": 10,
+            "color": {
+              "fixedColor": "#8F3BB8",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 3
+                },
+                {
+                  "color": "dark-red",
+                  "value": 10
+                }
+              ]
+            },
+            "custom": {}
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT CAST(COALESCE(100.0*SUM(more_than_1_item)/NULLIF(SUM(total_items),0),0) AS decimal(5,1)) AS [Multiple Items %]\nFROM dbo.device_statistics\nWHERE device_id = ${device} AND $__timeFilter(ts_datetime)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "type": "table",
+        "title": "Drive Storage",
+        "gridPos": {
+          "x": 0,
+          "y": 25,
+          "w": 24,
+          "h": 6
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true,
+          "enablePagination": false,
+          "sortBy": [
+            {
+              "displayName": "Drive",
+              "desc": false
+            }
+          ]
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "#808080",
+              "mode": "fixed"
+            },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Drive"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Free GB"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                },
+                {
+                  "id": "decimals",
+                  "value": 1
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "basic",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#73BF69",
+                        "value": 0
+                      },
+                      {
+                        "color": "#FF780A",
+                        "value": 75
+                      },
+                      {
+                        "color": "#C4162A",
+                        "value": 90
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT x.drive AS [Drive], x.total_gb AS [Total GB], x.used_gb AS [Used GB], x.free_gb AS [Free GB], CAST(x.usage_percent AS decimal(5,1)) AS [Used %]\nFROM (\n  SELECT drive, total_gb, free_gb, used_gb, usage_percent,\n         ROW_NUMBER() OVER (PARTITION BY drive ORDER BY ts_datetime DESC) AS rn\n  FROM dbo.device_storage_status\n  WHERE device_id = ${device}\n) x WHERE x.rn = 1\nORDER BY x.drive",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "type": "timeseries",
+        "title": "Data Transmission \u2014 Sent vs Not Sent",
+        "gridPos": {
+          "x": 0,
+          "y": 12,
+          "w": 24,
+          "h": 8
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "drawStyle": "line",
+              "pointSize": 4,
+              "showPoints": "auto",
+              "spanNulls": false,
+              "axisPlacement": "auto",
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Actual Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#64B0C8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dimension %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out of Spec %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "time_series",
+            "rawQuery": true,
+            "rawSql": "SELECT ts_datetime AS time, data_sent AS [Data Sent], not_sent AS [Not Sent], image_sent AS [Images Sent], image_not_sent AS [Images Not Sent]\nFROM dbo.device_statistics\nWHERE device_id = ${device}\nAND $__timeFilter(ts_datetime)\nORDER BY ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "type": "barchart",
+        "title": "Hourly Items \u2014 Today vs Daily Average",
+        "gridPos": {
+          "x": 0,
+          "y": 31,
+          "w": 24,
+          "h": 9
+        },
+        "datasource": {
+          "type": "mssql",
+          "uid": "PAAAEB8D7872B0C49"
+        },
+        "options": {
+          "barWidth": 0.7,
+          "groupWidth": 0.7,
+          "barRadius": 0.1,
+          "xTickLabelRotation": 0,
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "fullHighlight": false,
+          "stacking": {
+            "mode": "none",
+            "group": "A"
+          },
+          "orientation": "auto",
+          "xField": "hour_label"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "fillOpacity": 80,
+              "lineWidth": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "Items",
+              "scaleDistribution": {
+                "type": "linear"
+              }
+            },
+            "color": {
+              "mode": "palette-classic"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#64B0C8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Actual Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total Items"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Reads"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Images Not Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Read %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Dimension %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FF780A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Out of Spec %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#FADE2A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Multi-Item %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#8F3BB8",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "No Weight %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#1F60C4",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hand Scanned %"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#5794F2",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Good Read % Today"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read_pct"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "good_read"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#73BF69",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "mssql",
+              "uid": "PAAAEB8D7872B0C49"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "refId": "A",
+            "rawSql": "WITH\nhours AS (\n    SELECT 0 AS hr UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3\n    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7\n    UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11\n    UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15\n    UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19\n    UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23\n),\nmonthly_avg AS (\n    SELECT\n        ds.hr,\n        CAST(AVG(CAST(ds.day_total AS float)) AS decimal(10,1)) AS avg_items\n    FROM (\n        SELECT\n            DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) AS hr,\n            CAST(DATEADD(HOUR, 2, ts_datetime) AS date) AS day_date,\n            SUM(total_items) AS day_total\n        FROM dbo.device_statistics\n        WHERE device_id = ${device}\n          AND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) >=\n              CAST(DATEFROMPARTS(YEAR(DATEADD(HOUR,2,GETDATE())), MONTH(DATEADD(HOUR,2,GETDATE())), 1) AS date)\n          AND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) < CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\n        GROUP BY\n            DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)),\n            CAST(DATEADD(HOUR, 2, ts_datetime) AS date)\n    ) ds\n    GROUP BY ds.hr\n),\ntoday_actuals AS (\n    SELECT\n        DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) AS hr,\n        SUM(total_items) AS actual_items\n    FROM dbo.device_statistics\n    WHERE device_id = ${device}\n      AND CAST(DATEADD(HOUR, 2, ts_datetime) AS date) = CAST(DATEADD(HOUR, 2, GETDATE()) AS date)\n      AND DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime)) < DATEPART(HOUR, DATEADD(HOUR, 2, GETDATE()))\n    GROUP BY DATEPART(HOUR, DATEADD(HOUR, 2, ts_datetime))\n)\nSELECT\n    RIGHT('0' + CAST(h.hr AS varchar), 2) + ':00' AS hour_label,\n    COALESCE(m.avg_items, 0)  AS [Avg Items],\n    t.actual_items            AS [Actual Items]\nFROM hours h\nLEFT JOIN monthly_avg   m ON m.hr = h.hr\nLEFT JOIN today_actuals t ON t.hr = h.hr\nORDER BY h.hr"
+          }
+        ]
+      }
+    ]
+  }
+}
