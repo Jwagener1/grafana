@@ -1,0 +1,495 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "parameter-explorer-s1"
+  },
+  "spec": {
+    "title": "Parameter Explorer",
+    "tags": ["admin", "explorer"],
+    "timezone": "browser",
+    "refresh": "1m",
+    "schemaVersion": 39,
+    "time": { "from": "now-24h", "to": "now" },
+    "timepicker": {},
+    "graphTooltip": 1,
+    "annotations": { "list": [] },
+    "links": [],
+    "preload": false,
+    "fiscalYearStartMonth": 0,
+    "editable": true,
+    "templating": {
+      "list": [
+        {
+          "allowCustomValue": false,
+          "current": {},
+          "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+          "definition": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
+          "description": "Select one or more machines to plot",
+          "includeAll": false,
+          "label": "Machines",
+          "multi": true,
+          "name": "machines",
+          "options": [],
+          "query": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
+          "refresh": 1,
+          "regex": "",
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "panels": [
+
+      {
+        "id": 1,
+        "type": "text",
+        "title": "",
+        "gridPos": { "x": 0, "y": 0, "w": 24, "h": 3 },
+        "options": {
+          "mode": "markdown",
+          "content": "## 📊 Parameter Explorer\nUse the **Machines** dropdown above to select one or more devices. All charts will populate with data for your selection across the chosen time range.\n\n> _Tip: hold Ctrl/Cmd to select multiple machines._"
+        }
+      },
+
+      {
+        "id": 2,
+        "type": "row",
+        "title": "📦 Scan Statistics",
+        "collapsed": false,
+        "gridPos": { "x": 0, "y": 3, "w": 24, "h": 1 },
+        "panels": []
+      },
+
+      {
+        "id": 3,
+        "type": "timeseries",
+        "title": "Total Items",
+        "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  s.total_items AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 4,
+        "type": "timeseries",
+        "title": "Good Read %",
+        "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.good_read / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 5,
+        "type": "timeseries",
+        "title": "No Read %",
+        "gridPos": { "x": 0, "y": 12, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.no_read / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 6,
+        "type": "timeseries",
+        "title": "Out of Spec %",
+        "gridPos": { "x": 8, "y": 12, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.item_out_of_spec / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 7,
+        "type": "timeseries",
+        "title": "Multiple Items %",
+        "gridPos": { "x": 16, "y": 12, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.more_than_1_item / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 8,
+        "type": "timeseries",
+        "title": "No Weight %",
+        "gridPos": { "x": 0, "y": 20, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.no_weight / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 9,
+        "type": "timeseries",
+        "title": "Data Sent vs Not Sent",
+        "gridPos": { "x": 8, "y": 20, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name + ' - Sent' AS metric,\n  s.data_sent AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nUNION ALL\nSELECT\n  s.ts_datetime AS time,\n  d.machine_name + ' - Not Sent' AS metric,\n  s.not_sent AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY time",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 10,
+        "type": "timeseries",
+        "title": "Hand Scanned",
+        "gridPos": { "x": 16, "y": 20, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  s.hand_scanned AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 11,
+        "type": "row",
+        "title": "💻 OS Metrics",
+        "collapsed": false,
+        "gridPos": { "x": 0, "y": 28, "w": 24, "h": 1 },
+        "panels": []
+      },
+
+      {
+        "id": 12,
+        "type": "timeseries",
+        "title": "CPU %",
+        "gridPos": { "x": 0, "y": 29, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(m.cpu_percent AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 13,
+        "type": "timeseries",
+        "title": "Memory %",
+        "gridPos": { "x": 8, "y": 29, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(m.mem_usage_pct AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 14,
+        "type": "timeseries",
+        "title": "Temperature (°C)",
+        "gridPos": { "x": 16, "y": 29, "w": 8, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "celsius",
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(m.temp_celsius AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 15,
+        "type": "row",
+        "title": "💾 Storage",
+        "collapsed": false,
+        "gridPos": { "x": 0, "y": 37, "w": 24, "h": 1 },
+        "panels": []
+      },
+
+      {
+        "id": 16,
+        "type": "timeseries",
+        "title": "C: Drive Used %",
+        "gridPos": { "x": 0, "y": 38, "w": 12, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 75 },
+                { "color": "red", "value": 90 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(s.usage_percent AS DECIMAL(5,1)) AS value\nFROM dbo.device_storage_status s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND s.drive = 'C:'\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 17,
+        "type": "timeseries",
+        "title": "C: Drive Free (GB)",
+        "gridPos": { "x": 12, "y": 38, "w": 12, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "decgbytes",
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(s.free_gb AS DECIMAL(8,2)) AS value\nFROM dbo.device_storage_status s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND s.drive = 'C:'\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      },
+
+      {
+        "id": 18,
+        "type": "row",
+        "title": "⏱ Uptime",
+        "collapsed": false,
+        "gridPos": { "x": 0, "y": 46, "w": 24, "h": 1 },
+        "panels": []
+      },
+
+      {
+        "id": 19,
+        "type": "timeseries",
+        "title": "Uptime",
+        "gridPos": { "x": 0, "y": 47, "w": 12, "h": 8 },
+        "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom": { "lineWidth": 2, "fillOpacity": 5, "spanNulls": false }
+          },
+          "overrides": []
+        },
+        "options": {
+          "tooltip": { "mode": "multi", "sort": "desc" },
+          "legend": { "displayMode": "list", "placement": "bottom" }
+        },
+        "targets": [
+          {
+            "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
+            "format": "time_series",
+            "rawSql": "SELECT\n  u.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(u.uptime_seconds AS DECIMAL(12,0)) AS value\nFROM dbo.device_uptime_status u\nINNER JOIN dbo.devices d ON d.id = u.device_id\nWHERE u.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(u.ts_datetime)\nORDER BY u.ts_datetime",
+            "refId": "A"
+          }
+        ]
+      }
+
+    ]
+  }
+}
