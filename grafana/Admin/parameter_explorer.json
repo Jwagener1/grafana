@@ -82,7 +82,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  s.total_items AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  s.total_items AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -111,7 +111,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.good_read / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.good_read / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -140,7 +140,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.no_read / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.no_read / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -169,7 +169,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.item_out_of_spec / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.item_out_of_spec / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -198,7 +198,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.more_than_1_item / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.more_than_1_item / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -227,7 +227,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.no_weight / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(CASE WHEN s.total_items > 0 THEN 100.0 * s.no_weight / s.total_items ELSE NULL END AS DECIMAL(6,2)) AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -254,7 +254,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name + ' - Sent' AS metric,\n  s.data_sent AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nUNION ALL\nSELECT\n  s.ts_datetime AS time,\n  d.machine_name + ' - Not Sent' AS metric,\n  s.not_sent AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY time",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name + ' - Sent' AS metric,\n  s.data_sent AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nUNION ALL\nSELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name + ' - Not Sent' AS metric,\n  s.not_sent AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY time",
             "refId": "A"
           }
         ]
@@ -281,7 +281,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  s.hand_scanned AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  s.hand_scanned AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -319,7 +319,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(m.cpu_percent AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
+            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(m.cpu_percent AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
             "refId": "A"
           }
         ]
@@ -348,7 +348,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(m.mem_usage_pct AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
+            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(m.mem_usage_pct AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
             "refId": "A"
           }
         ]
@@ -375,7 +375,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(m.temp_celsius AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
+            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(m.temp_celsius AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
             "refId": "A"
           }
         ]
@@ -421,7 +421,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(s.usage_percent AS DECIMAL(5,1)) AS value\nFROM dbo.device_storage_status s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND s.drive = 'C:'\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(s.usage_percent AS DECIMAL(5,1)) AS value\nFROM dbo.device_storage_status s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND s.drive = 'C:'\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -448,7 +448,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(s.free_gb AS DECIMAL(8,2)) AS value\nFROM dbo.device_storage_status s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND s.drive = 'C:'\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
+            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(s.free_gb AS DECIMAL(8,2)) AS value\nFROM dbo.device_storage_status s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND s.drive = 'C:'\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
             "refId": "A"
           }
         ]
@@ -484,7 +484,7 @@
           {
             "datasource": { "type": "mssql", "uid": "PAAAEB8D7872B0C49" },
             "format": "time_series",
-            "rawSql": "SELECT\n  u.ts_datetime AS time,\n  d.machine_name AS metric,\n  CAST(u.uptime_seconds AS DECIMAL(12,0)) AS value\nFROM dbo.device_uptime_status u\nINNER JOIN dbo.devices d ON d.id = u.device_id\nWHERE u.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(u.ts_datetime)\nORDER BY u.ts_datetime",
+            "rawSql": "SELECT\n  u.ts_datetime AS time,\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS metric,\n  CAST(u.uptime_seconds AS DECIMAL(12,0)) AS value\nFROM dbo.device_uptime_status u\nINNER JOIN dbo.devices d ON d.id = u.device_id\nWHERE u.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(u.ts_datetime)\nORDER BY u.ts_datetime",
             "refId": "A"
           }
         ]
