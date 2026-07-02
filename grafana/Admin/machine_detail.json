@@ -3600,7 +3600,7 @@
       "list": [
         {
           "allowCustomValue": false,
-          "current": {}
+          "current": {},
           "datasource": {
             "type": "mssql",
             "uid": "PAAAEB8D7872B0C49"
