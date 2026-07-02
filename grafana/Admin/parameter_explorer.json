@@ -59,7 +59,7 @@
           "x": 0,
           "y": 0,
           "w": 24,
-          "h": 4
+          "h": 3
         },
         "options": {
           "mode": "markdown",
@@ -86,7 +86,7 @@
         "gridPos": {
           "x": 0,
           "y": 4,
-          "w": 12,
+          "w": 24,
           "h": 8
         },
         "datasource": {
@@ -99,7 +99,7 @@
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 5,
-              "spanNulls": false,
+              "spanNulls": true,
               "drawStyle": "line",
               "pointSize": 3,
               "showPoints": "never"
@@ -134,9 +134,9 @@
         "type": "timeseries",
         "title": "Good Read %",
         "gridPos": {
-          "x": 12,
-          "y": 4,
-          "w": 12,
+          "x": 0,
+          "y": 12,
+          "w": 24,
           "h": 8
         },
         "datasource": {
@@ -146,12 +146,12 @@
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
-            "min": 0,
-            "max": 100,
+            "min": -2,
+            "max": 102,
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 5,
-              "spanNulls": false,
+              "spanNulls": true,
               "drawStyle": "line",
               "pointSize": 3,
               "showPoints": "never"
@@ -187,8 +187,8 @@
         "title": "No Read %",
         "gridPos": {
           "x": 0,
-          "y": 12,
-          "w": 8,
+          "y": 20,
+          "w": 24,
           "h": 8
         },
         "datasource": {
@@ -198,12 +198,12 @@
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
-            "min": 0,
-            "max": 100,
+            "min": -2,
+            "max": 102,
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 5,
-              "spanNulls": false,
+              "spanNulls": true,
               "drawStyle": "line",
               "pointSize": 3,
               "showPoints": "never"
@@ -238,9 +238,9 @@
         "type": "timeseries",
         "title": "Out of Spec %",
         "gridPos": {
-          "x": 8,
-          "y": 12,
-          "w": 8,
+          "x": 0,
+          "y": 28,
+          "w": 24,
           "h": 8
         },
         "datasource": {
@@ -250,12 +250,12 @@
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
-            "min": 0,
-            "max": 100,
+            "min": -2,
+            "max": 102,
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 5,
-              "spanNulls": false,
+              "spanNulls": true,
               "drawStyle": "line",
               "pointSize": 3,
               "showPoints": "never"
@@ -290,9 +290,9 @@
         "type": "timeseries",
         "title": "Multiple Items %",
         "gridPos": {
-          "x": 16,
-          "y": 12,
-          "w": 8,
+          "x": 0,
+          "y": 36,
+          "w": 24,
           "h": 8
         },
         "datasource": {
@@ -302,12 +302,12 @@
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
-            "min": 0,
-            "max": 100,
+            "min": -2,
+            "max": 102,
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 5,
-              "spanNulls": false,
+              "spanNulls": true,
               "drawStyle": "line",
               "pointSize": 3,
               "showPoints": "never"
@@ -343,8 +343,8 @@
         "title": "No Weight %",
         "gridPos": {
           "x": 0,
-          "y": 20,
-          "w": 8,
+          "y": 44,
+          "w": 24,
           "h": 8
         },
         "datasource": {
@@ -354,12 +354,12 @@
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
-            "min": 0,
-            "max": 100,
+            "min": -2,
+            "max": 102,
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 5,
-              "spanNulls": false,
+              "spanNulls": true,
               "drawStyle": "line",
               "pointSize": 3,
               "showPoints": "never"
@@ -394,9 +394,9 @@
         "type": "timeseries",
         "title": "Data Sent vs Not Sent",
         "gridPos": {
-          "x": 8,
-          "y": 20,
-          "w": 8,
+          "x": 0,
+          "y": 52,
+          "w": 24,
           "h": 8
         },
         "datasource": {
@@ -409,7 +409,7 @@
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 5,
-              "spanNulls": false,
+              "spanNulls": true,
               "drawStyle": "line",
               "pointSize": 3,
               "showPoints": "never"
@@ -444,9 +444,9 @@
         "type": "timeseries",
         "title": "Hand Scanned",
         "gridPos": {
-          "x": 16,
-          "y": 20,
-          "w": 8,
+          "x": 0,
+          "y": 60,
+          "w": 24,
           "h": 8
         },
         "datasource": {
@@ -459,7 +459,7 @@
             "custom": {
               "lineWidth": 2,
               "fillOpacity": 5,
-              "spanNulls": false,
+              "spanNulls": true,
               "drawStyle": "line",
               "pointSize": 3,
               "showPoints": "never"
@@ -485,368 +485,6 @@
             },
             "format": "time_series",
             "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' \u203a ' + d.location + ' \u203a ' + d.machine_name AS metric,\n  s.hand_scanned AS value\nFROM dbo.device_statistics s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 11,
-        "type": "row",
-        "title": "\ud83d\udcbb OS Metrics",
-        "collapsed": false,
-        "gridPos": {
-          "x": 0,
-          "y": 28,
-          "w": 24,
-          "h": 1
-        },
-        "panels": []
-      },
-      {
-        "id": 12,
-        "type": "timeseries",
-        "title": "CPU %",
-        "gridPos": {
-          "x": 0,
-          "y": 29,
-          "w": 8,
-          "h": 8
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "min": 0,
-            "max": 100,
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 5,
-              "spanNulls": false,
-              "drawStyle": "line",
-              "pointSize": 3,
-              "showPoints": "never"
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "tooltip": {
-            "mode": "multi",
-            "sort": "desc"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "format": "time_series",
-            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.customer + ' \u203a ' + d.location + ' \u203a ' + d.machine_name AS metric,\n  CAST(m.cpu_percent AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 13,
-        "type": "timeseries",
-        "title": "Memory %",
-        "gridPos": {
-          "x": 8,
-          "y": 29,
-          "w": 8,
-          "h": 8
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "min": 0,
-            "max": 100,
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 5,
-              "spanNulls": false,
-              "drawStyle": "line",
-              "pointSize": 3,
-              "showPoints": "never"
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "tooltip": {
-            "mode": "multi",
-            "sort": "desc"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "format": "time_series",
-            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.customer + ' \u203a ' + d.location + ' \u203a ' + d.machine_name AS metric,\n  CAST(m.mem_usage_pct AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 14,
-        "type": "timeseries",
-        "title": "Temperature (\u00b0C)",
-        "gridPos": {
-          "x": 16,
-          "y": 29,
-          "w": 8,
-          "h": 8
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "celsius",
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 5,
-              "spanNulls": false,
-              "drawStyle": "line",
-              "pointSize": 3,
-              "showPoints": "never"
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "tooltip": {
-            "mode": "multi",
-            "sort": "desc"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "format": "time_series",
-            "rawSql": "SELECT\n  m.ts_datetime AS time,\n  d.customer + ' \u203a ' + d.location + ' \u203a ' + d.machine_name AS metric,\n  CAST(m.temp_celsius AS DECIMAL(5,1)) AS value\nFROM dbo.device_os_metrics m\nINNER JOIN dbo.devices d ON d.id = m.device_id\nWHERE m.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(m.ts_datetime)\nORDER BY m.ts_datetime",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 15,
-        "type": "row",
-        "title": "\ud83d\udcbe Storage",
-        "collapsed": false,
-        "gridPos": {
-          "x": 0,
-          "y": 37,
-          "w": 24,
-          "h": 1
-        },
-        "panels": []
-      },
-      {
-        "id": 16,
-        "type": "timeseries",
-        "title": "C: Drive Used %",
-        "gridPos": {
-          "x": 0,
-          "y": 38,
-          "w": 12,
-          "h": 8
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "min": 0,
-            "max": 100,
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 5,
-              "spanNulls": false,
-              "drawStyle": "line",
-              "pointSize": 3,
-              "showPoints": "never"
-            },
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "yellow",
-                  "value": 75
-                },
-                {
-                  "color": "red",
-                  "value": 90
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "tooltip": {
-            "mode": "multi",
-            "sort": "desc"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' \u203a ' + d.location + ' \u203a ' + d.machine_name AS metric,\n  CAST(s.usage_percent AS DECIMAL(5,1)) AS value\nFROM dbo.device_storage_status s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND s.drive = 'C:'\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 17,
-        "type": "timeseries",
-        "title": "C: Drive Free (GB)",
-        "gridPos": {
-          "x": 12,
-          "y": 38,
-          "w": 12,
-          "h": 8
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "decgbytes",
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 5,
-              "spanNulls": false,
-              "drawStyle": "line",
-              "pointSize": 3,
-              "showPoints": "never"
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "tooltip": {
-            "mode": "multi",
-            "sort": "desc"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "format": "time_series",
-            "rawSql": "SELECT\n  s.ts_datetime AS time,\n  d.customer + ' \u203a ' + d.location + ' \u203a ' + d.machine_name AS metric,\n  CAST(s.free_gb AS DECIMAL(8,2)) AS value\nFROM dbo.device_storage_status s\nINNER JOIN dbo.devices d ON d.id = s.device_id\nWHERE s.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND s.drive = 'C:'\nAND $__timeFilter(s.ts_datetime)\nORDER BY s.ts_datetime",
-            "refId": "A"
-          }
-        ]
-      },
-      {
-        "id": 18,
-        "type": "row",
-        "title": "\u23f1 Uptime",
-        "collapsed": false,
-        "gridPos": {
-          "x": 0,
-          "y": 46,
-          "w": 24,
-          "h": 1
-        },
-        "panels": []
-      },
-      {
-        "id": 19,
-        "type": "timeseries",
-        "title": "Uptime",
-        "gridPos": {
-          "x": 0,
-          "y": 47,
-          "w": 12,
-          "h": 8
-        },
-        "datasource": {
-          "type": "mssql",
-          "uid": "PAAAEB8D7872B0C49"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "unit": "s",
-            "custom": {
-              "lineWidth": 2,
-              "fillOpacity": 5,
-              "spanNulls": false,
-              "drawStyle": "line",
-              "pointSize": 3,
-              "showPoints": "never"
-            }
-          },
-          "overrides": []
-        },
-        "options": {
-          "tooltip": {
-            "mode": "multi",
-            "sort": "desc"
-          },
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "mssql",
-              "uid": "PAAAEB8D7872B0C49"
-            },
-            "format": "time_series",
-            "rawSql": "SELECT\n  u.ts_datetime AS time,\n  d.customer + ' \u203a ' + d.location + ' \u203a ' + d.machine_name AS metric,\n  CAST(u.uptime_seconds AS DECIMAL(12,0)) AS value\nFROM dbo.device_uptime_status u\nINNER JOIN dbo.devices d ON d.id = u.device_id\nWHERE u.device_id IN (\n  SELECT CAST(value AS INT) FROM STRING_SPLIT('${machines:raw}', ',') WHERE value != ''\n)\nAND $__timeFilter(u.ts_datetime)\nORDER BY u.ts_datetime",
             "refId": "A"
           }
         ]
