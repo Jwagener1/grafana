@@ -498,7 +498,7 @@
             "refId": "A"
           }
         ],
-        "title": "Items Today \u2014 All Customers",
+        "title": "Items Today — All Customers",
         "type": "stat"
       },
       {
@@ -618,7 +618,7 @@
           "y": 7
         },
         "id": 8,
-        "title": "Customer Summary \u2014 Today",
+        "title": "Customer Summary — Today",
         "type": "row"
       },
       {
@@ -884,11 +884,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nWITH last_seen AS (\n    SELECT device_id, MAX(ts_datetime) AS last_ts\n    FROM dbo.device_statistics\n    GROUP BY device_id\n),\ndevice_online AS (\n    SELECT d.customer,\n           COUNT(DISTINCT d.id) AS total_devices,\n           SUM(CASE WHEN ls.last_ts IS NOT NULL AND DATEDIFF(MINUTE, ls.last_ts, GETDATE()) < 60 THEN 1 ELSE 0 END) AS online_count\n    FROM dbo.devices d\n    LEFT JOIN last_seen ls ON ls.device_id = d.id\n    GROUP BY d.customer\n),\nstats_today AS (\n    SELECT d.customer,\n           COALESCE(SUM(ds.total_items),0)       AS items_today,\n           COALESCE(SUM(ds.good_read),0)          AS good_read,\n           COALESCE(SUM(ds.no_read),0)            AS no_read,\n           COALESCE(SUM(ds.no_dimension),0)       AS no_dimension,\n           COALESCE(SUM(ds.no_weight),0)          AS no_weight,\n           COALESCE(SUM(ds.hand_scanned),0)       AS hand_scanned,\n           COALESCE(SUM(ds.item_out_of_spec),0)   AS item_out_of_spec,\n           COALESCE(SUM(ds.more_than_1_item),0)   AS more_than_1_item,\n           COALESCE(SUM(ds.not_sent),0)           AS not_sent\n    FROM dbo.devices d\n    LEFT JOIN dbo.device_statistics ds\n        ON ds.device_id = d.id\n        AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\n    GROUP BY d.customer\n)\nSELECT\n    do.customer                                                                           AS [Customer],\n    do.total_devices                                                                      AS [Devices],\n    do.online_count                                                                       AS [Online],\n    do.total_devices - do.online_count                                                    AS [Offline],\n    st.items_today                                                                        AS [Items Today],\n    CAST(COALESCE(100.0*st.good_read       /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [Good Read %],\n    CAST(COALESCE(100.0*st.no_read         /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [No Read %],\n    CAST(COALESCE(100.0*st.no_dimension    /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [No Dim %],\n    CAST(COALESCE(100.0*st.no_weight       /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [No Weight %],\n    CAST(COALESCE(100.0*st.hand_scanned    /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [Hand Scan %],\n    CAST(COALESCE(100.0*st.item_out_of_spec/NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [Out Spec %],\n    CAST(COALESCE(100.0*st.more_than_1_item/NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [Multi-Item %],\n    st.not_sent                                                                           AS [Not Sent]\nFROM device_online do\nLEFT JOIN stats_today st ON st.customer = do.customer\nORDER BY do.customer;",
+            "rawSql": "\nWITH last_seen AS (\n    SELECT device_id, MAX(ts_datetime) AS last_ts\n    FROM dbo.device_statistics\n    GROUP BY device_id\n),\ndevice_online AS (\n    SELECT d.customer,\n           COUNT(DISTINCT d.id) AS total_devices,\n           SUM(CASE WHEN ls.last_ts IS NOT NULL AND DATEDIFF(MINUTE, ls.last_ts, GETDATE()) < 60 THEN 1 ELSE 0 END) AS online_count\n    FROM dbo.devices d\n    LEFT JOIN last_seen ls ON ls.device_id = d.id\n    GROUP BY d.customer\n),\nstats_period AS (\n    SELECT d.customer,\n           COALESCE(SUM(ds.total_items),0)       AS items_today,\n           COALESCE(SUM(ds.good_read),0)          AS good_read,\n           COALESCE(SUM(ds.no_read),0)            AS no_read,\n           COALESCE(SUM(ds.no_dimension),0)       AS no_dimension,\n           COALESCE(SUM(ds.no_weight),0)          AS no_weight,\n           COALESCE(SUM(ds.hand_scanned),0)       AS hand_scanned,\n           COALESCE(SUM(ds.item_out_of_spec),0)   AS item_out_of_spec,\n           COALESCE(SUM(ds.more_than_1_item),0)   AS more_than_1_item,\n           COALESCE(SUM(ds.not_sent),0)           AS not_sent\n    FROM dbo.devices d\n    LEFT JOIN dbo.device_statistics ds\n        ON ds.device_id = d.id\n        AND $__timeFilter(ds.ts_datetime)\n    GROUP BY d.customer\n)\nSELECT\n    do.customer                                                                           AS [Customer],\n    do.total_devices                                                                      AS [Devices],\n    do.online_count                                                                       AS [Online],\n    do.total_devices - do.online_count                                                    AS [Offline],\n    st.items_today                                                                        AS [Items],\n    CAST(COALESCE(100.0*st.good_read       /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [Good Read %],\n    CAST(COALESCE(100.0*st.no_read         /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [No Read %],\n    CAST(COALESCE(100.0*st.no_dimension    /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [No Dim %],\n    CAST(COALESCE(100.0*st.no_weight       /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [No Weight %],\n    CAST(COALESCE(100.0*st.hand_scanned    /NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [Hand Scan %],\n    CAST(COALESCE(100.0*st.item_out_of_spec/NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [Out Spec %],\n    CAST(COALESCE(100.0*st.more_than_1_item/NULLIF(st.items_today,0),0) AS decimal(5,1)) AS [Multi-Item %],\n    st.not_sent                                                                           AS [Not Sent]\nFROM device_online do\nLEFT JOIN stats_period st ON st.customer = do.customer\nORDER BY do.customer;",
             "refId": "A"
           }
         ],
-        "title": "Customer Performance Summary \u2014 Today",
+        "title": "Customer Performance Summary — Selected Period",
         "type": "table"
       },
       {
@@ -1056,11 +1056,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT\n  d.customer AS [Customer],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.item_out_of_spec)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Out Spec %],\n  CAST(COALESCE(100.0*SUM(ds.more_than_1_item)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Multi-Item %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;\n",
+            "rawSql": "\nSELECT\n  d.customer AS [Customer],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.item_out_of_spec)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Out Spec %],\n  CAST(COALESCE(100.0*SUM(ds.more_than_1_item)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Multi-Item %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)   AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND $__timeFilter(ds.ts_datetime)\nGROUP BY d.customer\nORDER BY d.customer;\n",
             "refId": "A"
           }
         ],
-        "title": "Performance % by Customer \u2014 Today",
+        "title": "Performance % by Customer — Selected Period",
         "type": "barchart"
       },
       {
@@ -1156,11 +1156,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT\n  d.customer AS [Customer],\n  COALESCE(SUM(ds.total_items),0) AS [Total Items],\n  COALESCE(SUM(ds.good_read),0)   AS [Good Reads],\n  COALESCE(SUM(ds.no_read),0)     AS [No Reads]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer\nORDER BY d.customer;\n",
+            "rawSql": "\nSELECT\n  d.customer AS [Customer],\n  COALESCE(SUM(ds.total_items),0) AS [Total Items],\n  COALESCE(SUM(ds.good_read),0)   AS [Good Reads],\n  COALESCE(SUM(ds.no_read),0)     AS [No Reads]\nFROM dbo.devices d\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND $__timeFilter(ds.ts_datetime)\nGROUP BY d.customer\nORDER BY d.customer;\n",
             "refId": "A"
           }
         ],
-        "title": "Item Volumes by Customer \u2014 Today",
+        "title": "Item Volumes by Customer — Selected Period",
         "type": "barchart"
       },
       {
@@ -1227,7 +1227,7 @@
           "barWidth": 0.6,
           "groupWidth": 0.7,
           "stacking": "none",
-          "xField": "Customer",
+          "xField": "Machine",
           "legend": {
             "displayMode": "list",
             "placement": "bottom",
@@ -1248,11 +1248,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nSELECT\n  d.customer AS [Customer],\n  CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) AS [Date],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= DATEADD(DAY,-7,GETUTCDATE())\nGROUP BY d.customer, CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date)\nHAVING SUM(ds.total_items) > 0\nORDER BY d.customer, [Date];",
+            "rawSql": "\nSELECT\n  d.customer + ' › ' + d.location + ' › ' + d.machine_name AS [Machine],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Good Read %]\nFROM dbo.device_statistics ds\nJOIN dbo.devices d ON d.id = ds.device_id\nWHERE ds.ts_datetime >= DATEADD(DAY,-7,GETUTCDATE())\nGROUP BY d.customer, d.location, d.machine_name\nHAVING SUM(ds.total_items) > 0\nORDER BY d.customer, d.location, d.machine_name;",
             "refId": "A"
           }
         ],
-        "title": "Daily Good Read % per Customer \u2014 7 Days",
+        "title": "7-Day Average Good Read % per Machine",
         "type": "barchart"
       },
       {
@@ -1264,7 +1264,7 @@
           "y": 36
         },
         "id": 15,
-        "title": "Per-Machine Detail \u2014 Today",
+        "title": "Per-Machine Detail — Today",
         "type": "row"
       },
       {
@@ -1348,15 +1348,15 @@
                       "type": "value",
                       "options": {
                         "online": {
-                          "text": "\ud83d\udfe2 Online",
+                          "text": "🟢 Online",
                           "index": 0
                         },
                         "offline": {
-                          "text": "\ud83d\udd34 Offline",
+                          "text": "🔴 Offline",
                           "index": 1
                         },
                         "unknown": {
-                          "text": "\u26aa Unknown",
+                          "text": "⚪ Unknown",
                           "index": 2
                         }
                       }
@@ -1515,11 +1515,11 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "\nWITH latest_status AS (\n    SELECT x.device_id, x.status FROM (\n        SELECT ds.device_id, ds.status,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_status ds\n    ) x WHERE x.rn = 1\n)\nSELECT\n  d.customer                                                               AS [Customer],\n  d.location + ' ' + d.machine_name                                       AS [Machine],\n  COALESCE(ls.status, 'offline')                                          AS [Status],\n  COALESCE(SUM(ds.total_items),0)                                         AS [Items],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)    AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  COALESCE(SUM(ds.data_sent),0)                                           AS [Sent],\n  COALESCE(SUM(ds.not_sent),0)                                            AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN latest_status ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND CAST(DATEADD(HOUR,2,ds.ts_datetime) AS date) = CAST(DATEADD(HOUR,2,GETDATE()) AS date)\nGROUP BY d.customer, d.location, d.machine_name, ls.status\nORDER BY d.customer, d.location, d.machine_name;",
+            "rawSql": "\nWITH latest_status AS (\n    SELECT x.device_id, x.status FROM (\n        SELECT ds.device_id, ds.status,\n               ROW_NUMBER() OVER (PARTITION BY ds.device_id ORDER BY ds.ts_datetime DESC) AS rn\n        FROM dbo.device_status ds\n    ) x WHERE x.rn = 1\n)\nSELECT\n  d.customer                                                               AS [Customer],\n  d.location + ' ' + d.machine_name                                       AS [Machine],\n  COALESCE(ls.status, 'offline')                                          AS [Status],\n  COALESCE(SUM(ds.total_items),0)                                         AS [Items],\n  CAST(COALESCE(100.0*SUM(ds.good_read)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [Good Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_read)/NULLIF(SUM(ds.total_items),0),0)    AS decimal(5,1)) AS [No Read %],\n  CAST(COALESCE(100.0*SUM(ds.no_dimension)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [No Dim %],\n  CAST(COALESCE(100.0*SUM(ds.no_weight)/NULLIF(SUM(ds.total_items),0),0)  AS decimal(5,1)) AS [No Weight %],\n  CAST(COALESCE(100.0*SUM(ds.hand_scanned)/NULLIF(SUM(ds.total_items),0),0) AS decimal(5,1)) AS [Hand Scan %],\n  COALESCE(SUM(ds.data_sent),0)                                           AS [Sent],\n  COALESCE(SUM(ds.not_sent),0)                                            AS [Not Sent]\nFROM dbo.devices d\nLEFT JOIN latest_status ls ON ls.device_id = d.id\nLEFT JOIN dbo.device_statistics ds\n    ON ds.device_id = d.id\n    AND $__timeFilter(ds.ts_datetime)\nGROUP BY d.customer, d.location, d.machine_name, ls.status\nORDER BY d.customer, d.location, d.machine_name;",
             "refId": "A"
           }
         ],
-        "title": "All Machines \u2014 Today",
+        "title": "All Machines — Selected Period",
         "type": "table"
       }
     ]
