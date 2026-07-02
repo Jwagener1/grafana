@@ -3600,21 +3600,18 @@
       "list": [
         {
           "allowCustomValue": false,
-          "current": {
-            "text": "DIM3",
-            "value": "2"
-          },
+          "current": {}
           "datasource": {
             "type": "mssql",
             "uid": "PAAAEB8D7872B0C49"
           },
-          "definition": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
+          "definition": "SELECT customer + ' › ' + location + ' › ' + machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
           "description": "Select a device to inspect",
           "includeAll": false,
           "label": "Machine",
           "name": "machine",
           "options": [],
-          "query": "SELECT machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
+          "query": "SELECT customer + ' › ' + location + ' › ' + machine_name AS __text, id AS __value FROM dbo.devices ORDER BY customer, location, machine_name",
           "refresh": 1,
           "regex": "",
           "type": "query"
